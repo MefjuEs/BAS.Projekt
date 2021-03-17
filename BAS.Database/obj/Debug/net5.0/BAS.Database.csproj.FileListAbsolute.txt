@@ -1,0 +1,15 @@
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\BAS.Database.deps.json
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\BAS.Database.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\ref\BAS.Database.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\BAS.Database.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.AssemblyInfoInputs.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.AssemblyInfo.cs
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.csproj.CoreCompileInputs.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\ref\BAS.Database.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.csprojAssemblyReference.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\BAS.AppCommon.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\bin\Debug\net5.0\BAS.AppCommon.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Database\obj\Debug\net5.0\BAS.Database.csproj.CopyComplete

@@ -1,0 +1,15 @@
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\BAS.Identity.deps.json
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\BAS.Identity.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\ref\BAS.Identity.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\BAS.Identity.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.csprojAssemblyReference.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.AssemblyInfoInputs.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.AssemblyInfo.cs
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.csproj.CoreCompileInputs.cache
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\ref\BAS.Identity.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\BAS.AppCommon.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\bin\Debug\net5.0\BAS.AppCommon.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Identity\obj\Debug\net5.0\BAS.Identity.csproj.CopyComplete
