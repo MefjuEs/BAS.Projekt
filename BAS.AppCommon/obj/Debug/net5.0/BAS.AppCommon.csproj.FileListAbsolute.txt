@@ -10,3 +10,15 @@ C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.dll
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\ref\BAS.AppCommon.dll
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.pdb
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.deps.json
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\bin\Debug\net5.0\ref\BAS.AppCommon.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.pdb
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.csprojAssemblyReference.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.GeneratedMSBuildEditorConfig.editorconfig
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.AssemblyInfoInputs.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.AssemblyInfo.cs
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.csproj.CoreCompileInputs.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\ref\BAS.AppCommon.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.pdb

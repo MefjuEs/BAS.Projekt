@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BAS.AppCommon\BAS.AppCommon.csproj" />
+    <ProjectReference Include="..\BAS.Identity\BAS.Identity.csproj" />
+  </ItemGroup>
+
 </Project>

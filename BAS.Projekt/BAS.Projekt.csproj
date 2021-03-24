@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BAS.Database\BAS.Database.csproj" />
     <ProjectReference Include="..\BAS.Identity\BAS.Identity.csproj" />
+    <ProjectReference Include="..\BAS.Repository\BAS.AppRepository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

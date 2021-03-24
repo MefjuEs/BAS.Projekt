@@ -1,0 +1,12 @@
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\bin\Debug\net5.0\BAS.Repository.deps.json
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\bin\Debug\net5.0\BAS.Repository.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\bin\Debug\net5.0\ref\BAS.Repository.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\bin\Debug\net5.0\BAS.Repository.pdb
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.csprojAssemblyReference.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.GeneratedMSBuildEditorConfig.editorconfig
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.AssemblyInfoInputs.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.AssemblyInfo.cs
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.csproj.CoreCompileInputs.cache
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\ref\BAS.Repository.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Repository\obj\Debug\net5.0\BAS.Repository.pdb

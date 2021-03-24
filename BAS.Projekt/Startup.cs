@@ -1,5 +1,7 @@
 using BAS.Database;
 using BAS.Identity;
+using BAS.Repository.Infrastructure;
+using BAS.Repository.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -55,6 +57,11 @@ namespace BAS.Projekt
             })
             .AddEntityFrameworkStores<IdentityContext>()
             .AddDefaultTokenProviders();
+            #endregion
+
+            #region Repository
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             #endregion
 
             services.AddCors();
