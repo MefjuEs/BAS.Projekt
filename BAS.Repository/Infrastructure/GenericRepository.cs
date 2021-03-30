@@ -45,9 +45,8 @@ namespace BAS.Repository.Infrastructure
             db.Set<T>().Update(entity);
         }
 
-        public IEnumerable<T> GetByPredicate(Func<T, bool> predicate = null, Func<T, object> orderBy = null, bool isDescending = false, int page = 1, QuantityOfItemsOnPage pageSize = QuantityOfItemsOnPage.Ten)
+        public IEnumerable<T> GetByPredicate(Func<T, bool> predicate = null, Func<T, object> orderBy = null, bool isDescending = false, int page = 1, int? pageSize = null)
         {
-            int pageSizeInt = (int)pageSize;
             var items = db.Set<T>().Where(predicate ?? (p => true));
 
             if (orderBy != null && isDescending)
@@ -55,7 +54,10 @@ namespace BAS.Repository.Infrastructure
             else if(orderBy != null && !isDescending)
                 items = items.OrderBy(orderBy);
 
-            return items.Skip((page - 1) * pageSizeInt).Take(pageSizeInt);
+            if (pageSize == null)
+                return items;
+
+            return items.Skip((page - 1) * pageSize.Value).Take(pageSize.Value);
         }
 
         public async Task<int> Count(Func<T, bool> predicate = null)

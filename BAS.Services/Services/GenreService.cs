@@ -53,7 +53,7 @@ namespace BAS.AppServices.Services
             return true;
         }
 
-        public async Task<GenreListWithFilters> GetGenresByName(string containStringInName, QuantityOfItemsOnPage pageSize, int page)
+        public async Task<GenreListWithFilters> GetGenresByName(string containStringInName, int? pageSize, int page)
         {
             Func<Genre, bool> predicate = g => string.IsNullOrWhiteSpace(containStringInName) ||
                     g.Name.Contains(containStringInName);
@@ -61,7 +61,7 @@ namespace BAS.AppServices.Services
             var result = new GenreListWithFilters()
             {
                 CurrentPage = page,
-                PageSize = pageSize,
+                PageSize = pageSize.HasValue ? pageSize.Value : int.MaxValue,
                 AllPages = await unitOfWork.GenreRepository.Count(predicate)
             };
 
