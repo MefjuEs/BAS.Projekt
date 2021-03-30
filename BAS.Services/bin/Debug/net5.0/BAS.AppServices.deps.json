@@ -9,6 +9,7 @@
       "BAS.AppServices/1.0.0": {
         "dependencies": {
           "BAS.AppCommon": "1.0.0",
+          "BAS.AppRepository": "1.0.0",
           "BAS.Identity": "1.0.0"
         },
         "runtime": {
@@ -1377,6 +1378,23 @@
           "BAS.AppCommon.dll": {}
         }
       },
+      "BAS.AppRepository/1.0.0": {
+        "dependencies": {
+          "BAS.Database": "1.0.0"
+        },
+        "runtime": {
+          "BAS.AppRepository.dll": {}
+        }
+      },
+      "BAS.Database/1.0.0": {
+        "dependencies": {
+          "BAS.AppCommon": "1.0.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.4"
+        },
+        "runtime": {
+          "BAS.Database.dll": {}
+        }
+      },
       "BAS.Identity/1.0.0": {
         "dependencies": {
           "BAS.AppCommon": "1.0.0",
@@ -2251,6 +2269,16 @@
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
     "BAS.AppCommon/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BAS.AppRepository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BAS.Database/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

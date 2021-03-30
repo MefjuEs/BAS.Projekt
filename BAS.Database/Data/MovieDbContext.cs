@@ -37,6 +37,8 @@ namespace BAS.Database
                 r.MovieId,
                 r.GenreId
             });
+
+            builder.Entity<Movie>().HasIndex(m => m.Title).IsUnique();
         }
     }
 }

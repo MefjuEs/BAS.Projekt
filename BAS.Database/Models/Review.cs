@@ -10,9 +10,13 @@ namespace BAS.Database.Models
 {
     public class Review
     {
-        public string UserId { get; set; }
+        public long UserId { get; set; }
         public long MovieId { get; set; }
+        [Required]
         public double Rating { get; set; }
+        [MaxLength(500)]
         public string Message { get; set; }
+        [ForeignKey("MovieId")]
+        public virtual Movie Movie { get; set; }
     }
 }

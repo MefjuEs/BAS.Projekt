@@ -1864,6 +1864,33 @@
           "bin/placeholder/BAS.AppCommon.dll": {}
         }
       },
+      "BAS.AppRepository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "BAS.Database": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BAS.AppRepository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BAS.AppRepository.dll": {}
+        }
+      },
+      "BAS.Database/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "BAS.AppCommon": "1.0.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.4"
+        },
+        "compile": {
+          "bin/placeholder/BAS.Database.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BAS.Database.dll": {}
+        }
+      },
       "BAS.Identity/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
@@ -6539,6 +6566,16 @@
       "path": "../BAS.AppCommon/BAS.AppCommon.csproj",
       "msbuildProject": "../BAS.AppCommon/BAS.AppCommon.csproj"
     },
+    "BAS.AppRepository/1.0.0": {
+      "type": "project",
+      "path": "../BAS.Repository/BAS.AppRepository.csproj",
+      "msbuildProject": "../BAS.Repository/BAS.AppRepository.csproj"
+    },
+    "BAS.Database/1.0.0": {
+      "type": "project",
+      "path": "../BAS.Database/BAS.Database.csproj",
+      "msbuildProject": "../BAS.Database/BAS.Database.csproj"
+    },
     "BAS.Identity/1.0.0": {
       "type": "project",
       "path": "../BAS.Identity/BAS.Identity.csproj",
@@ -6548,6 +6585,7 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "BAS.AppCommon >= 1.0.0",
+      "BAS.AppRepository >= 1.0.0",
       "BAS.Identity >= 1.0.0"
     ]
   },
@@ -6583,6 +6621,9 @@
             },
             "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Identity\\BAS.Identity.csproj": {
               "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Identity\\BAS.Identity.csproj"
+            },
+            "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Repository\\BAS.AppRepository.csproj": {
+              "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Repository\\BAS.AppRepository.csproj"
             }
           }
         }

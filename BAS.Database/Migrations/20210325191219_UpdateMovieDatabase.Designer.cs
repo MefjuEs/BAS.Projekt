@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BAS.Database.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20210317145943_init")]
-    partial class init
+    [Migration("20210325191219_UpdateMovieDatabase")]
+    partial class UpdateMovieDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,10 +29,13 @@ namespace BAS.Database.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -50,27 +53,28 @@ namespace BAS.Database.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("Director")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MovieLength")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MovieLengthInMinutes")
+                        .HasColumnType("int");
 
                     b.Property<string>("Poster")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Producer")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("Movies");
                 });
@@ -84,6 +88,8 @@ namespace BAS.Database.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("MovieId", "GenreId");
+
+                    b.HasIndex("GenreId");
 
                     b.ToTable("MovieGenres");
                 });
@@ -99,12 +105,9 @@ namespace BAS.Database.Migrations
                     b.Property<int>("MemberPosition")
                         .HasColumnType("int");
 
-                    b.Property<long?>("PersonnelId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("MovieId", "PersonId", "MemberPosition");
 
-                    b.HasIndex("PersonnelId");
+                    b.HasIndex("PersonId");
 
                     b.ToTable("MoviePersonnel");
                 });
@@ -120,13 +123,19 @@ namespace BAS.Database.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -135,14 +144,15 @@ namespace BAS.Database.Migrations
 
             modelBuilder.Entity("BAS.Database.Models.Review", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
@@ -156,33 +166,56 @@ namespace BAS.Database.Migrations
 
             modelBuilder.Entity("BAS.Database.Models.MovieGenre", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Movie", null)
+                    b.HasOne("BAS.Database.Models.Genre", "Genre")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BAS.Database.Models.Movie", "Movie")
                         .WithMany("Genres")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("BAS.Database.Models.MoviePersonnel", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Movie", null)
+                    b.HasOne("BAS.Database.Models.Movie", "Movie")
                         .WithMany("Crew")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BAS.Database.Models.Personnel", null)
+                    b.HasOne("BAS.Database.Models.Personnel", "Personnel")
                         .WithMany("Movies")
-                        .HasForeignKey("PersonnelId");
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Personnel");
                 });
 
             modelBuilder.Entity("BAS.Database.Models.Review", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Movie", null)
+                    b.HasOne("BAS.Database.Models.Movie", "Movie")
                         .WithMany("Reviews")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("BAS.Database.Models.Genre", b =>
+                {
+                    b.Navigation("MovieGenres");
                 });
 
             modelBuilder.Entity("BAS.Database.Models.Movie", b =>

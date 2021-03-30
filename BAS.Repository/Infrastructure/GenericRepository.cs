@@ -1,4 +1,5 @@
-﻿using BAS.Database;
+﻿using BAS.AppCommon.Enums;
+using BAS.Database;
 using BAS.Repository.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,11 +35,6 @@ namespace BAS.Repository.Infrastructure
             return await db.Set<T>().FindAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
-        {
-            return await db.Set<T>().ToListAsync();
-        }
-
         public async Task Insert(T entity)
         {
             await db.Set<T>().AddAsync(entity);
@@ -47,6 +43,24 @@ namespace BAS.Repository.Infrastructure
         public async Task Update(T entity)
         {
             db.Set<T>().Update(entity);
+        }
+
+        public IEnumerable<T> GetByPredicate(Func<T, bool> predicate = null, Func<T, object> orderBy = null, bool isDescending = false, int page = 1, QuantityOfItemsOnPage pageSize = QuantityOfItemsOnPage.Ten)
+        {
+            int pageSizeInt = (int)pageSize;
+            var items = db.Set<T>().Where(predicate ?? (p => true));
+
+            if (orderBy != null && isDescending)
+                items = items.OrderByDescending(orderBy);
+            else if(orderBy != null && !isDescending)
+                items = items.OrderBy(orderBy);
+
+            return items.Skip((page - 1) * pageSizeInt).Take(pageSizeInt);
+        }
+
+        public async Task<int> Count(Func<T, bool> predicate = null)
+        {
+            return db.Set<T>().Count(predicate ?? (p => true));
         }
     }
 }

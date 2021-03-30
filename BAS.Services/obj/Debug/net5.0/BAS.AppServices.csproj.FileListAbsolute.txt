@@ -27,3 +27,7 @@ D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.Identi
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.AppCommon.pdb
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.Identity.pdb
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\obj\Debug\net5.0\BAS.AppServices.csproj.CopyComplete
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.AppRepository.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.Database.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.AppRepository.pdb
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Services\bin\Debug\net5.0\BAS.Database.pdb
