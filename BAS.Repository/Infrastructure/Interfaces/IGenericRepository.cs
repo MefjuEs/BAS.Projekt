@@ -1,11 +1,8 @@
-﻿using BAS.AppCommon.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BAS.Repository.Infrastructure.Interfaces
+namespace BAS.Repository
 {
     public interface IGenericRepository<T> where T : class
     {

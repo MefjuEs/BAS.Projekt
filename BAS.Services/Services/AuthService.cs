@@ -1,35 +1,28 @@
 ﻿using BAS.AppCommon;
-using BAS.AppCommon.Exceptions;
-using BAS.AppServices.DTOs;
-using BAS.AppServices.Services.Interfaces;
 using BAS.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services
+namespace BAS.AppServices
 {
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<IdentityRole<long>> roleManager;
-        private readonly IdentityContext identityDb;
         private readonly INotificationService notificationService;
 
         public AuthService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole<long>> roleManager,
-            IdentityContext identityDb)
+            RoleManager<IdentityRole<long>> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
-            this.identityDb = identityDb;
         }
 
         public async Task LogIn(LogInDTO loginDTO)
@@ -171,6 +164,11 @@ namespace BAS.AppServices.Services
         {
             var roles = await this.roleManager.Roles.ToListAsync();
             return roles;
+        }
+
+        public async Task<bool> DoesUserExist(long id)
+        {
+            return (await userManager.FindByIdAsync(id.ToString())) != null;
         }
     }
 }

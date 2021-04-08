@@ -154,3 +154,7 @@ D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepo
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepository.pdb
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.dll
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepository.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.dll
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepository.pdb
+C:\Users\Emati\Desktop\BAS.Projekt\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.pdb

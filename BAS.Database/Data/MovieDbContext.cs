@@ -1,5 +1,4 @@
-﻿using BAS.Database.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BAS.Database
 {

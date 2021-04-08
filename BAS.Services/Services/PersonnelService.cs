@@ -1,17 +1,11 @@
-﻿using BAS.AppCommon.StaticValues;
-using BAS.AppServices.DTOs;
-using BAS.AppServices.Services.Interfaces;
+﻿using BAS.AppCommon;
 using BAS.Database;
-using BAS.Database.Models;
-using BAS.Repository.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services
+namespace BAS.AppServices
 {
     public class PersonnelService : IPersonnelService
     {
@@ -109,22 +103,30 @@ namespace BAS.AppServices.Services
             return result;
         }
 
-        public async Task<bool> InsertPersonnel(Personnel personnel)
+        public async Task<bool> InsertPersonnel(PersonnelDTO personnelDTO)
         {
-            if (personnel.DateOfBirth >= DateTime.Now)
+            if (personnelDTO.DateOfBirth >= DateTime.Now)
                 return false;
 
-            if (personnel.Name.Length == 0 ||
-                personnel.Name.Length >= StaticValues.PersonnelNameMaxLength)
+            if (personnelDTO.Name.Length == 0 ||
+                personnelDTO.Name.Length >= StaticValues.PersonnelNameMaxLength)
                 return false;
 
-            if (personnel.Surname.Length == 0 ||
-                personnel.Name.Length >= StaticValues.PersonnelSurnameMaxLength)
+            if (personnelDTO.Surname.Length == 0 ||
+                personnelDTO.Name.Length >= StaticValues.PersonnelSurnameMaxLength)
                 return false;
 
-            if (personnel.Nationality.Length == 0 ||
-                personnel.Name.Length >= StaticValues.PersonnelNationalityMaxLength)
+            if (personnelDTO.Nationality.Length == 0 ||
+                personnelDTO.Name.Length >= StaticValues.PersonnelNationalityMaxLength)
                 return false;
+
+            var personnel = new Personnel()
+            {
+                Name = personnelDTO.Name,
+                Surname = personnelDTO.Surname,
+                Nationality = personnelDTO.Nationality,
+                DateOfBirth = personnelDTO.DateOfBirth
+            };
 
             db.Actors.Add(personnel);
             db.SaveChanges();

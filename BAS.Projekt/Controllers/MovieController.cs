@@ -1,10 +1,5 @@
-﻿using BAS.AppServices.DTOs;
-using BAS.AppServices.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BAS.AppServices;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BAS.Projekt.Controllers

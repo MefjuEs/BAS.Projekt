@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BAS.AppCommon.StaticValues
+﻿namespace BAS.AppCommon
 {
     public static class StaticValues
     {
@@ -21,5 +15,7 @@ namespace BAS.AppCommon.StaticValues
         public const int PersonnelNationalityMaxLength = 100;
 
         public const int MovieItemsLoaded = 20;
+
+        public const int ReviewContentMaxLength = 500;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services.Interfaces
+namespace BAS.AppServices
 {
     public interface INotificationService
     {

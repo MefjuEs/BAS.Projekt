@@ -5672,19 +5672,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Mateusz\\.nuget\\packages\\": {}
+    "C:\\Users\\Emati\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Database\\BAS.Database.csproj",
+      "projectUniqueName": "C:\\Users\\Emati\\Desktop\\BAS.Projekt\\BAS.Database\\BAS.Database.csproj",
       "projectName": "BAS.Database",
-      "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Database\\BAS.Database.csproj",
-      "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
-      "outputPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Database\\obj\\",
+      "projectPath": "C:\\Users\\Emati\\Desktop\\BAS.Projekt\\BAS.Database\\BAS.Database.csproj",
+      "packagesPath": "C:\\Users\\Emati\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Emati\\Desktop\\BAS.Projekt\\BAS.Database\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Emati\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5698,8 +5702,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.AppCommon\\BAS.AppCommon.csproj": {
-              "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.AppCommon\\BAS.AppCommon.csproj"
+            "C:\\Users\\Emati\\Desktop\\BAS.Projekt\\BAS.AppCommon\\BAS.AppCommon.csproj": {
+              "projectPath": "C:\\Users\\Emati\\Desktop\\BAS.Projekt\\BAS.AppCommon\\BAS.AppCommon.csproj"
             }
           }
         }
@@ -5734,7 +5738,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
       }
     }
   }

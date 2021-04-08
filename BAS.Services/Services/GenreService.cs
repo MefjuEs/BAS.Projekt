@@ -1,18 +1,10 @@
-﻿using BAS.AppCommon.Enums;
-using BAS.AppServices.DTOs;
-using BAS.AppServices.Services.Interfaces;
-using BAS.Database;
-using BAS.Database.Models;
-using BAS.Repository.Infrastructure;
-using BAS.Repository.Infrastructure.Interfaces;
+﻿using BAS.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services
+namespace BAS.AppServices
 {
     public class GenreService : IGenreService
     {
@@ -23,14 +15,20 @@ namespace BAS.AppServices.Services
             this.db = db;
         }
 
-        public async Task<bool> InsertGenre(Genre genre)
+        public async Task<bool> InsertGenre(GenreDTO genre)
         {
             if (string.IsNullOrWhiteSpace(genre.Name) ||
                 genre.Description.Length > 500 ||
                 db.Genres.Any(g => g.Name.ToLower().Equals(genre.Name.ToLower()))) //unitOfWork.GenreRepository.GetByPredicate(g => g.Name == genre.Name).Any()
                 return false;
 
-            db.Genres.Add(genre);
+            var newGenre = new Genre()
+            {
+                Name = genre.Name,
+                Description = genre.Description,
+            };
+
+            db.Genres.Add(newGenre);
             db.SaveChanges();
 
             return true;

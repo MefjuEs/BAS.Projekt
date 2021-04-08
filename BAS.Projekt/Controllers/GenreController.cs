@@ -1,12 +1,5 @@
-﻿using BAS.AppServices.DTOs;
-using BAS.AppServices.Services;
-using BAS.AppServices.Services.Interfaces;
-using BAS.Database.Models;
-using BAS.Repository.Infrastructure.Interfaces;
+﻿using BAS.AppServices;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BAS.Projekt.Controllers
@@ -37,7 +30,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertGenre([FromBody] Genre genre)
+        public async Task<IActionResult> InsertGenre([FromBody] GenreDTO genre)
         {
             var result = await genreService.InsertGenre(genre);
             return result ? Ok() : NotFound();

@@ -2,7 +2,6 @@ C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.dll
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\bin\Debug\net5.0\ref\BAS.AppCommon.dll
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\bin\Debug\net5.0\BAS.AppCommon.pdb
-C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.csprojAssemblyReference.cache
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.AssemblyInfoInputs.cache
 C:\Users\Emati\Desktop\BAS.Projekt\BAS.AppCommon\obj\Debug\net5.0\BAS.AppCommon.AssemblyInfo.cs

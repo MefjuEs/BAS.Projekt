@@ -1,22 +1,16 @@
-﻿using BAS.AppServices.DTOs;
-using BAS.Database.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BAS.Database;
 using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services.Interfaces
+namespace BAS.AppServices
 {
     public interface IMovieService
     {
-        Task<bool> DeleteMovie(long id);
-        Task<Movie> GetMovie(long id);
-        Task<MovieListWithFilters> GetMoviesWtihFilter(MovieFilters personnelFilter);
         Task<bool> InsertMovie(InsertUpdateMovieDTO movieDTO);
         Task<bool> UpdateMovie(InsertUpdateMovieDTO movieDTO);
-        Task<bool> InsertReview();
-        Task<bool> UpdateReview();
-        Task<bool> DeleteReview();
+        Task<bool> DeleteMovie(long id);
+        Task<Movie> GetMovie(long id);
+        Task<MovieListWithFilters> GetMovieWithFilters(MovieFilters personnelFilter);
+        Task<bool> DoesMovieExist(long movieId);
+        Task<bool> UpdateMovieRating(long movieId, double avgRating);
     }
 }

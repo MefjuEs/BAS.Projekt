@@ -1,12 +1,9 @@
 ﻿using BAS.AppCommon;
-using BAS.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BAS.Database.Data
+namespace BAS.Database
 {
     public static class MovieSeeder
     {
@@ -56,8 +53,8 @@ namespace BAS.Database.Data
                 new Personnel()
                 {
                     DateOfBirth = new DateTime(1948, 12, 21),
-                    Name = "Samuel",
-                    Surname = "L. Jackson",
+                    Name = "Samuel L.",
+                    Surname = "Jackson",
                     Nationality = "USA"
                 },
                 new Personnel()
@@ -145,7 +142,7 @@ namespace BAS.Database.Data
                 new Genre()
                 {
                     Description = "",
-                    Name = "Sci-Fi"
+                    Name = "Science Fiction"
                 }
             };
             List<MoviePersonnel> moviePersonnels = new List<MoviePersonnel>

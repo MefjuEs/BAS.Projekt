@@ -1,12 +1,8 @@
-﻿using BAS.AppCommon.StaticValues;
-using System;
+﻿using BAS.AppCommon;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BAS.Database.Models
+namespace BAS.Database
 {
     public class Movie
     {

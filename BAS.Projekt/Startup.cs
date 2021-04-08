@@ -1,9 +1,6 @@
-using BAS.AppServices.Services;
-using BAS.AppServices.Services.Interfaces;
+using BAS.AppServices;
 using BAS.Database;
 using BAS.Identity;
-using BAS.Repository.Infrastructure;
-using BAS.Repository.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -70,6 +67,8 @@ namespace BAS.Projekt
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IPersonnelService, PersonnelService>();
             services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IReviewService, ReviewService>();
             #endregion
 
             services.AddCors();

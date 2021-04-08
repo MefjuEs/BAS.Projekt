@@ -1,11 +1,7 @@
-﻿using BAS.Database.Models;
-using System;
+﻿using BAS.Database;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BAS.AppServices.DTOs
+namespace BAS.AppServices
 {
     public class PersonnelListWithFilters
     {

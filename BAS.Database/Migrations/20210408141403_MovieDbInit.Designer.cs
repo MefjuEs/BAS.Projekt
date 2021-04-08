@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BAS.Database.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20210325191219_UpdateMovieDatabase")]
-    partial class UpdateMovieDatabase
+    [Migration("20210408141403_MovieDbInit")]
+    partial class MovieDbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace BAS.Database.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BAS.Database.Models.Genre", b =>
+            modelBuilder.Entity("BAS.Database.Genre", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace BAS.Database.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Movie", b =>
+            modelBuilder.Entity("BAS.Database.Movie", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace BAS.Database.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.MovieGenre", b =>
+            modelBuilder.Entity("BAS.Database.MovieGenre", b =>
                 {
                     b.Property<long>("MovieId")
                         .HasColumnType("bigint");
@@ -94,7 +94,7 @@ namespace BAS.Database.Migrations
                     b.ToTable("MovieGenres");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.MoviePersonnel", b =>
+            modelBuilder.Entity("BAS.Database.MoviePersonnel", b =>
                 {
                     b.Property<long>("MovieId")
                         .HasColumnType("bigint");
@@ -112,7 +112,7 @@ namespace BAS.Database.Migrations
                     b.ToTable("MoviePersonnel");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Personnel", b =>
+            modelBuilder.Entity("BAS.Database.Personnel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +142,7 @@ namespace BAS.Database.Migrations
                     b.ToTable("Actors");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Review", b =>
+            modelBuilder.Entity("BAS.Database.Review", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -164,15 +164,15 @@ namespace BAS.Database.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.MovieGenre", b =>
+            modelBuilder.Entity("BAS.Database.MovieGenre", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Genre", "Genre")
+                    b.HasOne("BAS.Database.Genre", "Genre")
                         .WithMany("MovieGenres")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BAS.Database.Models.Movie", "Movie")
+                    b.HasOne("BAS.Database.Movie", "Movie")
                         .WithMany("Genres")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -183,15 +183,15 @@ namespace BAS.Database.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.MoviePersonnel", b =>
+            modelBuilder.Entity("BAS.Database.MoviePersonnel", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Movie", "Movie")
+                    b.HasOne("BAS.Database.Movie", "Movie")
                         .WithMany("Crew")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BAS.Database.Models.Personnel", "Personnel")
+                    b.HasOne("BAS.Database.Personnel", "Personnel")
                         .WithMany("Movies")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -202,9 +202,9 @@ namespace BAS.Database.Migrations
                     b.Navigation("Personnel");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Review", b =>
+            modelBuilder.Entity("BAS.Database.Review", b =>
                 {
-                    b.HasOne("BAS.Database.Models.Movie", "Movie")
+                    b.HasOne("BAS.Database.Movie", "Movie")
                         .WithMany("Reviews")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -213,12 +213,12 @@ namespace BAS.Database.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Genre", b =>
+            modelBuilder.Entity("BAS.Database.Genre", b =>
                 {
                     b.Navigation("MovieGenres");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Movie", b =>
+            modelBuilder.Entity("BAS.Database.Movie", b =>
                 {
                     b.Navigation("Crew");
 
@@ -227,7 +227,7 @@ namespace BAS.Database.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("BAS.Database.Models.Personnel", b =>
+            modelBuilder.Entity("BAS.Database.Personnel", b =>
                 {
                     b.Navigation("Movies");
                 });

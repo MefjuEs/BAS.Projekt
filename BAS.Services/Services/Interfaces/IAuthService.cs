@@ -1,9 +1,8 @@
-﻿using BAS.AppServices.DTOs;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services.Interfaces
+namespace BAS.AppServices
 {
     public interface IAuthService
     {
@@ -15,5 +14,6 @@ namespace BAS.AppServices.Services.Interfaces
         Task LogIn(LogInDTO loginDTO);
         Task LogOut();
         Task<RegisterResultDTO> Register(RegisterDTO registerDTO);
+        Task<bool> DoesUserExist(long id);
     }
 }

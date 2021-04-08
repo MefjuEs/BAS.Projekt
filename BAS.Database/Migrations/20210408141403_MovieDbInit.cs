@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BAS.Database.Migrations
 {
-    public partial class UpdateMovieDatabase : Migration
+    public partial class MovieDbInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
