@@ -1953,6 +1953,21 @@
           "bin/placeholder/BAS.AppRepository.dll": {}
         }
       },
+      "BAS.AppServices/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "BAS.AppCommon": "1.0.0",
+          "BAS.AppRepository": "1.0.0",
+          "BAS.Identity": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BAS.AppServices.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BAS.AppServices.dll": {}
+        }
+      },
       "BAS.Database/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
@@ -6719,6 +6734,11 @@
       "path": "../BAS.Repository/BAS.AppRepository.csproj",
       "msbuildProject": "../BAS.Repository/BAS.AppRepository.csproj"
     },
+    "BAS.AppServices/1.0.0": {
+      "type": "project",
+      "path": "../BAS.Services/BAS.AppServices.csproj",
+      "msbuildProject": "../BAS.Services/BAS.AppServices.csproj"
+    },
     "BAS.Database/1.0.0": {
       "type": "project",
       "path": "../BAS.Database/BAS.Database.csproj",
@@ -6733,6 +6753,7 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "BAS.AppRepository >= 1.0.0",
+      "BAS.AppServices >= 1.0.0",
       "BAS.Database >= 1.0.0",
       "BAS.Identity >= 1.0.0",
       "Microsoft.AspNetCore.SpaServices.Extensions >= 5.0.4",
@@ -6774,6 +6795,9 @@
             },
             "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Repository\\BAS.AppRepository.csproj": {
               "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Repository\\BAS.AppRepository.csproj"
+            },
+            "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Services\\BAS.AppServices.csproj": {
+              "projectPath": "D:\\Studia\\Studia\\Stopień2\\Semestr3\\BAS\\BAS.Services\\BAS.AppServices.csproj"
             }
           }
         }

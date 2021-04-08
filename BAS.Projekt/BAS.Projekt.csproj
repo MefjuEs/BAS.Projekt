@@ -16,10 +16,11 @@
     <ProjectReference Include="..\BAS.Database\BAS.Database.csproj" />
     <ProjectReference Include="..\BAS.Identity\BAS.Identity.csproj" />
     <ProjectReference Include="..\BAS.Repository\BAS.AppRepository.csproj" />
+    <ProjectReference Include="..\BAS.Services\BAS.AppServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\MovieImages\" />
   </ItemGroup>
 
 </Project>

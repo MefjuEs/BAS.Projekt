@@ -1,5 +1,6 @@
 ﻿using BAS.AppCommon.Enums;
 using BAS.AppServices.DTOs;
+using BAS.AppServices.Services.Interfaces;
 using BAS.Database;
 using BAS.Database.Models;
 using BAS.Repository.Infrastructure;
@@ -13,71 +14,144 @@ using System.Threading.Tasks;
 
 namespace BAS.AppServices.Services
 {
-    public class GenreService
+    public class GenreService : IGenreService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly MovieDbContext db;
 
-        public GenreService(IUnitOfWork unitOfWork)
+        public GenreService(MovieDbContext db)
         {
-            this.unitOfWork = unitOfWork;
+            this.db = db;
         }
 
         public async Task<bool> InsertGenre(Genre genre)
         {
             if (string.IsNullOrWhiteSpace(genre.Name) ||
                 genre.Description.Length > 500 ||
-                unitOfWork.GenreRepository.GetByPredicate(g => g.Name == genre.Name).Any())
+                db.Genres.Any(g => g.Name.ToLower().Equals(genre.Name.ToLower()))) //unitOfWork.GenreRepository.GetByPredicate(g => g.Name == genre.Name).Any()
                 return false;
 
-            await unitOfWork.GenreRepository.Insert(genre);
+            db.Genres.Add(genre);
+            db.SaveChanges();
 
             return true;
         }
 
-        public async Task<bool> UpdateGenre(Genre genre)
+        public async Task<bool> UpdateGenre(GenreDTO genreDTO)
         {
-            if(string.IsNullOrWhiteSpace(genre.Name) ||
-                genre.Description.Length > 500 ||
-                unitOfWork.GenreRepository.GetByPredicate(g => g.Name == genre.Name).Any())
+            if (string.IsNullOrWhiteSpace(genreDTO.Name) ||
+                genreDTO.Description.Length > 500 ||
+                db.Genres.Any(g => g.Name.ToLower().Equals(genreDTO.Name.ToLower()) && g.Id != genreDTO.Id)) //unitOfWork.GenreRepository.GetByPredicate(g => g.Name == genreDTO.Name && g.Id != genreDTO.Id).Any()
                 return false;
 
-            await unitOfWork.GenreRepository.Update(genre);
+            var genre = db.Genres.Find(genreDTO.Id);
+
+            if (genre == null)
+                return false;
+
+            genre.Name = genreDTO.Name;
+            genre.Description = genreDTO.Description;
+
+            db.Genres.Update(genre);
+            db.SaveChanges();
 
             return true;
         }
 
         public async Task<bool> DeleteGenre(long id)
         {
-            await unitOfWork.GenreRepository.Delete(id);
+            var genre = db.Genres.Find(id);
+
+            if (genre != null)
+            {
+                db.Genres.Remove(genre);
+                db.SaveChanges();
+            }
 
             return true;
         }
 
-        public async Task<GenreListWithFilters> GetGenresByName(string containStringInName, int? pageSize, int page)
+        public async Task<GenreListWithFilters> GetGenresByName(GetGenresFiltersDTO genreFilter)
         {
-            Func<Genre, bool> predicate = g => string.IsNullOrWhiteSpace(containStringInName) ||
-                    g.Name.Contains(containStringInName);
+            if (string.IsNullOrWhiteSpace(genreFilter.Name))
+            {
+                genreFilter.Name = "";
+            }
+
+            //Func<Genre, bool> predicate = g => string.IsNullOrWhiteSpace(genreFilter.Name) ||
+            //        g.Name.Contains(genreFilter.Name);
+
+            //Func<Genre, object> orderBy;
+
+            //switch (genreFilter.OrderBy)
+            //{
+            //    case "description":
+            //        orderBy = g => g.Description;
+            //        break;
+            //    case "name":
+            //        orderBy = g => g.Name;
+            //        break;
+            //    default:
+            //        orderBy = null;
+            //        break;
+            //}
+
+            var pageSize = genreFilter.PageSize.HasValue ? genreFilter.PageSize.Value : int.MaxValue;
 
             var result = new GenreListWithFilters()
             {
-                CurrentPage = page,
-                PageSize = pageSize.HasValue ? pageSize.Value : int.MaxValue,
-                AllPages = await unitOfWork.GenreRepository.Count(predicate)
+                CurrentPage = genreFilter.Page,
+                PageSize = pageSize,
+                AllPages = (int)Math.Ceiling(db.Genres.Count(g => g.Name.ToLower().Contains(genreFilter.Name.ToLower())) * 1.0 / pageSize)
             };
 
-            result.GenreList = unitOfWork.GenreRepository.GetByPredicate(predicate)
-                .Select(g => new GenreInListDTO() 
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                }).ToList();
+            var genres = db.Genres.Where(g => g.Name.ToLower().Contains(genreFilter.Name.ToLower()));
 
-            return null;
+            switch (genreFilter.OrderBy.ToLower())
+            {
+                case "description":
+                    if(genreFilter.IsDescending)
+                        genres = genres.OrderByDescending(g => g.Description);
+                    else
+                        genres = genres.OrderBy(g => g.Description);
+                    break;
+                case "name":
+                    if (genreFilter.IsDescending)
+                        genres = genres.OrderByDescending(g => g.Name);
+                    else
+                        genres = genres.OrderBy(g => g.Name);
+                    break;
+                default:
+                    break;
+            }
+
+
+            genres = genres.Skip((genreFilter.Page - 1) * pageSize).Take(pageSize);
+
+            //result.GenreList = 
+            //    unitOfWork.GenreRepository.GetByPredicate(predicate, orderBy, genreFilter.IsDescending, genreFilter.Page, pageSize)
+            //    .Select(g => new GenreInListDTO()
+            //    {
+            //        Id = g.Id,
+            //        Name = g.Name
+            //    }).ToList();
+
+            result.GenreList = genres.Select(g => new GenreInListDTO()
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList();
+
+            return result;
         }
 
         public async Task<Genre> GetGenre(long id)
         {
-            return await unitOfWork.GenreRepository.GetById(id);
+            return db.Genres.Find(id);
+        }
+
+        public async Task<bool> IsGenreInDB(long id)
+        {
+            return await db.Genres.AnyAsync(g => g.Id == id);
         }
     }
 }

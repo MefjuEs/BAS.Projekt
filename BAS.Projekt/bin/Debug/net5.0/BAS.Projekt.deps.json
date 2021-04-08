@@ -26,6 +26,7 @@
       "BAS.Projekt/1.0.0": {
         "dependencies": {
           "BAS.AppRepository": "1.0.0",
+          "BAS.AppServices": "1.0.0",
           "BAS.Database": "1.0.0",
           "BAS.Identity": "1.0.0",
           "Microsoft.AspNetCore.SpaServices.Extensions": "5.0.4",
@@ -1561,6 +1562,19 @@
         },
         "compile": {
           "BAS.AppRepository.dll": {}
+        }
+      },
+      "BAS.AppServices/1.0.0": {
+        "dependencies": {
+          "BAS.AppCommon": "1.0.0",
+          "BAS.AppRepository": "1.0.0",
+          "BAS.Identity": "1.0.0"
+        },
+        "runtime": {
+          "BAS.AppServices.dll": {}
+        },
+        "compile": {
+          "BAS.AppServices.dll": {}
         }
       },
       "BAS.Database/1.0.0": {
@@ -4161,6 +4175,11 @@
       "sha512": ""
     },
     "BAS.AppRepository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BAS.AppServices/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

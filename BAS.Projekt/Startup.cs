@@ -1,3 +1,5 @@
+using BAS.AppServices.Services;
+using BAS.AppServices.Services.Interfaces;
 using BAS.Database;
 using BAS.Identity;
 using BAS.Repository.Infrastructure;
@@ -60,8 +62,14 @@ namespace BAS.Projekt
             #endregion
 
             #region Repository
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            #endregion
+
+            #region Services
+            services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IPersonnelService, PersonnelService>();
+            services.AddScoped<IMovieService, MovieService>();
             #endregion
 
             services.AddCors();

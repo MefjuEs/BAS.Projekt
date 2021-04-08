@@ -152,3 +152,5 @@ D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\obj\Debug\net5.0\BAS.Projekt
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\obj\Debug\net5.0\BAS.Projekt.genruntimeconfig.cache
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepository.dll
 D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppRepository.pdb
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.dll
+D:\Studia\Studia\Stopień2\Semestr3\BAS\BAS.Projekt\bin\Debug\net5.0\BAS.AppServices.pdb

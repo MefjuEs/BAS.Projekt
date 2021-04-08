@@ -14,6 +14,7 @@ namespace BAS.AppCommon.StaticValues
         public const int MoviePosterMaxLength = 50;
         public const int MovieTitleMaxLength = 100;
         public const int MovieDescriptionMaxLength = 2000;
+        public const int MoviePosterMaxFileSize = 1048576;
 
         public const int PersonnelNameMaxLength = 100;
         public const int PersonnelSurnameMaxLength = 100;

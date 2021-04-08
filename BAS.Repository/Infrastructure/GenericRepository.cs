@@ -32,7 +32,7 @@ namespace BAS.Repository.Infrastructure
 
         public async Task<T> GetById(long id)
         {
-            return await db.Set<T>().FindAsync();
+            return await db.Set<T>().FindAsync(id);
         }
 
         public async Task Insert(T entity)
@@ -42,7 +42,8 @@ namespace BAS.Repository.Infrastructure
 
         public async Task Update(T entity)
         {
-            db.Set<T>().Update(entity);
+            db.Set<T>().Attach(entity);
+            db.Entry<T>(entity).State = EntityState.Modified;
         }
 
         public IEnumerable<T> GetByPredicate(Func<T, bool> predicate = null, Func<T, object> orderBy = null, bool isDescending = false, int page = 1, int? pageSize = null)
