@@ -35,5 +35,19 @@ namespace BAS.Projekt.Controllers
             var result = await movieService.DeleteMovie(id);
             return Ok(result);
         }
+
+        [HttpGet("{id}/Genres")]
+        public async Task<IActionResult> GetMovieGenres([FromRoute] long id)
+        {
+            var result = await movieService.GetMovieGenres(id);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Personnel")]
+        public async Task<IActionResult> GetMoviePersonnel([FromRoute] long id)
+        {
+            var result = await movieService.GetMoviePersonnel(id);
+            return Ok(result);
+        }
     }
 }

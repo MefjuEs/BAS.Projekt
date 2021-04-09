@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace BAS.AppServices
 {
@@ -318,6 +319,32 @@ namespace BAS.AppServices
             var movie = await db.Movies.FindAsync(id);
 
             return movie;
+        }
+
+        public async Task<List<GenreInMovieDTO>> GetMovieGenres(long movieId)
+        {
+            return db.MovieGenres.Include(mg => mg.Genre)
+                .Where(mg => mg.MovieId == movieId)
+                .Select(mg => new GenreInMovieDTO()
+                {
+                    MovieId = mg.MovieId,
+                    GenreId = mg.GenreId,
+                    Name = mg.Genre.Name
+                }).ToList();
+        }
+
+        public async Task<List<PersonnelInMovieDTO>> GetMoviePersonnel(long movieId)
+        {
+            return db.MoviePersonnel.Include(mp => mp.Personnel)
+                .Where(mp => mp.MovieId == movieId)
+                .Select(mp => new PersonnelInMovieDTO()
+                {
+                    MovieId = mp.MovieId,
+                    PersonId = mp.PersonId,
+                    MemberPosition = mp.MemberPosition,
+                    Name = mp.Personnel.Name,
+                    Surname = mp.Personnel.Surname
+                }).ToList();
         }
 
         public Task<MovieListWithFilters> GetMovieWithFilters(MovieFilters personnelFilter)
