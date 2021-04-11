@@ -1,4 +1,6 @@
-﻿namespace BAS.AppServices
+﻿using System.Collections.Generic;
+
+namespace BAS.AppServices
 {
     public class GetMovieDTO
     {
@@ -7,6 +9,10 @@
         public string Description { get; set; }
         public int ReleaseYear { get; set; }
         public int MovieLengthInMinutes { get; set; }
-        public byte MoviePoster { get; set; }
+        public double AverageRating { get; set; }
+        public FileDTO MoviePoster { get; set; }
+        public List<GenreInMovieDTO> Genres { get; set; }
+        public List<PersonnelInMovieDTO> Personnel { get; set; }
+        public MovieReviewListWithFilters Reviews { get; set; }
     }
 }

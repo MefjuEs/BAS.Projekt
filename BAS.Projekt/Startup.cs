@@ -64,6 +64,7 @@ namespace BAS.Projekt
             #endregion
 
             #region Services
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IPersonnelService, PersonnelService>();
             services.AddScoped<IMovieService, MovieService>();

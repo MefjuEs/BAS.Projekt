@@ -15,5 +15,6 @@ namespace BAS.AppServices
         Task LogOut();
         Task<RegisterResultDTO> Register(RegisterDTO registerDTO);
         Task<bool> DoesUserExist(long id);
+        Task<string> GetUsername(long id);
     }
 }

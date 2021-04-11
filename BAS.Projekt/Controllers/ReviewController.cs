@@ -16,9 +16,16 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertReview([FromBody] ReviewDTO reviewDTO)
+        public async Task<IActionResult> InsertReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.InsertReview(reviewDTO);
+            return result ? Ok() : NotFound();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateReview([FromBody] InsertUpdateReviewDTO reviewDTO)
+        {
+            var result = await reviewService.UpdateReview(reviewDTO);
             return result ? Ok() : NotFound();
         }
 

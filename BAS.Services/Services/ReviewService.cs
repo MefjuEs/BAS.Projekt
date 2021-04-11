@@ -1,5 +1,8 @@
 ﻿using BAS.AppCommon;
 using BAS.Database;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +21,7 @@ namespace BAS.AppServices
             this.movieServices = movieServices;
         }
 
-        public async Task<bool> InsertReview(ReviewDTO reviewDTO)
+        public async Task<bool> InsertReview(InsertUpdateReviewDTO reviewDTO)
         {
             if (!await authServices.DoesUserExist(reviewDTO.UserId))
                 return false;
@@ -49,7 +52,7 @@ namespace BAS.AppServices
             return true;
         }
 
-        public double GetAvgMovieRating(long movieId)
+        private double GetAvgMovieRating(long movieId)
         {
             var reviews = db.Reviews.Where(m => m.MovieId == movieId).ToList();
 
@@ -65,6 +68,34 @@ namespace BAS.AppServices
             }
 
             return sumRating / reviews.Count();
+        }
+
+        public async Task<bool> UpdateReview(InsertUpdateReviewDTO reviewDTO)
+        {
+            if (!await authServices.DoesUserExist(reviewDTO.UserId))
+                return false;
+
+            if (!await movieServices.DoesMovieExist(reviewDTO.MovieId))
+                return false;
+
+            if (reviewDTO.Rating < 1 || reviewDTO.Rating > 10)
+                return false;
+
+            if (reviewDTO.Message.Length > StaticValues.ReviewContentMaxLength)
+                return false;
+
+
+            var review = db.Reviews.Find(reviewDTO.UserId, reviewDTO.MovieId);
+            review.Message = reviewDTO.Message;
+            review.Rating = reviewDTO.Rating;
+
+            db.Reviews.Update(review);
+            db.SaveChanges();
+
+            var avgRating = GetAvgMovieRating(reviewDTO.MovieId);
+            await movieServices.UpdateMovieRating(reviewDTO.MovieId, avgRating);
+
+            return true;
         }
 
         public async Task<bool> DeleteReview(long userId, long movieId)
@@ -83,6 +114,58 @@ namespace BAS.AppServices
             }
 
             return false;
+        }
+
+        public async Task<Review> GetReview(long userId, long movieId)
+        {
+            return await db.Reviews.FindAsync(userId, movieId);
+        }
+
+        public UserReviewListWithFilters GetUserReviews(ReviewFilters reviewfilters)
+        {
+            var pageSize = reviewfilters.PageSize ?? int.MaxValue;
+
+            var result = new UserReviewListWithFilters()
+            {
+                CurrentPage = reviewfilters.Page,
+                PageSize = pageSize,
+                AllPages = (int)Math.Ceiling(db.Reviews.Count(r => r.UserId == reviewfilters.Id) * 1.0 / pageSize)
+            };
+
+            var reviews = db.Reviews.Include(r => r.Movie)
+                .Where(r => r.UserId == reviewfilters.Id)
+                .Select(r => new UserReviewInListDTO()
+                {
+                    UserId = r.UserId,
+                    MovieId = r.MovieId,
+                    Rating = r.Rating,
+                    Message = r.Message,
+                    MovieTitle = r.Movie.Title
+                });
+
+            switch (reviewfilters.OrderBy.ToLower())
+            {
+                case "rating":
+                    if (reviewfilters.IsDescending)
+                        reviews = reviews.OrderByDescending(r => r.Rating);
+                    else
+                        reviews = reviews.OrderBy(r => r.Rating);
+                    break;
+                case "movie":
+                    if (reviewfilters.IsDescending)
+                        reviews = reviews.OrderByDescending(r => r.MovieTitle);
+                    else
+                        reviews = reviews.OrderBy(r => r.MovieTitle);
+                    break;
+                default:
+                    break;
+            }
+
+            reviews = reviews.Skip((reviewfilters.Page - 1) * pageSize).Take(pageSize);
+
+            result.ReviewList = reviews.ToList();
+
+            return result;
         }
     }
 }

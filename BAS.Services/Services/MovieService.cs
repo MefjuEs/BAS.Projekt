@@ -16,13 +16,17 @@ namespace BAS.AppServices
         private readonly MovieDbContext db;
         private readonly IGenreService genreService;
         private readonly IPersonnelService personnelService;
-        private IHostingEnvironment appEnvironment;
+        private readonly IFileService fileService;
+        private readonly IAuthService authService;
+        private readonly IHostingEnvironment appEnvironment;
 
-        public MovieService(MovieDbContext db, IGenreService genreService, IPersonnelService personnelService, IHostingEnvironment appEnvironment)
+        public MovieService(MovieDbContext db, IGenreService genreService, IPersonnelService personnelService, IFileService fileService, IAuthService authService, IHostingEnvironment appEnvironment)
         {
             this.db = db;
             this.genreService = genreService;
             this.personnelService = personnelService;
+            this.fileService = fileService;
+            this.authService = authService;
             this.appEnvironment = appEnvironment;
         }
 
@@ -47,7 +51,7 @@ namespace BAS.AppServices
                 MovieLengthInMinutes = movieDTO.MovieLengthInMinutes,
                 AverageRating = 0.0,
                 Description = movieDTO.Description,
-                Poster = "", //"Movie_"
+                Poster = "",
                 ReleaseYear = movieDTO.ReleaseYear,
                 Title = movieDTO.Title
             };
@@ -59,7 +63,7 @@ namespace BAS.AppServices
 
             await InsertMovieGenres(movieId, movieDTO.Genres);
             await InsertMovieCrew(movieId, movieDTO.Crew);
-            movie.Poster = await InsertMoviePoster(movieId, movieDTO.File);
+            movie.Poster = await fileService.InsertMoviePoster(movieId, movieDTO.File);
 
             db.Movies.Update(movie);
             db.SaveChanges();
@@ -97,7 +101,7 @@ namespace BAS.AppServices
             await UpdateMovieCrew(movie.Id, movieDTO.Crew);
 
             if (movieDTO.UpdatePhoto)
-                movie.Poster = await UpdateMoviePoster(movie.Id, movieDTO.File);
+                movie.Poster = await fileService.UpdateMoviePoster(movie.Id, movie.Poster, movieDTO.File);
 
             db.Movies.Update(movie);
             db.SaveChanges();
@@ -111,7 +115,7 @@ namespace BAS.AppServices
 
             if (movie != null)
             {
-                await DeleteMoviePoster(id);
+                fileService.DeleteMoviePoster(movie.Poster);
 
                 db.Movies.Remove(movie);
                 db.SaveChanges();
@@ -249,76 +253,83 @@ namespace BAS.AppServices
         }
         #endregion
 
-        #region MoviePosters
-        private async Task<string> InsertMoviePoster(long movieId, IFormFile file)
-        {
-            var enableExtensions = new string[] { ".jpeg", ".jpg", ".png" };
-
-            var extension = "." + file.FileName.Split(".").Last();
-
-            if (file.Length <= 0 ||
-                file.Length > StaticValues.MoviePosterMaxFileSize ||
-                 !enableExtensions.Any(e => e == extension))
-                return "";
-
-            string fileName = "Movie_" + movieId;
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages";
-
-            if(File.Exists(path + "\\" + fileName))
-            {
-                long i = 1;
-                var fileFound = true;
-
-                do
-                {
-                    var tempFileName = fileName + "_" + i;
-
-                    if(!File.Exists(path + "\\" + tempFileName))
-                    {
-                        fileFound = false;
-                        fileName = tempFileName;
-                    }
-
-                    i++;
-                } while (fileFound);
-            }
-
-            using (var stream = File.Create(path + "\\" + fileName + extension))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return fileName + extension;
-        }
-
-        
-        private async Task<string> UpdateMoviePoster(long movieId, IFormFile file)
-        {
-            await DeleteMoviePoster(movieId);
-            return await InsertMoviePoster(movieId, file);
-        }
-
-        private async Task DeleteMoviePoster(long movieId)
-        {
-            var moviePosterName = db.Movies.Find(movieId)?.Poster;
-
-            if (moviePosterName == "")
-                return;
-
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages\\";
-            if (File.Exists(path + moviePosterName))
-            {
-                File.Delete(path + moviePosterName);
-            }
-        }
-        #endregion
-
         #region Getters
-        public async Task<Movie> GetMovie(long id)
+        public async Task<GetMovieDTO> GetMovie(long id)
         {
             var movie = await db.Movies.FindAsync(id);
 
-            return movie;
+            var moviePoster = fileService.GetMoviePoster(movie.Poster);
+            var movieGenres = await GetMovieGenres(id);
+            var moviePersonnel = await GetMoviePersonnel(id);
+            var movieReviews = await GetMovieReviews(new ReviewFilters()
+            {
+                Id = id,
+                IsDescending = true,
+                OrderBy = "",
+                Page = 1,
+                PageSize = 10
+            });
+
+            var movieDTO = new GetMovieDTO()
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                ReleaseYear = movie.ReleaseYear,
+                MovieLengthInMinutes = movie.MovieLengthInMinutes,
+                AverageRating = movie.AverageRating,
+                MoviePoster = moviePoster,
+                Genres = movieGenres,
+                Personnel = moviePersonnel,
+                Reviews = movieReviews
+            };
+
+            return movieDTO;
+        }
+
+        public async Task<MovieReviewListWithFilters> GetMovieReviews(ReviewFilters reviewfilters)
+        {
+            var pageSize = reviewfilters.PageSize ?? int.MaxValue;
+
+            var result = new MovieReviewListWithFilters()
+            {
+                CurrentPage = reviewfilters.Page,
+                PageSize = pageSize,
+                AllPages = (int)Math.Ceiling(db.Reviews.Count(r => r.MovieId == reviewfilters.Id) * 1.0 / pageSize)
+            };
+
+            var reviews = db.Reviews
+                .Where(r => r.MovieId == reviewfilters.Id)
+                .Select(r => new MovieReviewInListDTO()
+                {
+                    UserId = r.UserId,
+                    MovieId = r.MovieId,
+                    Rating = r.Rating,
+                    Message = r.Message,
+                });
+
+            switch (reviewfilters.OrderBy.ToLower())
+            {
+                case "rating":
+                    if (reviewfilters.IsDescending)
+                        reviews = reviews.OrderByDescending(r => r.Rating);
+                    else
+                        reviews = reviews.OrderBy(r => r.Rating);
+                    break;
+                default:
+                    break;
+            }
+
+            reviews = reviews.Skip((reviewfilters.Page - 1) * pageSize).Take(pageSize);
+
+            result.ReviewList = reviews.ToList();
+
+            foreach(var review in result.ReviewList)
+            {
+                review.Username = await authService.GetUsername(review.UserId);
+            }
+
+            return result;
         }
 
         public async Task<List<GenreInMovieDTO>> GetMovieGenres(long movieId)
@@ -347,9 +358,92 @@ namespace BAS.AppServices
                 }).ToList();
         }
 
-        public Task<MovieListWithFilters> GetMovieWithFilters(MovieFilters personnelFilter)
+        public async Task<MovieListWithFilters> GetMovieWithFilters(MovieFilters movieFilters)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(movieFilters.Title))
+            {
+                movieFilters.Title = "";
+            }
+
+            var pageSize = movieFilters.PageSize.HasValue ? movieFilters.PageSize.Value : int.MaxValue;
+
+            Func<Movie, bool> predicate = (m => m.Title.ToLower().Contains(movieFilters.Title.ToLower()) &&
+                                (!movieFilters.ReleaseYearFrom.HasValue || m.ReleaseYear >= movieFilters.ReleaseYearFrom.Value) &&
+                                (!movieFilters.ReleaseYearTo.HasValue || m.ReleaseYear <= movieFilters.ReleaseYearTo.Value) &&
+                                (!movieFilters.MovieLengthFrom.HasValue || m.MovieLengthInMinutes >= movieFilters.MovieLengthFrom) &&
+                                (!movieFilters.MovieLengthTo.HasValue || m.MovieLengthInMinutes <= movieFilters.MovieLengthTo) &&
+                                (!movieFilters.AvgRatingFrom.HasValue || m.AverageRating >= movieFilters.AvgRatingFrom) &&
+                                (!movieFilters.AvgRatingTo.HasValue || m.AverageRating <= movieFilters.AvgRatingTo) &&
+                                (!movieFilters.GenreId.HasValue || m.Genres.Any(mg => mg.GenreId == movieFilters.GenreId)));
+
+            var result = new MovieListWithFilters()
+            {
+                CurrentPage = movieFilters.Page,
+                PageSize = pageSize,
+                AllPages = (int)Math.Ceiling(db.Movies.Include(m => m.Genres).Count(predicate) * 1.0 / pageSize)
+                
+                
+                
+                //(int)Math.Ceiling(db.Actors.Count(p => (p.Name.ToLower() + p.Surname.ToLower()).Contains(personnelFilter.FullName.ToLower()) &&
+                //    p.Nationality.ToLower().Contains(personnelFilter.Nationality.ToLower()) &&
+                //    (!personnelFilter.BirthDateFrom.HasValue || p.DateOfBirth >= personnelFilter.BirthDateFrom.Value) &&
+                //    (!personnelFilter.BirthDateTo.HasValue || p.DateOfBirth <= personnelFilter.BirthDateTo.Value))
+                //                * 1.0 / pageSize)
+            };
+
+            var movies = db.Movies.Include(m => m.Genres)
+                .Where(predicate).Select(m => new MovieInListDTO()
+                {
+                    AverageRating = m.AverageRating,
+                    Id = m.Id,
+                    MovieLengthInMinutes = m.MovieLengthInMinutes,
+                    ReleaseYear = m.ReleaseYear,
+                    Title = m.Title,
+                    PosterName = m.Poster
+                });
+
+
+
+
+            switch (movieFilters.OrderBy.ToLower())
+            {
+                case "title":
+                    if (movieFilters.IsDescending)
+                        movies = movies.OrderByDescending(m => m.Title);
+                    else
+                        movies = movies.OrderBy(m => m.Title);
+                    break;
+                case "releaseyear":
+                    if (movieFilters.IsDescending)
+                        movies = movies.OrderByDescending(m => m.ReleaseYear);
+                    else
+                        movies = movies.OrderBy(m => m.ReleaseYear);
+                    break;
+                case "movielength":
+                    if (movieFilters.IsDescending)
+                        movies = movies.OrderByDescending(m => m.MovieLengthInMinutes);
+                    else
+                        movies = movies.OrderBy(m => m.MovieLengthInMinutes);
+                    break;
+                case "averageRating":
+                    if (movieFilters.IsDescending)
+                        movies = movies.OrderByDescending(m => m.AverageRating);
+                    else
+                        movies = movies.OrderBy(m => m.AverageRating);
+                    break;
+                default:
+                    break;
+            }
+
+            result.MovieList = movies.Skip((movieFilters.Page - 1) * pageSize).Take(pageSize).ToList();
+            
+
+            foreach(var movie in result.MovieList)
+            {
+                movie.Poster = fileService.GetMoviePoster(movie.PosterName);
+            }
+
+            return result;
         }
         #endregion
 
@@ -368,6 +462,16 @@ namespace BAS.AppServices
             db.SaveChanges();
 
             return true;
+        }
+
+        public async Task<FileDTO> GetMoviePoster(long movieId)
+        {
+            var movie = await db.Movies.FindAsync(movieId);
+
+            if (movie == null)
+                return null;
+
+            return fileService.GetMoviePoster(movie.Poster);
         }
     }
 }

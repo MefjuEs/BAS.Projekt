@@ -4,7 +4,8 @@ namespace BAS.AppServices
 {
     public interface IReviewService
     {
-        Task<bool> InsertReview(ReviewDTO review);
+        Task<bool> InsertReview(InsertUpdateReviewDTO review);
+        Task<bool> UpdateReview(InsertUpdateReviewDTO reviewDTO);
         Task<bool> DeleteReview(long userId, long movieId);
     }
 }

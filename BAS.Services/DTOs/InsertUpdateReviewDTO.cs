@@ -1,6 +1,6 @@
 ﻿namespace BAS.AppServices
 {
-    public class ReviewDTO
+    public class InsertUpdateReviewDTO
     {
         public long UserId { get; set; }
         public long MovieId { get; set; }

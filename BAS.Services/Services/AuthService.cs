@@ -170,5 +170,15 @@ namespace BAS.AppServices
         {
             return (await userManager.FindByIdAsync(id.ToString())) != null;
         }
+
+        public async Task<string> GetUsername(long id)
+        {
+            var user = await userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+                return "Gal Anonim";
+
+            return user.UserName;
+        }
     }
 }

@@ -36,6 +36,28 @@ namespace BAS.Projekt.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMovie([FromRoute] long id)
+        {
+            var result = await movieService.GetMovie(id);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMoviesWithFilters([FromBody] MovieFilters filters)
+        {
+            var result = await movieService.GetMovieWithFilters(filters);
+            return Ok(result);
+        }
+
+        [HttpGet("Reviews")]
+        public async Task<IActionResult> GetMovieReviews([FromBody] ReviewFilters filters)
+        {
+            var result = await movieService.GetMovieReviews(filters);
+            return Ok(result);
+        }
+
+        #region AlternativeMethods
         [HttpGet("{id}/Genres")]
         public async Task<IActionResult> GetMovieGenres([FromRoute] long id)
         {
@@ -49,5 +71,13 @@ namespace BAS.Projekt.Controllers
             var result = await movieService.GetMoviePersonnel(id);
             return Ok(result);
         }
+
+        [HttpGet("{id}/Poster")]
+        public async Task<IActionResult> GetMoviePoster([FromRoute] long id)
+        {
+            var result = await movieService.GetMoviePoster(id);
+            return Ok(result);
+        }
+        #endregion
     }
 }
