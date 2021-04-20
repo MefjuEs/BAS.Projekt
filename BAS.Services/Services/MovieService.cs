@@ -1,13 +1,13 @@
 ﻿using BAS.AppCommon;
 using BAS.Database;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using RestSharp;
 
 namespace BAS.AppServices
 {
@@ -19,8 +19,12 @@ namespace BAS.AppServices
         private readonly IFileService fileService;
         private readonly IAuthService authService;
         private readonly IHostingEnvironment appEnvironment;
+        private readonly RestClient moviePyClient;
 
-        public MovieService(MovieDbContext db, IGenreService genreService, IPersonnelService personnelService, IFileService fileService, IAuthService authService, IHostingEnvironment appEnvironment)
+        private const string moviePyRecommendUrl = "movies/recommend";
+
+        public MovieService(MovieDbContext db, IGenreService genreService, IPersonnelService personnelService, IFileService fileService,
+            IAuthService authService, IHostingEnvironment appEnvironment, IConfiguration configuration)
         {
             this.db = db;
             this.genreService = genreService;
@@ -28,6 +32,13 @@ namespace BAS.AppServices
             this.fileService = fileService;
             this.authService = authService;
             this.appEnvironment = appEnvironment;
+            this.moviePyClient = this.ConfigureMoviePy(configuration);
+        }
+
+        private RestClient ConfigureMoviePy(IConfiguration configuration)
+        {
+            var baseUrl = configuration.GetSection("API").GetSection("MoviePy").GetValue<string>("Url");
+            return new RestClient(baseUrl);
         }
 
         #region Movie
@@ -472,6 +483,24 @@ namespace BAS.AppServices
                 return null;
 
             return fileService.GetMoviePoster(movie.Poster);
+        }
+
+        public async Task<RecommendationsDTO> GetRecommendations(long userAccountId, int page = 1, int pageSize = 20)
+        {
+            var request = new RestRequest(moviePyRecommendUrl);
+            request.AddParameter(nameof(userAccountId), userAccountId);
+            request.AddParameter(nameof(page), page);
+            request.AddParameter(nameof(pageSize), pageSize);
+
+            try
+            {
+                var response = await this.moviePyClient.GetAsync<MoviePyResponseDTO<RecommendationsDTO>>(request);
+                return response.Data;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("MoviePy API returned error", e);
+            }
         }
     }
 }
