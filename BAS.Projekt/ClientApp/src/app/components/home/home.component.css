@@ -1,0 +1,19 @@
+h2 {
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.golden-star {
+    color: goldenrod;
+    font-size: 35px;
+    margin-top: 10px;
+}
+
+.filters {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.input-padding-right-25 {
+    padding-right: 25px;
+}

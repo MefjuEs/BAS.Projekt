@@ -70,6 +70,7 @@ namespace BAS.Projekt
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<INotificationService, NotificationService>();
             #endregion
 
             services.AddCors();

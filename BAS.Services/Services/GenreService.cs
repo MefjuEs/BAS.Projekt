@@ -1,6 +1,7 @@
 ﻿using BAS.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -106,22 +107,21 @@ namespace BAS.AppServices
 
             switch (genreFilter.OrderBy.ToLower())
             {
-                case "description":
-                    if(genreFilter.IsDescending)
-                        genres = genres.OrderByDescending(g => g.Description);
-                    else
-                        genres = genres.OrderBy(g => g.Description);
+                case "descriptiondesc":
+                    genres = genres.OrderByDescending(g => g.Description);
                     break;
-                case "name":
-                    if (genreFilter.IsDescending)
-                        genres = genres.OrderByDescending(g => g.Name);
-                    else
-                        genres = genres.OrderBy(g => g.Name);
+                case "descriptionasc":
+                    genres = genres.OrderBy(g => g.Description);
+                    break;
+                case "namedesc":
+                    genres = genres.OrderByDescending(g => g.Name);
+                    break;
+                case "nameasc":
+                    genres = genres.OrderBy(g => g.Name);
                     break;
                 default:
                     break;
             }
-
 
             genres = genres.Skip((genreFilter.Page - 1) * pageSize).Take(pageSize);
 
@@ -145,6 +145,15 @@ namespace BAS.AppServices
         public async Task<Genre> GetGenre(long id)
         {
             return db.Genres.Find(id);
+        }
+
+        public List<GenreInListDTO> GetGenres()
+        {
+            return db.Genres.Select(g => new GenreInListDTO()
+            {
+                Name = g.Name,
+                Id = g.Id
+            }).ToList();
         }
 
         public async Task<bool> IsGenreInDB(long id)

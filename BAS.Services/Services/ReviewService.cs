@@ -145,17 +145,17 @@ namespace BAS.AppServices
 
             switch (reviewfilters.OrderBy.ToLower())
             {
-                case "rating":
-                    if (reviewfilters.IsDescending)
-                        reviews = reviews.OrderByDescending(r => r.Rating);
-                    else
-                        reviews = reviews.OrderBy(r => r.Rating);
+                case "ratingdesc":
+                    reviews = reviews.OrderByDescending(r => r.Rating);
                     break;
-                case "movie":
-                    if (reviewfilters.IsDescending)
-                        reviews = reviews.OrderByDescending(r => r.MovieTitle);
-                    else
-                        reviews = reviews.OrderBy(r => r.MovieTitle);
+                case "ratingasc":
+                    reviews = reviews.OrderBy(r => r.Rating);
+                    break;
+                case "moviedesc":
+                    reviews = reviews.OrderByDescending(r => r.MovieTitle);
+                    break;
+                case "movieasc":
+                    reviews = reviews.OrderBy(r => r.MovieTitle);
                     break;
                 default:
                     break;

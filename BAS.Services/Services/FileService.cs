@@ -102,7 +102,7 @@ namespace BAS.AppServices
             if (!File.Exists(path))
                 return null;
 
-            var image = File.ReadAllBytes(path);
+            var image = Convert.ToBase64String(File.ReadAllBytes(path));
             var extension = Path.GetExtension(path);
             var contentType = "";
             switch (extension)

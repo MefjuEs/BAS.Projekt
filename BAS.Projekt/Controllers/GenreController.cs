@@ -22,8 +22,15 @@ namespace BAS.Projekt.Controllers
             return Ok(genre);
         }
 
+        [HttpGet("all")]
+        public IActionResult GetGenres()
+        {
+            var result = genreService.GetGenres();
+            return Ok(result);
+        }
+
         [HttpGet]
-        public async Task<IActionResult> GetGenres([FromBody] GetGenresFiltersDTO genreFilter)
+        public async Task<IActionResult> GetGenresByName([FromBody] GetGenresFiltersDTO genreFilter)
         {
             var genres = await genreService.GetGenresByName(genreFilter);
             return Ok(genres);
@@ -45,7 +52,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> UpdateGenre([FromRoute] long id)
+        public async Task<IActionResult> DeleteGenre([FromRoute] long id)
         {
             var result = await genreService.DeleteGenre(id);
             return result ? Ok() : NotFound();

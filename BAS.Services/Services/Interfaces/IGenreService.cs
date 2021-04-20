@@ -1,4 +1,5 @@
 ﻿using BAS.Database;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BAS.AppServices
@@ -11,5 +12,6 @@ namespace BAS.AppServices
         Task<Genre> GetGenre(long id);
         Task<GenreListWithFilters> GetGenresByName(GetGenresFiltersDTO genreFilter);
         Task<bool> IsGenreInDB(long id);
+        List<GenreInListDTO> GetGenres();
     }
 }

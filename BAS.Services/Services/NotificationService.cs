@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BAS.AppServices.Services
+namespace BAS.AppServices
 {
     public class NotificationService : INotificationService
     {

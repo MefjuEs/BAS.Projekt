@@ -68,29 +68,29 @@ namespace BAS.AppServices
 
             switch (personnelFilter.OrderBy.ToLower())
             {
-                case "surname":
-                    if (personnelFilter.IsDescending)
-                        personnel = personnel.OrderByDescending(g => g.Surname);
-                    else
-                        personnel = personnel.OrderBy(g => g.Surname);
+                case "surnamedesc":
+                    personnel = personnel.OrderByDescending(g => g.Surname);
                     break;
-                case "nationality":
-                    if (personnelFilter.IsDescending)
-                        personnel = personnel.OrderByDescending(g => g.Nationality);
-                    else
-                        personnel = personnel.OrderBy(g => g.Nationality);
+                case "surnameasc":
+                    personnel = personnel.OrderBy(g => g.Surname);
                     break;
-                case "dateofbirth":
-                    if (personnelFilter.IsDescending)
-                        personnel = personnel.OrderByDescending(g => g.DateOfBirth);
-                    else
-                        personnel = personnel.OrderBy(g => g.DateOfBirth);
+                case "nationalitydesc":
+                    personnel = personnel.OrderByDescending(g => g.Nationality);
                     break;
-                case "name":
-                    if (personnelFilter.IsDescending)
-                        personnel = personnel.OrderByDescending(g => g.Name);
-                    else
-                        personnel = personnel.OrderBy(g => g.Name);
+                case "nationalityasc":
+                    personnel = personnel.OrderBy(g => g.Nationality);
+                    break;
+                case "dateofbirthdesc":
+                    personnel = personnel.OrderByDescending(g => g.DateOfBirth);
+                    break;
+                case "dateofbirthasc":
+                    personnel = personnel.OrderBy(g => g.DateOfBirth);
+                    break;
+                case "namedesc":
+                    personnel = personnel.OrderByDescending(g => g.Name);
+                    break;
+                case "nameasc":
+                    personnel = personnel.OrderBy(g => g.Name);
                     break;
                 default:
                     break;

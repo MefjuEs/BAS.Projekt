@@ -16,13 +16,12 @@ namespace BAS.AppServices
         private readonly RoleManager<IdentityRole<long>> roleManager;
         private readonly INotificationService notificationService;
 
-        public AuthService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole<long>> roleManager)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole<long>> roleManager, INotificationService notificationService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
+            this.notificationService = notificationService;
         }
 
         public async Task LogIn(LogInDTO loginDTO)

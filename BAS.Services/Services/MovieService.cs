@@ -264,7 +264,6 @@ namespace BAS.AppServices
             var movieReviews = await GetMovieReviews(new ReviewFilters()
             {
                 Id = id,
-                IsDescending = true,
                 OrderBy = "",
                 Page = 1,
                 PageSize = 10
@@ -310,11 +309,11 @@ namespace BAS.AppServices
 
             switch (reviewfilters.OrderBy.ToLower())
             {
-                case "rating":
-                    if (reviewfilters.IsDescending)
-                        reviews = reviews.OrderByDescending(r => r.Rating);
-                    else
-                        reviews = reviews.OrderBy(r => r.Rating);
+                case "ratingdesc":
+                    reviews = reviews.OrderByDescending(r => r.Rating);
+                    break;
+                case "ratingasc":
+                    reviews = reviews.OrderBy(r => r.Rating);
                     break;
                 default:
                     break;
@@ -402,34 +401,31 @@ namespace BAS.AppServices
                     PosterName = m.Poster
                 });
 
-
-
-
-            switch (movieFilters.OrderBy.ToLower())
+            switch (movieFilters.OrderBy?.ToLower())
             {
-                case "title":
-                    if (movieFilters.IsDescending)
-                        movies = movies.OrderByDescending(m => m.Title);
-                    else
-                        movies = movies.OrderBy(m => m.Title);
+                case "titledesc":
+                    movies = movies.OrderByDescending(m => m.Title);
                     break;
-                case "releaseyear":
-                    if (movieFilters.IsDescending)
-                        movies = movies.OrderByDescending(m => m.ReleaseYear);
-                    else
-                        movies = movies.OrderBy(m => m.ReleaseYear);
+                case "titleasc":
+                    movies = movies.OrderBy(m => m.Title);
                     break;
-                case "movielength":
-                    if (movieFilters.IsDescending)
-                        movies = movies.OrderByDescending(m => m.MovieLengthInMinutes);
-                    else
-                        movies = movies.OrderBy(m => m.MovieLengthInMinutes);
+                case "releaseyeardesc":
+                    movies = movies.OrderByDescending(m => m.ReleaseYear);
                     break;
-                case "averageRating":
-                    if (movieFilters.IsDescending)
-                        movies = movies.OrderByDescending(m => m.AverageRating);
-                    else
-                        movies = movies.OrderBy(m => m.AverageRating);
+                case "releaseyearasc":
+                    movies = movies.OrderBy(m => m.ReleaseYear);
+                    break;
+                case "movielengthdesc":
+                    movies = movies.OrderByDescending(m => m.MovieLengthInMinutes);
+                    break;
+                case "movielengthasc":
+                    movies = movies.OrderBy(m => m.MovieLengthInMinutes);
+                    break;
+                case "averageratingdesc":
+                    movies = movies.OrderByDescending(m => m.AverageRating);
+                    break;
+                case "averageratingasc":
+                    movies = movies.OrderBy(m => m.AverageRating);
                     break;
                 default:
                     break;
@@ -437,10 +433,10 @@ namespace BAS.AppServices
 
             result.MovieList = movies.Skip((movieFilters.Page - 1) * pageSize).Take(pageSize).ToList();
             
-
             foreach(var movie in result.MovieList)
             {
                 movie.Poster = fileService.GetMoviePoster(movie.PosterName);
+                movie.Genres = (await GetMovieGenres(movie.Id)).Select(g => g.Name).ToList();
             }
 
             return result;

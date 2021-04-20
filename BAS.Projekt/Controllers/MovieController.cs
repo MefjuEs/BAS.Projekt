@@ -44,7 +44,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMoviesWithFilters([FromBody] MovieFilters filters)
+        public async Task<IActionResult> GetMoviesWithFilters([FromQuery] MovieFilters filters)
         {
             var result = await movieService.GetMovieWithFilters(filters);
             return Ok(result);
