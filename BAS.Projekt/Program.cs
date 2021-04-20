@@ -1,3 +1,4 @@
+using BAS.AppServices;
 using BAS.Database;
 using BAS.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,9 @@ namespace BAS.Projekt
 
             identitySeeder.Seed().Wait();
             MovieSeeder.Seed(serviceProvider.GetService<MovieDbContext>());
+
+            var movieService = serviceProvider.GetService<IMovieService>();
+            var recommendations = movieService.GetRecommendations(1);
 
             webHost.Run();
         }
