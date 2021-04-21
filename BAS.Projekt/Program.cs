@@ -23,9 +23,6 @@ namespace BAS.Projekt
             identitySeeder.Seed().Wait();
             MovieSeeder.Seed(serviceProvider.GetService<MovieDbContext>());
 
-            var movieService = serviceProvider.GetService<IMovieService>();
-            var recommendations = movieService.GetRecommendations(1);
-
             webHost.Run();
         }
 
