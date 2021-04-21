@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (window:scroll)="onWindowScroll($event)">
     <div class="row">
         <div class="col-md-12 filters">
             <mat-expansion-panel hideToggle>
@@ -74,7 +74,38 @@
               </mat-expansion-panel>
         </div>
     </div>
-    <div class="row" *ngIf="movies!=null">
+
+    <div class="row" *ngIf="!isLoading; else loadingBlock">
+        <div *ngFor="let movie of movies.movieList" class="col-md-4">
+            <mat-card class="movie-card-margins">
+                <img mat-card-image [src]="getMoviePoster(movie.poster)">
+                <mat-card-content>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2>{{movie.title}}</h2>
+                            </div>
+                            <div>
+                                <mat-icon class="golden-star">star</mat-icon>
+                                <span class="align-middle">{{movie.averageRating}}</span>
+                            </div>
+                        </div>
+                        <div>
+                            {{movie.releaseYear}}
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-footer>
+                    <mat-chip-list class="mat-chip-list">
+                        <mat-chip *ngFor="let genre of movie.genres" class="mat-chip" color="primary" selected>
+                            {{genre}}
+                        </mat-chip>
+                    </mat-chip-list>
+                </mat-card-footer>
+            </mat-card>
+        </div>
+        
+        <!-- 
         <div *ngFor="let movie of movies.movieList" class="col-md-4">
             <div>
                 <img [src]="getMoviePoster(movie.poster)" height="300px" width="200px"/>
@@ -99,5 +130,23 @@
                 </mat-chip>
             </mat-chip-list>
         </div>
+        -->
     </div>
+
+    <div style="height: 200px;">
+        <ng-container *ngIf="isLoadingMoviePage; then loadingBlock">
+
+        </ng-container>
+    </div>
+    
+    <footer>
+        
+    </footer>
 </div>
+
+<ng-template #loadingBlock>
+    <div class="mat-spinner">
+        <mat-spinner color="accent">
+        </mat-spinner>
+    </div>
+</ng-template>

@@ -1,3 +1,4 @@
+import { __decorate } from "tslib";
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -17,36 +18,38 @@ import { MatSelectModule } from '@angular/material/select';
 import { GenresService } from './services/genres.service';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    HomeComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent }
-    ]),
-    BrowserAnimationsModule,
-    MatChipsModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatCardModule,
-    MatProgressSpinnerModule
-  ],
-  providers: [
-    MoviesService, 
-    GenresService
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+let AppModule = class AppModule {
+};
+AppModule = __decorate([
+    NgModule({
+        declarations: [
+            AppComponent,
+            NavbarComponent,
+            HomeComponent,
+        ],
+        imports: [
+            BrowserModule,
+            FormsModule,
+            HttpClientModule,
+            RouterModule.forRoot([
+                { path: '', component: HomeComponent }
+            ]),
+            BrowserAnimationsModule,
+            MatChipsModule,
+            MatIconModule,
+            MatExpansionModule,
+            MatInputModule,
+            MatFormFieldModule,
+            MatButtonModule,
+            MatSelectModule,
+            MatCardModule
+        ],
+        providers: [
+            MoviesService,
+            GenresService
+        ],
+        bootstrap: [AppComponent]
+    })
+], AppModule);
+export { AppModule };
+//# sourceMappingURL=app.module.js.map

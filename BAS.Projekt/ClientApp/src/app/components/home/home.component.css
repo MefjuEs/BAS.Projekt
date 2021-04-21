@@ -17,3 +17,22 @@ h2 {
 .input-padding-right-25 {
     padding-right: 25px;
 }
+
+.movie-card-margins {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.mat-chip-list /deep/.mat-chip-list-wrapper {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.mat-chip {
+    font-size: 12px;
+}
+
+.mat-spinner {
+    margin: auto;
+}

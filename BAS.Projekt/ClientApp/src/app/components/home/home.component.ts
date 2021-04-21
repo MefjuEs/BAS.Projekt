@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
@@ -14,7 +14,14 @@ import { IGenreList } from 'src/app/interfaces/genres/IGenreList';
 
 export class HomeComponent implements OnInit {
 
-  public movies: IMovieListWithFilters;
+  public isLoading: boolean;
+  public isLoadingMoviePage: boolean;
+  public movies: IMovieListWithFilters = {
+    currentPage: 1,
+    pageSize: 9,
+    allPages: 1,
+    movieList: []
+  };
   public genresList: IGenreList;
   public movieFilters: IMovieFilters = {
     title: '',
@@ -24,17 +31,33 @@ export class HomeComponent implements OnInit {
     movieLengthTo: null,
     avgRatingFrom: null,
     avgRatingTo: null,
-    page: 1,
-    pageSize: null,
+    page: 0,
+    pageSize: 9,
     orderBy: '',
     genreId: null
   }
 
-  constructor(private moviesService: MoviesService, private genresService: GenresService) { }
+  constructor(private moviesService: MoviesService, private genresService: GenresService) {
+    this.isLoading = true;
+    this.isLoadingMoviePage = false;
+  }
 
   ngOnInit() {
-    this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
+    this.getMovies();
     this.genresService.getGenres().subscribe(data => this.genresList = data);
+  }
+
+  getMovies() {
+    this.movieFilters.page += 1;
+
+    this.moviesService.getMovies(this.movieFilters).subscribe(data => {
+      data.movieList.forEach(movie => {
+        this.movies.movieList.push(movie);
+      });
+      this.movies.allPages = data.allPages;
+      this.isLoading = false;
+      this.isLoadingMoviePage = false;
+    });
   }
 
   getMoviePoster(poster: IFile) {
@@ -48,5 +71,15 @@ export class HomeComponent implements OnInit {
 
   onApplyFilters(event) {
     this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
+  }
+
+  onWindowScroll(event) {
+    let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+    let max = document.documentElement.scrollHeight;
+
+    if(pos == max && this.movies.allPages > this.movieFilters.page) {
+      this.isLoadingMoviePage = true;
+      this.getMovies();
+    }
   }
 }

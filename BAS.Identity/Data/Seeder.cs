@@ -44,8 +44,60 @@ namespace BAS.Identity
                         SecurityStamp = Guid.NewGuid().ToString()
                     };
 
-                    await userManager.CreateAsync(user1, "Admin123!");
+                    var user2 = new ApplicationUser()
+                    {
+                        Name = "Adam",
+                        Surname = "Nietupski",
+                        Email = "nietup@beton.pl",
+                        EmailConfirmed = true,
+                        UserName = "Nietup",
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+
+                    var user3 = new ApplicationUser()
+                    {
+                        Name = "Pan",
+                        Surname = "Czarny",
+                        Email = "pan@czarny.pl",
+                        EmailConfirmed = true,
+                        UserName = "MrBlack",
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+
+                    var user4 = new ApplicationUser()
+                    {
+                        Name = "Mefju",
+                        Surname = "Es",
+                        Email = "mef@ju.pl",
+                        EmailConfirmed = true,
+                        UserName = "Mefju",
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+
+                    var user5 = new ApplicationUser()
+                    {
+                        Name = "Roman",
+                        Surname = "Dmowski",
+                        Email = "roman@dmowski.pl",
+                        EmailConfirmed = true,
+                        UserName = "Romulus",
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+
+                    await userManager.CreateAsync(user1, "admin123");
                     await userManager.AddToRoleAsync(user1, UserRole.Admin.ToString());
+
+                    await userManager.CreateAsync(user2, "nietup123");
+                    await userManager.AddToRoleAsync(user2, UserRole.User.ToString());
+
+                    await userManager.CreateAsync(user3, "nietup123");
+                    await userManager.AddToRoleAsync(user3, UserRole.User.ToString());
+
+                    await userManager.CreateAsync(user4, "nietup123");
+                    await userManager.AddToRoleAsync(user4, UserRole.User.ToString());
+
+                    await userManager.CreateAsync(user5, "nietup123");
+                    await userManager.AddToRoleAsync(user5, UserRole.User.ToString());
                 }
 
                 transaction.Commit();

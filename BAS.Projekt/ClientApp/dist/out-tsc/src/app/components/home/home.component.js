@@ -12,10 +12,9 @@ let HomeComponent = class HomeComponent {
             movieLengthTo: null,
             avgRatingFrom: null,
             avgRatingTo: null,
-            page: 0,
+            page: 1,
             pageSize: null,
             orderBy: '',
-            isDescending: false,
             genreId: null
         };
     }
@@ -30,6 +29,9 @@ let HomeComponent = class HomeComponent {
         else {
             return '';
         }
+    }
+    onApplyFilters(event) {
+        this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
     }
 };
 HomeComponent = __decorate([
