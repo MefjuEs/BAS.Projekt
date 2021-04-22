@@ -20,9 +20,9 @@ export class HomeComponent implements OnInit {
     currentPage: 1,
     pageSize: 9,
     allPages: 1,
+    allElements: 0,
     movieList: []
   };
-  public genresList: IGenreList;
   public movieFilters: IMovieFilters = {
     title: '',
     releaseYearFrom: null,
@@ -37,14 +37,13 @@ export class HomeComponent implements OnInit {
     genreId: null
   }
 
-  constructor(private moviesService: MoviesService, private genresService: GenresService) {
+  constructor(private moviesService: MoviesService) {
     this.isLoading = true;
     this.isLoadingMoviePage = false;
   }
 
   ngOnInit() {
     this.getMovies();
-    this.genresService.getGenres().subscribe(data => this.genresList = data);
   }
 
   getMovies() {
@@ -70,6 +69,9 @@ export class HomeComponent implements OnInit {
   }
 
   onApplyFilters(event) {
+    let pageSize = this.movieFilters.pageSize;
+    this.movieFilters = event;
+    this.movieFilters.pageSize = pageSize;
     this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
   }
 

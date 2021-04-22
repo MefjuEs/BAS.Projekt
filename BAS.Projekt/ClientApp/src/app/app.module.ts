@@ -18,19 +18,33 @@ import { GenresService } from './services/genres.service';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AdminMovieComponent, DeleteMovieDialog } from './components/admin-movie/admin-movie.component';
+import { MatTableModule } from '@angular/material/table';
+import { MovieFilterComponent } from './components/movie-filter/movie-filter.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { AddEditMovieComponent } from './components/add-edit-movie/add-edit-movie.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
+    AdminPanelComponent,
+    AdminMovieComponent,
+    MovieFilterComponent,
+    AddEditMovieComponent,
+    DeleteMovieDialog
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent }
+      { path: '', component: HomeComponent },
+      { path: 'admin', component: AdminPanelComponent }
     ]),
     BrowserAnimationsModule,
     MatChipsModule,
@@ -41,7 +55,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatSelectModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatDialogModule
   ],
   providers: [
     MoviesService, 

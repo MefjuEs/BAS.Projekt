@@ -30,4 +30,8 @@ export class MoviesService {
 
     return this.http.get<IMovieListWithFilters>(this.url, { headers: headers, params: params });
   }
+
+  deleteMovie(id: number): Observable<any> {
+    return this.http.delete(`${this.url}/${id}`);
+  }
 }

@@ -125,11 +125,14 @@ namespace BAS.AppServices
         {
             var pageSize = reviewfilters.PageSize ?? int.MaxValue;
 
+            var allElements = db.Reviews.Count(r => r.UserId == reviewfilters.Id);
+
             var result = new UserReviewListWithFilters()
             {
                 CurrentPage = reviewfilters.Page,
                 PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(db.Reviews.Count(r => r.UserId == reviewfilters.Id) * 1.0 / pageSize)
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
             };
 
             var reviews = db.Reviews.Include(r => r.Movie)

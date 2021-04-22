@@ -96,11 +96,14 @@ namespace BAS.AppServices
 
             var pageSize = genreFilter.PageSize.HasValue ? genreFilter.PageSize.Value : int.MaxValue;
 
+            var allElements = db.Genres.Count(g => g.Name.ToLower().Contains(genreFilter.Name.ToLower()));
+
             var result = new GenreListWithFilters()
             {
                 CurrentPage = genreFilter.Page,
                 PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(db.Genres.Count(g => g.Name.ToLower().Contains(genreFilter.Name.ToLower())) * 1.0 / pageSize)
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
             };
 
             var genres = db.Genres.Where(g => g.Name.ToLower().Contains(genreFilter.Name.ToLower()));

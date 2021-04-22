@@ -301,11 +301,14 @@ namespace BAS.AppServices
         {
             var pageSize = reviewfilters.PageSize ?? int.MaxValue;
 
+            var allElements = db.Reviews.Count(r => r.MovieId == reviewfilters.Id);
+
             var result = new MovieReviewListWithFilters()
             {
                 CurrentPage = reviewfilters.Page,
                 PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(db.Reviews.Count(r => r.MovieId == reviewfilters.Id) * 1.0 / pageSize)
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
             };
 
             var reviews = db.Reviews
@@ -386,11 +389,14 @@ namespace BAS.AppServices
                                 (!movieFilters.AvgRatingTo.HasValue || m.AverageRating <= movieFilters.AvgRatingTo) &&
                                 (!movieFilters.GenreId.HasValue || m.Genres.Any(mg => mg.GenreId == movieFilters.GenreId)));
 
+            var allElements = db.Movies.Include(m => m.Genres).Count(predicate);
+
             var result = new MovieListWithFilters()
             {
                 CurrentPage = movieFilters.Page,
                 PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(db.Movies.Include(m => m.Genres).Count(predicate) * 1.0 / pageSize)
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
                 
                 
                 

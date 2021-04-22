@@ -48,16 +48,17 @@ namespace BAS.AppServices
 
 
             var pageSize = personnelFilter.PageSize.HasValue ? personnelFilter.PageSize.Value : int.MaxValue;
+            var allElements = db.Actors.Count(p => (p.Name.ToLower() + p.Surname.ToLower()).Contains(personnelFilter.FullName.ToLower()) &&
+                    p.Nationality.ToLower().Contains(personnelFilter.Nationality.ToLower()) &&
+                    (!personnelFilter.BirthDateFrom.HasValue || p.DateOfBirth >= personnelFilter.BirthDateFrom.Value) &&
+                    (!personnelFilter.BirthDateTo.HasValue || p.DateOfBirth <= personnelFilter.BirthDateTo.Value));
 
             var result = new PersonnelListWithFilters()
             {
                 CurrentPage = personnelFilter.Page,
                 PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(db.Actors.Count(p => (p.Name.ToLower() + p.Surname.ToLower()).Contains(personnelFilter.FullName.ToLower()) &&
-                    p.Nationality.ToLower().Contains(personnelFilter.Nationality.ToLower()) &&
-                    (!personnelFilter.BirthDateFrom.HasValue || p.DateOfBirth >= personnelFilter.BirthDateFrom.Value) &&
-                    (!personnelFilter.BirthDateTo.HasValue || p.DateOfBirth <= personnelFilter.BirthDateTo.Value))
-                                * 1.0 / pageSize)
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
             };
 
             var personnel = db.Actors.Where(p => (p.Name.ToLower() + p.Surname.ToLower()).Contains(personnelFilter.FullName.ToLower()) &&
