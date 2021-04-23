@@ -1,9 +1,11 @@
-import { __decorate } from "tslib";
+import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 let AdminMovieComponent = class AdminMovieComponent {
     constructor(moviesService, dialog) {
         this.moviesService = moviesService;
         this.dialog = dialog;
+        this.isLoading = true;
         this.movieFilters = {
             title: '',
             releaseYearFrom: null,
@@ -24,7 +26,8 @@ let AdminMovieComponent = class AdminMovieComponent {
             allElements: 0,
             movieList: []
         };
-        this.displayedColumns = ['title', 'releaseYear', 'movieLengthInMinutes', 'symbol'];
+        this.displayedColumns = ['title', 'releaseYear', 'movieLengthInMinutes', 'averageRating', 'action'];
+        this.isLoading = true;
     }
     ngOnInit() {
         this.pageIndex = 0;
@@ -32,7 +35,11 @@ let AdminMovieComponent = class AdminMovieComponent {
         this.getMovies();
     }
     getMovies() {
-        this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
+        this.moviesService.getMovies(this.movieFilters).subscribe(data => {
+            this.isLoading = true;
+            this.movies = data;
+            this.isLoading = false;
+        });
     }
     onApplyFilters(event) {
         let pageSize = this.movieFilters.pageSize;
@@ -52,20 +59,51 @@ let AdminMovieComponent = class AdminMovieComponent {
         console.log(event);
         console.log(this.movieFilters.page);
     }
-    openDeleteDialog() {
-        debugger;
-        console.log('gowno');
+    openDeleteDialog(id) {
         const dialogRef = this.dialog.open(DeleteMovieDialog);
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
+            if (result === true) {
+                this.moviesService.deleteMovie(id).subscribe(() => {
+                    this.getMovies();
+                    console.log("Pomyślnie usunięto");
+                });
+            }
         });
+    }
+    expandMovieDetails(element) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.expandedElement === element) {
+                this.expandedElement = null;
+            }
+            else {
+                this.expandedElement = element;
+            }
+        });
+    }
+    getMoviePoster(poster) {
+        if (poster != null) {
+            return `data:${poster.contentType};base64,${poster.file}`;
+        }
+        else {
+            return '';
+        }
+    }
+    getMovieGenres(genres) {
+        return genres.join(', ');
     }
 };
 AdminMovieComponent = __decorate([
     Component({
         selector: 'admin-movie',
         templateUrl: './admin-movie.component.html',
-        styleUrls: ['./admin-movie.component.css']
+        styleUrls: ['./admin-movie.component.css'],
+        animations: [
+            trigger('detailExpand', [
+                state('collapsed', style({ height: '0px', minHeight: '0' })),
+                state('expanded', style({ height: '*' })),
+                transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+            ]),
+        ]
     })
 ], AdminMovieComponent);
 export { AdminMovieComponent };

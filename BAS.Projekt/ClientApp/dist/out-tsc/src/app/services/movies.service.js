@@ -1,4 +1,4 @@
-import { __decorate } from "tslib";
+import { __awaiter, __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 let MoviesService = class MoviesService {
@@ -22,6 +22,14 @@ let MoviesService = class MoviesService {
         params = params.append('orderBy', movieFilters.orderBy);
         params = params.append('genreId', movieFilters.genreId ? movieFilters.genreId.toString() : '');
         return this.http.get(this.url, { headers: headers, params: params });
+    }
+    deleteMovie(id) {
+        return this.http.delete(`${this.url}/${id}`);
+    }
+    getMovie(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.http.get(`${this.url}/${id}`).toPromise();
+        });
     }
 };
 MoviesService = __decorate([

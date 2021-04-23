@@ -11,7 +11,7 @@ export class GenresService {
 
   constructor(private http: HttpClient) { }
 
-  getGenres(): Observable<IGenreList> {
-    return this.http.get<IGenreList>(this.url + "/all");
+  getGenres(): Observable<IGenreList[]> {
+    return this.http.get<IGenreList[]>(this.url + "/all");
   }
 }

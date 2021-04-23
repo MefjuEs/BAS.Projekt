@@ -269,6 +269,11 @@ namespace BAS.AppServices
         {
             var movie = await db.Movies.FindAsync(id);
 
+            if(movie == null)
+            {
+                return null;
+            }
+
             var moviePoster = fileService.GetMoviePoster(movie.Poster);
             var movieGenres = await GetMovieGenres(id);
             var moviePersonnel = await GetMoviePersonnel(id);

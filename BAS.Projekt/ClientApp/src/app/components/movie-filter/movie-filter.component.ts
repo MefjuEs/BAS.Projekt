@@ -22,7 +22,7 @@ export class MovieFilterComponent implements OnInit {
     orderBy: '',
     genreId: null
   }
-  public genresList: IGenreList;
+  public genresList: IGenreList[];
 
   @Output()
   public applyEvent = new EventEmitter();

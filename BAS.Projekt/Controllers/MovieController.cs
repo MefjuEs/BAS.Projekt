@@ -40,7 +40,7 @@ namespace BAS.Projekt.Controllers
         public async Task<IActionResult> GetMovie([FromRoute] long id)
         {
             var result = await movieService.GetMovie(id);
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpGet]
