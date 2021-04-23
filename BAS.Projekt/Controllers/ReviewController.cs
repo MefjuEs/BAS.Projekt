@@ -1,4 +1,5 @@
 ﻿using BAS.AppServices;
+using BAS.Projekt.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
+        [BASAuthorize]
         public async Task<IActionResult> InsertReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.InsertReview(reviewDTO);
@@ -23,6 +25,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPut]
+        [BASAuthorize]
         public async Task<IActionResult> UpdateReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.UpdateReview(reviewDTO);
@@ -30,6 +33,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{userId}/{movieId}")]
+        [BASAuthorize]
         public async Task<IActionResult> DeleteReview([FromRoute] long userId, long movieId)
         {
             var result = await reviewService.DeleteReview(userId, movieId);

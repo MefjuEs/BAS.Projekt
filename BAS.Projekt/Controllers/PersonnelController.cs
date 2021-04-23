@@ -1,4 +1,6 @@
-﻿using BAS.AppServices;
+﻿using BAS.AppCommon;
+using BAS.AppServices;
+using BAS.Projekt.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -30,6 +32,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertPersonnel([FromBody] PersonnelDTO personnel)
         {
             var result = await personnelService.InsertPersonnel(personnel);
@@ -37,6 +40,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPut]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> UpdatePersonnel([FromBody] PersonnelDTO personnelDTO)
         {
 
@@ -45,6 +49,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeletePersonnel([FromRoute] long id)
         {
             var result = await personnelService.DeletePersonnel(id);

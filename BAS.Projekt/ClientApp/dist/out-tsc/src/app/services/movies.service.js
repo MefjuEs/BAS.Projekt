@@ -23,6 +23,9 @@ let MoviesService = class MoviesService {
         params = params.append('genreId', movieFilters.genreId ? movieFilters.genreId.toString() : '');
         return this.http.get(this.url, { headers: headers, params: params });
     }
+    deleteMovie(id) {
+        return this.http.delete(`${this.url}/${id}`);
+    }
 };
 MoviesService = __decorate([
     Injectable()

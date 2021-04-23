@@ -17,5 +17,12 @@
         public const int MovieItemsLoaded = 20;
 
         public const int ReviewContentMaxLength = 500;
+
+        #region JWTToken
+        public const string JWTUserAccountIdClaim = "id";
+        public const string JWTRoleClaim = "role";
+        public const string JWTFirstNameClaim = "firstname";
+        public const string JWTLastNameClaim = "lastname";
+        #endregion
     }
 }

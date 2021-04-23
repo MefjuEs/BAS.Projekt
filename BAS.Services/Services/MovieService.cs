@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RestSharp;
@@ -17,27 +16,25 @@ namespace BAS.AppServices
         private readonly IGenreService genreService;
         private readonly IPersonnelService personnelService;
         private readonly IFileService fileService;
-        private readonly IAuthService authService;
-        private readonly IHostingEnvironment appEnvironment;
+        private readonly IUserService userService;
         private readonly RestClient moviePyClient;
 
         private const string moviePyRecommendUrl = "movies/recommend";
 
         public MovieService(MovieDbContext db, IGenreService genreService, IPersonnelService personnelService, IFileService fileService,
-            IAuthService authService, IHostingEnvironment appEnvironment, IConfiguration configuration)
+            AppConfig appConfig, IUserService userService)
         {
             this.db = db;
             this.genreService = genreService;
             this.personnelService = personnelService;
             this.fileService = fileService;
-            this.authService = authService;
-            this.appEnvironment = appEnvironment;
-            this.moviePyClient = this.ConfigureMoviePy(configuration);
+            this.userService = userService;
+            this.moviePyClient = this.ConfigureMoviePy(appConfig);
         }
 
-        private RestClient ConfigureMoviePy(IConfiguration configuration)
+        private RestClient ConfigureMoviePy(AppConfig appConfig)
         {
-            var baseUrl = configuration.GetSection("API").GetSection("MoviePy").GetValue<string>("Url");
+            var baseUrl = appConfig.API.MoviePy.Url;
             return new RestClient(baseUrl);
         }
 
@@ -339,7 +336,7 @@ namespace BAS.AppServices
 
             foreach(var review in result.ReviewList)
             {
-                review.Username = await authService.GetUsername(review.UserId);
+                review.Username = await userService.GetUsername(review.UserId);
             }
 
             return result;

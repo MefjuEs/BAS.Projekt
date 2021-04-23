@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using BAS.AppCommon;
+using System.Threading.Tasks;
 
 namespace BAS.AppServices
 {
     public interface INotificationService
     {
-        Task SendEmailConfirmation();
+        Task CreateNotification(NotificationType notificationType, object data);
     }
 }

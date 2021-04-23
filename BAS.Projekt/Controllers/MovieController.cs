@@ -1,4 +1,6 @@
-﻿using BAS.AppServices;
+﻿using BAS.AppCommon;
+using BAS.AppServices;
+using BAS.Projekt.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,6 +18,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertMovie([FromForm] InsertUpdateMovieDTO movieDTO)
         {
             var result = await movieService.InsertMovie(movieDTO);
@@ -23,6 +26,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPut]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> UpdateMovie([FromForm] InsertUpdateMovieDTO movieDTO)
         {
             var result = await movieService.UpdateMovie(movieDTO);
@@ -30,6 +34,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeleteMovie([FromRoute] long id)
         {
             var result = await movieService.DeleteMovie(id);

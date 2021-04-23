@@ -21,7 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AdminMovieComponent } from './components/admin-movie/admin-movie.component';
+import { AdminMovieComponent, DeleteMovieDialog } from './components/admin-movie/admin-movie.component';
 import { MatTableModule } from '@angular/material/table';
 import { MovieFilterComponent } from './components/movie-filter/movie-filter.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -38,7 +38,8 @@ AppModule = __decorate([
             AdminPanelComponent,
             AdminMovieComponent,
             MovieFilterComponent,
-            AddEditMovieComponent
+            AddEditMovieComponent,
+            DeleteMovieDialog
         ],
         imports: [
             BrowserModule,

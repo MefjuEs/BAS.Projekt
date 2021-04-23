@@ -4,6 +4,7 @@ let AdminMovieComponent = class AdminMovieComponent {
     constructor(moviesService, dialog) {
         this.moviesService = moviesService;
         this.dialog = dialog;
+        this.isLoading = true;
         this.movieFilters = {
             title: '',
             releaseYearFrom: null,
@@ -25,6 +26,7 @@ let AdminMovieComponent = class AdminMovieComponent {
             movieList: []
         };
         this.displayedColumns = ['title', 'releaseYear', 'movieLengthInMinutes', 'symbol'];
+        this.isLoading = true;
     }
     ngOnInit() {
         this.pageIndex = 0;
@@ -32,7 +34,11 @@ let AdminMovieComponent = class AdminMovieComponent {
         this.getMovies();
     }
     getMovies() {
-        this.moviesService.getMovies(this.movieFilters).subscribe(data => this.movies = data);
+        this.moviesService.getMovies(this.movieFilters).subscribe(data => {
+            this.isLoading = true;
+            this.movies = data;
+            this.isLoading = false;
+        });
     }
     onApplyFilters(event) {
         let pageSize = this.movieFilters.pageSize;
@@ -52,12 +58,15 @@ let AdminMovieComponent = class AdminMovieComponent {
         console.log(event);
         console.log(this.movieFilters.page);
     }
-    openDeleteDialog() {
-        debugger;
-        console.log('gowno');
+    openDeleteDialog(id) {
         const dialogRef = this.dialog.open(DeleteMovieDialog);
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
+            if (result === true) {
+                this.moviesService.deleteMovie(id).subscribe(() => {
+                    this.getMovies();
+                    console.log("Pomyślnie usunięto");
+                });
+            }
         });
     }
 };

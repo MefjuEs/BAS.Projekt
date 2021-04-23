@@ -1,10 +1,15 @@
 ﻿using BAS.AppCommon;
 using BAS.Identity;
+using BAS.Services.Notification;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BAS.AppServices
@@ -13,35 +18,82 @@ namespace BAS.AppServices
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly RoleManager<IdentityRole<long>> roleManager;
         private readonly INotificationService notificationService;
+        private readonly IdentityContext identityContext;
+        private readonly AppConfig appConfig;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole<long>> roleManager, INotificationService notificationService)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            INotificationService notificationService, IdentityContext identityContext,
+            AppConfig appConfig)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.roleManager = roleManager;
             this.notificationService = notificationService;
+            this.identityContext = identityContext;
+            this.appConfig = appConfig;
         }
 
-        public async Task LogIn(LogInDTO loginDTO)
+        public async Task<LogInResult> LogIn(LogInDTO loginDTO)
         {
+            var result = new LogInResult();
+
             var user = await this.userManager.FindByEmailAsync(loginDTO.Email);
 
-            if (user != null)
-            {
-                if (await this.userManager.CheckPasswordAsync(user, loginDTO.Password))
-                {
-                    var result = await this.signInManager.PasswordSignInAsync(user, loginDTO.Password, false, false);
+            result.HasConfirmedEmail = user?.EmailConfirmed ?? false;
 
-                    if (result.Succeeded)
-                    {
-                        return;
-                    }
+            if (user != null && result.HasConfirmedEmail && await this.userManager.CheckPasswordAsync(user, loginDTO.Password))
+            {
+                var signInResult = await this.signInManager.PasswordSignInAsync(user, loginDTO.Password, false, false);
+
+                if (signInResult.Succeeded)
+                {
+                    var token = await this.GetAccessTokenAsync(user.Id);
+                    result.Token = token;
                 }
+
+                result.Success = signInResult.Succeeded;
+            }
+            else
+            {
+                result.InvalidEmailOrPassword = true;
             }
 
-            throw new BASLogInException("Nieprawidłowy email lub hasło");
+            return result;
+        }
+
+        private async Task<string> GetAccessTokenAsync(long userId)
+        {
+            var user = await identityContext.Users.FindAsync(userId);
+
+            var role = await identityContext.UserRoles.Where(p => p.UserId == userId)
+                .Join(identityContext.Roles, p => p.RoleId, q => q.Id, (p, q) => q.Name)
+                .SingleAsync();
+
+            var utcNow = DateTime.UtcNow;
+            
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(StaticValues.JWTFirstNameClaim, user.Name),
+                new Claim(StaticValues.JWTLastNameClaim, user.Surname),
+                new Claim(StaticValues.JWTUserAccountIdClaim, user.Id.ToString()),
+                new Claim(StaticValues.JWTRoleClaim, role),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, Math.Round((utcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalSeconds, 0).ToString()),
+            };
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appConfig.JWTToken.SigningKey));
+
+            var token = new JwtSecurityToken
+            (
+                issuer: appConfig.Host.Url,
+                audience: appConfig.Host.Url,
+                expires: utcNow.AddMinutes(appConfig.JWTToken.ExpirationTimeMinutes),
+                claims: claims,
+                signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public async Task<RegisterResultDTO> Register(RegisterDTO registerDTO)
@@ -66,6 +118,9 @@ namespace BAS.AppServices
                 }
             }
 
+            result.UsernameTaken = userWithSameUserName != null;
+            result.EmailTaken = userWithSameEmail != null;
+
             if (userWithSameUserName == null && userWithSameEmail == null && isPaswordValid && wasPasswordsIdentical)
             {
                 var user = new ApplicationUser
@@ -77,7 +132,7 @@ namespace BAS.AppServices
                     Email = registerDTO.Email,
                 };
 
-                //using (var transaction = this.userRepository.Context.Database.BeginTransaction())
+                using (var transaction = this.identityContext.Database.BeginTransaction())
                 {
                     var createResult = await userManager.CreateAsync(user, registerDTO.Password);
 
@@ -86,17 +141,12 @@ namespace BAS.AppServices
                         await userManager.AddToRoleAsync(user, UserRole.User.ToString());
                         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                        result.Id = user.Id.ToString();
-                        result.Token = token;
+                        await notificationService.CreateNotification(NotificationType.REGISTRATION_CONFIRM, new RegistrationConfirmNotificationArgs
+                        {
+                            UserAccountId = user.Id,
+                            Token = token,
+                        });
 
-                        await notificationService.SendEmailConfirmation();
-                        //await this.notificationService.CreateNotification(NotificationType.REGISTRATION_CONFIRM, new RegistrationConfirmNotificationArgs
-                        //{
-                        //    UserAccountId = user.Id,
-                        //    Token = token,
-                        //});
-
-                        //transaction.Commit();
                         result.Success = true;
                     }
                 }
@@ -126,58 +176,6 @@ namespace BAS.AppServices
         public async Task LogOut()
         {
             await this.signInManager.SignOutAsync();
-        }
-
-        public async Task ChangeUserRole(long userId, long roleId)
-        {
-            var user = await userManager.FindByIdAsync(userId.ToString());
-
-            if (user == null)
-            {
-                throw new BASNotFoundException("Nie znaleziono takiego użytkownika");
-            }
-
-            var oldRole = await userManager.GetRolesAsync(user);
-            var newRole = await roleManager.FindByIdAsync(roleId.ToString());
-            await userManager.RemoveFromRoleAsync(user, oldRole.FirstOrDefault().ToString());
-            await userManager.AddToRoleAsync(user, newRole.Name);
-
-            await userManager.UpdateSecurityStampAsync(user);
-        }
-
-        public async Task<AdminUserListDTO> GetUserList(string query = null, int pageSize = 10, int pageNumber = 1)
-        {
-            throw new NotImplementedException();
-            //var users = await this.userRepository.GetUserList(query, pageSize, pageNumber);
-            //return users;
-        }
-
-        public async Task<List<UserDTO>> GetUsers(List<long> userIds = null)
-        {
-            throw new NotImplementedException();
-            //var users = await this.userRepository.GetUsers(userIds);
-            //return users;
-        }
-
-        public async Task<List<IdentityRole<long>>> GetRoles()
-        {
-            var roles = await this.roleManager.Roles.ToListAsync();
-            return roles;
-        }
-
-        public async Task<bool> DoesUserExist(long id)
-        {
-            return (await userManager.FindByIdAsync(id.ToString())) != null;
-        }
-
-        public async Task<string> GetUsername(long id)
-        {
-            var user = await userManager.FindByIdAsync(id.ToString());
-
-            if (user == null)
-                return "Gal Anonim";
-
-            return user.UserName;
         }
     }
 }

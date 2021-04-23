@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { timeStamp } from 'node:console';
 import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
 import { IMovieInList } from 'src/app/interfaces/movies/IMovieInList';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';

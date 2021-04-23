@@ -1,8 +1,8 @@
 ﻿using BAS.AppCommon;
 using BAS.Database;
+using BAS.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,19 +11,21 @@ namespace BAS.AppServices
     public class ReviewService : IReviewService
     {
         private readonly MovieDbContext db;
-        private readonly IAuthService authServices;
         private readonly IMovieService movieServices;
+        private readonly IUserService userService;
+        private readonly IUserContext userContext;
 
-        public ReviewService(MovieDbContext db, IAuthService authServices, IMovieService movieServices)
+        public ReviewService(MovieDbContext db, IMovieService movieServices, IUserService userService, IUserContext userContext)
         {
             this.db = db;
-            this.authServices = authServices;
             this.movieServices = movieServices;
+            this.userService = userService;
+            this.userContext = userContext;
         }
 
         public async Task<bool> InsertReview(InsertUpdateReviewDTO reviewDTO)
         {
-            if (!await authServices.DoesUserExist(reviewDTO.UserId))
+            if (!await userService.DoesUserExist(reviewDTO.UserId))
                 return false;
 
             if (!await movieServices.DoesMovieExist(reviewDTO.MovieId))
@@ -72,37 +74,42 @@ namespace BAS.AppServices
 
         public async Task<bool> UpdateReview(InsertUpdateReviewDTO reviewDTO)
         {
-            if (!await authServices.DoesUserExist(reviewDTO.UserId))
-                return false;
-
-            if (!await movieServices.DoesMovieExist(reviewDTO.MovieId))
-                return false;
-
-            if (reviewDTO.Rating < 1 || reviewDTO.Rating > 10)
-                return false;
-
-            if (reviewDTO.Message.Length > StaticValues.ReviewContentMaxLength)
-                return false;
-
-
             var review = db.Reviews.Find(reviewDTO.UserId, reviewDTO.MovieId);
-            review.Message = reviewDTO.Message;
-            review.Rating = reviewDTO.Rating;
+            var canModify = this.CanModifyReview(review);
 
-            db.Reviews.Update(review);
-            db.SaveChanges();
+            if (review != null && canModify)
+            {
+                if (!await userService.DoesUserExist(reviewDTO.UserId))
+                    return false;
 
-            var avgRating = GetAvgMovieRating(reviewDTO.MovieId);
-            await movieServices.UpdateMovieRating(reviewDTO.MovieId, avgRating);
+                if (!await movieServices.DoesMovieExist(reviewDTO.MovieId))
+                    return false;
 
-            return true;
+                if (reviewDTO.Rating < 1 || reviewDTO.Rating > 10)
+                    return false;
+
+                if (reviewDTO.Message.Length > StaticValues.ReviewContentMaxLength)
+                    return false;
+
+                review.Message = reviewDTO.Message;
+                review.Rating = reviewDTO.Rating;
+
+                db.Reviews.Update(review);
+                db.SaveChanges();
+
+                var avgRating = GetAvgMovieRating(reviewDTO.MovieId);
+                await movieServices.UpdateMovieRating(reviewDTO.MovieId, avgRating);
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> DeleteReview(long userId, long movieId)
         {
             var review = await db.Reviews.FindAsync(userId, movieId);
-
-            if (review != null)
+            var canModify = this.CanModifyReview(review);
+            if (review != null && canModify)
             {
                 db.Reviews.Remove(review);
                 db.SaveChanges();
@@ -114,6 +121,16 @@ namespace BAS.AppServices
             }
 
             return false;
+        }
+
+        private bool CanModifyReview(Review review)
+        {
+            if (review == null)
+            {
+                return false;
+            }
+
+            return review.UserId == this.userContext.UserAccountId || this.userContext.IsInRole(UserRole.Admin);
         }
 
         public async Task<Review> GetReview(long userId, long movieId)

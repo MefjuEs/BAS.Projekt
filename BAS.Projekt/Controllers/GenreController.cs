@@ -1,4 +1,6 @@
-﻿using BAS.AppServices;
+﻿using BAS.AppCommon;
+using BAS.AppServices;
+using BAS.Projekt.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -37,6 +39,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertGenre([FromBody] GenreDTO genre)
         {
             var result = await genreService.InsertGenre(genre);
@@ -44,6 +47,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPut]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> UpdateGenre([FromBody] GenreDTO genre)
         {
             
@@ -52,6 +56,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{id}")]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeleteGenre([FromRoute] long id)
         {
             var result = await genreService.DeleteGenre(id);
