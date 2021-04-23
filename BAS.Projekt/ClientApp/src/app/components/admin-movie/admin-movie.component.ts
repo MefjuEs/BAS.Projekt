@@ -1,14 +1,25 @@
+import { IFile } from './../../interfaces/movies/IFile';
+import { IGetMovieDTO } from './../../interfaces/movies/IGetMovieDTO';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
 import { IMovieInList } from 'src/app/interfaces/movies/IMovieInList';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 
 @Component({
   selector: 'admin-movie',
   templateUrl: './admin-movie.component.html',
-  styleUrls: ['./admin-movie.component.css']
+  styleUrls: ['./admin-movie.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class AdminMovieComponent implements OnInit {
   public isLoading: boolean = true;
@@ -32,8 +43,9 @@ export class AdminMovieComponent implements OnInit {
     allElements: 0,
     movieList: []
   };
-  public displayedColumns: string[] = ['title', 'releaseYear', 'movieLengthInMinutes', 'symbol'];
+  public displayedColumns: string[] = ['title', 'releaseYear', 'movieLengthInMinutes', 'averageRating', 'action'];
   public pageIndex: number;
+  public expandedElement: IMovieInList | null;
   
   constructor(private moviesService: MoviesService, public dialog: MatDialog) {
     this.isLoading = true;
@@ -86,6 +98,29 @@ export class AdminMovieComponent implements OnInit {
         })
       }
     });
+  }
+
+  async expandMovieDetails(element) {
+
+    if(this.expandedElement === element) {
+      this.expandedElement = null;
+    }
+    else {
+        this.expandedElement = element;
+    }
+  }
+
+  getMoviePoster(poster: IFile) {
+    if(poster != null) {
+      return `data:${poster.contentType};base64,${poster.file}`;
+    }
+    else {
+      return '';
+    }
+  }
+
+  getMovieGenres(genres) {
+    return genres.join(', ')
   }
 }
 

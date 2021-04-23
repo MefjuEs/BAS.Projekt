@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IMovieListWithFilters } from '../interfaces/movies/IMovieListWithFilters';
 import { Observable } from 'rxjs';
 import { IMovieFilters } from '../interfaces/movies/IMovieFilters';
+import { IGetMovieDTO } from '../interfaces/movies/IGetMovieDTO';
 
 @Injectable()
 export class MoviesService {
@@ -33,5 +34,9 @@ export class MoviesService {
 
   deleteMovie(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`);
+  }
+
+  async getMovie(id: number) {
+    return await this.http.get<IGetMovieDTO>(`${this.url}/${id}`).toPromise();
   }
 }

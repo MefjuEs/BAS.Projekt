@@ -47,7 +47,9 @@ AppModule = __decorate([
             HttpClientModule,
             RouterModule.forRoot([
                 { path: '', component: HomeComponent },
-                { path: 'admin', component: AdminPanelComponent }
+                { path: 'admin', component: AdminPanelComponent },
+                { path: 'movie/add', component: AddEditMovieComponent },
+                { path: 'movie/edit/:id', component: AddEditMovieComponent }
             ]),
             BrowserAnimationsModule,
             MatChipsModule,

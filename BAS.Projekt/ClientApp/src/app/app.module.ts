@@ -26,6 +26,7 @@ import { MovieFilterComponent } from './components/movie-filter/movie-filter.com
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AddEditMovieComponent } from './components/add-edit-movie/add-edit-movie.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
-      { path: 'admin', component: AdminPanelComponent }
+      { path: 'admin', component: AdminPanelComponent },
+      { path: 'movie/add', component: AddEditMovieComponent },
+      { path: 'movie/edit/:id', component: AddEditMovieComponent }
     ]),
     BrowserAnimationsModule,
     MatChipsModule,
@@ -59,7 +62,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [
     MoviesService, 
