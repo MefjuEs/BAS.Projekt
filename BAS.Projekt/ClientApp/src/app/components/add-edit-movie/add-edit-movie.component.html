@@ -34,7 +34,98 @@
                           <mat-option *ngFor="let genre of genreList" [value]="genre.id">{{ genre.name }}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-form-field appearance="fill" class='mat-form-field-custom'>
+                        <mat-label>Aktorzy</mat-label>
+                        <mat-chip-list #chipList aria-label="Wybieranie aktorów">
+                          <mat-chip
+                            *ngFor="let actor of selectedActors"
+                            selectable="true"
+                            removable="true"
+                            (removed)="removeActor(actor)">
+                            {{ actor.name + ' ' + actor.surname }}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                          </mat-chip>
+                          <input
+                            placeholder="Nowy aktor"
+                            #actorInput
+                            [formControl]="actorInputInDropdown"
+                            [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addActor($event)"
+                            (input)="onActorInputChange($event.target.value)"
+                            >
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedActor($event)">
+                          <mat-option *ngFor="let actor of actorsInDropdown" [value]="actor">
+                            {{ actor.name + ' ' + actor.surname }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+
+                      <mat-form-field appearance="fill" class='mat-form-field-custom'>
+                        <mat-label>Reżyserzy</mat-label>
+                        <mat-chip-list #chipListDirector aria-label="Wybieranie reżyserów">
+                          <mat-chip
+                            *ngFor="let director of selectedDirectors"
+                            selectable="true"
+                            removable="true"
+                            (removed)="removeDirector(director)">
+                            {{ director.name + ' ' + director.surname }}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                          </mat-chip>
+                          <input
+                            placeholder="Nowy reżyser"
+                            #directorInput
+                            [formControl]="directorInputInDropdown"
+                            [matAutocomplete]="autoDirector"
+                            [matChipInputFor]="chipListDirector"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addDirector($event)"
+                            (input)="onDirectorInputChange($event.target.value)"
+                            >
+                        </mat-chip-list>
+                        <mat-autocomplete #autoDirector="matAutocomplete" (optionSelected)="selectedDirector($event)">
+                          <mat-option *ngFor="let director of directorsInDropdown" [value]="director">
+                            {{ director.name + ' ' + director.surname }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+
+                      <mat-form-field appearance="fill" class='mat-form-field-custom'>
+                        <mat-label>Scenarzyści</mat-label>
+                        <mat-chip-list #chipListWriter aria-label="Wybieranie scenarzystów">
+                          <mat-chip
+                            *ngFor="let writer of selectedWriters"
+                            selectable="true"
+                            removable="true"
+                            (removed)="removeWriter(writer)">
+                            {{ writer.name + ' ' + writer.surname }}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                          </mat-chip>
+                          <input
+                            placeholder="Nowy scenarzysta"
+                            #writerInput
+                            [formControl]="writerInputInDropdown"
+                            [matAutocomplete]="autoWriter"
+                            [matChipInputFor]="chipListWriter"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addWriter($event)"
+                            (input)="onWriterInputChange($event.target.value)"
+                            >
+                        </mat-chip-list>
+                        <mat-autocomplete #autoWriter="matAutocomplete" (optionSelected)="selectedWriter($event)">
+                          <mat-option *ngFor="let writer of writersInDropdown" [value]="writer">
+                            {{ writer.name + ' ' + writer.surname }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
                 </div>
+            </div>
+            <div style="height: 1000px;">
+
             </div>
         </ng-container>
     </ng-container>

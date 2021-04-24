@@ -27,6 +27,9 @@ import { MovieFilterComponent } from './components/movie-filter/movie-filter.com
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AddEditMovieComponent } from './components/add-edit-movie/add-edit-movie.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PersonnelService } from './services/personnel.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -64,11 +67,14 @@ AppModule = __decorate([
             MatTabsModule,
             MatTableModule,
             MatPaginatorModule,
-            MatDialogModule
+            MatDialogModule,
+            ReactiveFormsModule,
+            MatAutocompleteModule
         ],
         providers: [
             MoviesService,
-            GenresService
+            GenresService,
+            PersonnelService
         ],
         bootstrap: [AppComponent]
     })

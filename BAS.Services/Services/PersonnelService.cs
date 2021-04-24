@@ -2,6 +2,7 @@
 using BAS.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,6 +34,28 @@ namespace BAS.AppServices
         {
             return db.Actors.Find(id);
         }
+
+        public List<PersonnelInSelectDTO> GetPersonnelToSelect(PersonnelSelectFilter filters)
+        {
+            if (filters.NumberOfItems <= 0)
+                throw new Exception("Zła liczba zwracanych osób");
+
+            if(string.IsNullOrWhiteSpace(filters.FullName))
+            {
+                filters.FullName = "";
+            }
+
+            return db.Actors.Where(p => (p.Name.ToLower() + " " + p.Surname.ToLower()).Contains(filters.FullName.ToLower()))
+                .OrderBy(p => p.Surname)
+                .Take(filters.NumberOfItems)
+                .Select(p => new PersonnelInSelectDTO()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Surname = p.Surname
+                }).ToList();
+        }
+
 
         public async Task<PersonnelListWithFilters> GetPersonnelWtihFilter(PersonnelFilters personnelFilter)
         {

@@ -31,6 +31,13 @@ namespace BAS.Projekt.Controllers
             return Ok(personnelList);
         }
 
+        [HttpGet("select")]
+        public async Task<IActionResult> GetPersonnelToSelect([FromQuery] PersonnelSelectFilter filters)
+        {
+            var personnelList = personnelService.GetPersonnelToSelect(filters);
+            return Ok(personnelList);
+        }
+
         [HttpPost]
         [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertPersonnel([FromBody] PersonnelDTO personnel)

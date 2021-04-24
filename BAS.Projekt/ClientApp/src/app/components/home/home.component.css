@@ -23,3 +23,7 @@ h2 {
 .mat-chip {
     font-size: 12px;
 }
+
+.mat-spinner {
+    margin: auto;
+}
