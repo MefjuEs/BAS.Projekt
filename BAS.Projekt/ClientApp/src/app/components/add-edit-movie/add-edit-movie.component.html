@@ -1,11 +1,11 @@
 <div class="container">
     <ng-container *ngIf="!isLoading; else loadingBlock">
         <ng-container *ngIf="!notFound; else notFoundBlock">
-            <div class="center-text">
+            <div class="title">
                 <h1> {{ editMode ? 'Edycja' : "Dodawanie"}}</h1>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 float-left">
                     <mat-form-field hintLabel="Max 100 znaków" appearance="fill" class='mat-form-field-custom'>
                         <mat-label>Tytuł filmu</mat-label>
                         <input matInput #input maxlength="100" type="text" [formControl]="movieTitle"/>
@@ -19,7 +19,7 @@
                         <mat-error *ngIf="movieDescription.invalid">{{ getDescriptionErrorMessage() }}</mat-error>
                       </mat-form-field>
                     <mat-form-field hintLabel="Przedział lat: 1900-2300" appearance="fill" class='mat-form-field-custom'>
-                        <mat-label>Rok wydania</mat-label>
+                        <mat-label>Rok premiery</mat-label>
                         <input matInput #input type="number" [formControl]="movieReleaseYear"/>
                         <mat-error *ngIf="movieReleaseYear.invalid">{{ getReleaseYearErrorMessage() }}</mat-error>
                     </mat-form-field>
@@ -123,9 +123,21 @@
                         </mat-autocomplete>
                       </mat-form-field>
                 </div>
-            </div>
-            <div style="height: 1000px;">
 
+                <div class="clearfix col-md-6 image-preview">
+                  <mat-card class="movie-card-margins">
+                    <img mat-card-image [src]="file">
+                    <mat-card-footer>
+                      <input type="file" (change)="uploadMoviePoster($event)"/>
+                    </mat-card-footer>
+                  </mat-card>
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <button mat-raised-button color="accent" (click)="onSubmit()">Zatwierdź</button>
+              </div>
             </div>
         </ng-container>
     </ng-container>

@@ -1,5 +1,4 @@
 import { __awaiter, __decorate } from "tslib";
-import { map, startWith } from 'rxjs/operators';
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
@@ -21,7 +20,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         this.selectedWriters = [];
         this.actorInputInDropdown = new FormControl();
         this.directorInputInDropdown = new FormControl();
-        this.writersInputInDropdown = new FormControl();
+        this.writerInputInDropdown = new FormControl();
         this.separatorKeysCodes = [ENTER, COMMA];
         this.isLoading = true;
         this.notFound = false;
@@ -31,8 +30,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         this.writersInDropdown = [];
         this.actorInputInDropdown.setValue(null);
         this.directorInputInDropdown.setValue(null);
-        this.writersInputInDropdown.setValue(null);
-        this.filteredActors = this.actorInputInDropdown.valueChanges.pipe(startWith(''), map(value => this._getActorsToDropdown(value)));
+        this.writerInputInDropdown.setValue(null);
     }
     ngOnInit() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -66,7 +64,6 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let getMovieDTO = yield this.movieService.getMovie(id);
-                console.log(getMovieDTO);
                 let genres = getMovieDTO.genres.map(g => g.genreId);
                 getMovieDTO.personnel.forEach(person => {
                     let personInSelect = {
@@ -89,20 +86,75 @@ let AddEditMovieComponent = class AddEditMovieComponent {
                 this.movieDescription.setValue(getMovieDTO.description);
                 this.movieReleaseYear.setValue(getMovieDTO.releaseYear);
                 this.movieLengthInMinutes.setValue(getMovieDTO.movieLengthInMinutes);
-                this.file = null;
+                this.file = this.getMoviePoster(getMovieDTO.moviePoster);
                 this.updatePhoto = false;
                 this.selectedGenres.setValue(genres);
                 this.isLoading = false;
+                this.movie = {
+                    id: this.movieId,
+                    title: "",
+                    description: "",
+                    releaseYear: 0,
+                    movieLengthInMinutes: 0,
+                    file: null,
+                    updatePhoto: false,
+                    crew: [],
+                    genres: []
+                };
             }
             catch (exception) {
                 this.isLoading = false;
                 this.notFound = true;
-                console.log('gonwo');
             }
         });
     }
+    getMoviePoster(poster) {
+        if (poster != null) {
+            return `data:${poster.contentType};base64,${poster.file}`;
+        }
+        else {
+            return '';
+        }
+    }
+    uploadMoviePoster(event) {
+        if (event.target.files != null) {
+            const file = event.target.files[0];
+            console.log(event.target.files[0]);
+            const reader = new FileReader();
+            reader.onload = () => {
+                console.log(reader.result);
+                this.file = reader.result;
+            };
+            reader.readAsDataURL(file);
+            this.movie.updatePhoto = true;
+        }
+        else {
+            this.file = '';
+            this.movie.updatePhoto = false;
+        }
+    }
+    onSubmit() {
+        this.movie.title = this.movieTitle.value;
+        this.movie.description = this.movieDescription.value;
+        this.movie.releaseYear = this.movieReleaseYear.value;
+        this.movie.movieLengthInMinutes = this.movieLengthInMinutes.value;
+        this.movie.file = this.file;
+        this.movie.genres = this.selectedGenres.value;
+        //actors
+        this.selectedActors.forEach(actor => {
+            this.movie.crew.push({ personnelId: actor.id, filmCrew: FilmCrew.Actor });
+        });
+        //directors
+        this.selectedDirectors.forEach(director => {
+            this.movie.crew.push({ personnelId: director.id, filmCrew: FilmCrew.Director });
+        });
+        //writers
+        this.selectedWriters.forEach(writer => {
+            this.movie.crew.push({ personnelId: writer.id, filmCrew: FilmCrew.Writer });
+        });
+        this.movieService.editMovie(this.movie).subscribe(data => console.log(data));
+    }
     getTitleErrorMessage() {
-        console.log(this.selectedGenres);
         if (this.movieTitle.hasError('required')) {
             return 'Tytuł nie może być pusty';
         }
@@ -141,14 +193,13 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     getDescriptionErrorMessage() {
         return this.movieTitle.hasError('maxLength') ? 'Tytuł jest za długi' : '';
     }
-    remove(actor) {
+    removeActor(actor) {
         const index = this.selectedActors.indexOf(actor);
         if (index >= 0) {
             this.selectedActors.splice(index, 1);
         }
     }
-    add(event) {
-        debugger;
+    addActor(event) {
         const input = event.input;
         const value = event.value;
         let foundPerson = this.checkIfObjectIsInList(value, this.actorsInDropdown);
@@ -185,24 +236,111 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         });
         return actorExist;
     }
-    selected(event) {
+    checkIfDirectorIsInSelectedList(director) {
+        if (director == null) {
+            return true;
+        }
+        let directorExist = false;
+        this.selectedDirectors.forEach(person => {
+            if (director.id == person.id) {
+                directorExist = true;
+                return;
+            }
+        });
+        return directorExist;
+    }
+    checkIfWriterIsInSelectedList(writer) {
+        if (writer == null) {
+            return true;
+        }
+        let writerExist = false;
+        this.selectedWriters.forEach(person => {
+            if (writer.id == person.id) {
+                writerExist = true;
+                return;
+            }
+        });
+        return writerExist;
+    }
+    selectedActor(event) {
         let foundPerson = this.checkIfObjectIsInList(event.option.viewValue, this.actorsInDropdown);
         if (foundPerson != null && !this.checkIfActorIsInSelectedList(foundPerson)) {
             this.selectedActors.push(foundPerson);
         }
         this.actorInput.nativeElement.value = '';
         this.actorInputInDropdown.setValue(null);
+        this.onActorInputChange("");
     }
     onActorInputChange(value) {
-        console.log(value);
-    }
-    _getActorsToDropdown(value) {
-        //console.log("gowno")
-        //this.personnelService.getPersonnelToSelectList(numberOfItems, value);
-        this.filteredActors.subscribe(data => {
-            data = this.actorsInDropdown;
+        return __awaiter(this, void 0, void 0, function* () {
+            this.actorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
         });
-        return this.actorsInDropdown;
+    }
+    removeDirector(director) {
+        const index = this.selectedDirectors.indexOf(director);
+        if (index >= 0) {
+            this.selectedDirectors.splice(index, 1);
+        }
+    }
+    addDirector(event) {
+        const input = event.input;
+        const value = event.value;
+        let foundPerson = this.checkIfObjectIsInList(value, this.directorsInDropdown);
+        if (foundPerson != null && !this.checkIfDirectorIsInSelectedList(foundPerson)) {
+            this.selectedDirectors.push(foundPerson);
+        }
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+        this.directorInputInDropdown.setValue(null);
+    }
+    selectedDirector(event) {
+        let foundPerson = this.checkIfObjectIsInList(event.option.viewValue, this.directorsInDropdown);
+        if (foundPerson != null && !this.checkIfDirectorIsInSelectedList(foundPerson)) {
+            this.selectedDirectors.push(foundPerson);
+        }
+        this.directorInput.nativeElement.value = '';
+        this.directorInputInDropdown.setValue(null);
+        this.onDirectorInputChange("");
+    }
+    onDirectorInputChange(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+        });
+    }
+    removeWriter(writer) {
+        const index = this.selectedWriters.indexOf(writer);
+        if (index >= 0) {
+            this.selectedWriters.splice(index, 1);
+        }
+    }
+    addWriter(event) {
+        const input = event.input;
+        const value = event.value;
+        let foundPerson = this.checkIfObjectIsInList(value, this.writersInDropdown);
+        if (foundPerson != null && !this.checkIfWriterIsInSelectedList(foundPerson)) {
+            this.selectedWriters.push(foundPerson);
+        }
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+        this.writerInputInDropdown.setValue(null);
+    }
+    selectedWriter(event) {
+        let foundPerson = this.checkIfObjectIsInList(event.option.viewValue, this.writersInDropdown);
+        if (foundPerson != null && !this.checkIfWriterIsInSelectedList(foundPerson)) {
+            this.selectedWriters.push(foundPerson);
+        }
+        this.writerInput.nativeElement.value = '';
+        this.writerInputInDropdown.setValue(null);
+        this.onWriterInputChange("");
+    }
+    onWriterInputChange(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+        });
     }
 };
 __decorate([
@@ -211,6 +349,18 @@ __decorate([
 __decorate([
     ViewChild('auto')
 ], AddEditMovieComponent.prototype, "matAutocomplete", void 0);
+__decorate([
+    ViewChild('directorInput')
+], AddEditMovieComponent.prototype, "directorInput", void 0);
+__decorate([
+    ViewChild('autoDirector')
+], AddEditMovieComponent.prototype, "matAutocompleteDirector", void 0);
+__decorate([
+    ViewChild('writerInput')
+], AddEditMovieComponent.prototype, "writerInput", void 0);
+__decorate([
+    ViewChild('autoWriter')
+], AddEditMovieComponent.prototype, "matAutocompleteWriter", void 0);
 AddEditMovieComponent = __decorate([
     Component({
         selector: 'app-add-edit-movie',

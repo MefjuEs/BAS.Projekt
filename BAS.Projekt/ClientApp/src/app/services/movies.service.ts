@@ -4,6 +4,7 @@ import { IMovieListWithFilters } from '../interfaces/movies/IMovieListWithFilter
 import { Observable } from 'rxjs';
 import { IMovieFilters } from '../interfaces/movies/IMovieFilters';
 import { IGetMovieDTO } from '../interfaces/movies/IGetMovieDTO';
+import { IMovieDTO } from '../interfaces/movies/IMovieDTO';
 
 @Injectable()
 export class MoviesService {
@@ -34,6 +35,54 @@ export class MoviesService {
 
   deleteMovie(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`);
+  }
+
+  editMovie(movie: IMovieDTO): Observable<any> {
+    let headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+    let formData: FormData = new FormData();
+    formData.append('id', movie.id ? movie.id.toString() : '');
+    formData.append('title', movie.title);
+    formData.append('description', movie.description);
+    formData.append('releaseYear', movie.releaseYear ? movie.releaseYear.toString() : '');
+    formData.append('movieLengthInMinutes', movie.movieLengthInMinutes ? movie.movieLengthInMinutes.toString() : '');
+    formData.append('file', movie.file);
+    formData.append('updatePhoto', JSON.stringify(movie.updatePhoto));
+
+    movie.crew.forEach( (person, index) => {
+      formData.append('crew[' + index + "].personnelId", person.personnelId ? person.personnelId.toString() : '');
+      formData.append('crew[' + index + "].filmCrew", person.filmCrew.toString());
+    })
+    
+    movie.genres.forEach( (genre, index) => {
+      formData.append('genres[' + index + "]", genre ? genre.toString() : '');
+    })
+
+    return this.http.put(this.url, formData, {headers: headers});
+  }
+
+  addMovie(movie: IMovieDTO): Observable<any> {
+    let headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+    let formData: FormData = new FormData();
+    formData.append('id', movie.id.toString());
+    formData.append('title', movie.title);
+    formData.append('description', movie.description);
+    formData.append('releaseYear', movie.releaseYear ? movie.releaseYear.toString() : '');
+    formData.append('movieLengthInMinutes', movie.movieLengthInMinutes ? movie.movieLengthInMinutes.toString() : '');
+    formData.append('file', movie.file);
+    formData.append('updatePhoto', JSON.stringify(movie.updatePhoto));
+
+    movie.crew.forEach( (person, index) => {
+      formData.append('crew[' + index + "].personnelId", person.personnelId ? person.personnelId.toString() : '');
+      formData.append('crew[' + index + "].filmCrew", person.filmCrew.toString());
+    })
+    
+    movie.genres.forEach( (genre, index) => {
+      formData.append('genres[' + index + "]", genre ? genre.toString() : '');
+    })
+
+    return this.http.post(this.url, formData, {headers: headers});
   }
 
   async getMovie(id: number) {

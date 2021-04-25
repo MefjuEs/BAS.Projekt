@@ -1,5 +1,6 @@
-.center-text {
-    text-align: center;
+.title {
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .mat-form-field-custom {
@@ -9,4 +10,13 @@
 
 .mat-spinner {
     margin: auto;
+}
+
+.image-preview {
+    margin-top: 10px;
+}
+
+.movie-card-margins {
+    max-width: 450px;
+    max-height: 655px;
 }

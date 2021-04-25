@@ -6,7 +6,7 @@ export interface IMovieDTO {
     description: string,
     releaseYear: number,
     movieLengthInMinutes: number,
-    file: any,
+    file: File,
     updatePhoto: boolean,
     crew: IInsertMovieCrewDTO[],
     genres: number[] 

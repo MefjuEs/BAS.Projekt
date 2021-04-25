@@ -14,6 +14,7 @@ import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { IFile } from 'src/app/interfaces/movies/IFile';
 
 const numberOfItems = 5;
 
@@ -34,7 +35,7 @@ export class AddEditMovieComponent implements OnInit {
   movieReleaseYear = new FormControl('', [Validators.required, Validators.min(1900), Validators.max(2300)]);
   movieLengthInMinutes = new FormControl('', [Validators.required, Validators.min(1), Validators.max(1000000)]);
   file: any;
-  updatePhoto: boolean;
+  fileToUpload: File;
   selectedGenres = new FormControl();
   titleExistError: boolean;
 
@@ -73,6 +74,18 @@ export class AddEditMovieComponent implements OnInit {
       this.actorInputInDropdown.setValue(null);
       this.directorInputInDropdown.setValue(null);
       this.writerInputInDropdown.setValue(null);
+
+      this.movie = {
+        id: 0,
+        title: "",
+        description: "",
+        releaseYear: 0,
+        movieLengthInMinutes: 0,
+        file: null,
+        updatePhoto: false,
+        crew: [],
+        genres: []
+      }
     }
 
   async ngOnInit() {
@@ -95,7 +108,6 @@ export class AddEditMovieComponent implements OnInit {
         this.movieReleaseYear.setValue('');
         this.movieLengthInMinutes.setValue('');
         this.file = null;
-        this.updatePhoto = false;
         this.selectedActors = [];
         this.selectedDirectors = [];
         this.selectedWriters = [];
@@ -133,8 +145,7 @@ export class AddEditMovieComponent implements OnInit {
       this.movieDescription.setValue(getMovieDTO.description);
       this.movieReleaseYear.setValue(getMovieDTO.releaseYear);
       this.movieLengthInMinutes.setValue(getMovieDTO.movieLengthInMinutes);
-      this.file = null;
-      this.updatePhoto = false;
+      this.file = this.getMoviePoster(getMovieDTO.moviePoster);
       this.selectedGenres.setValue(genres);
       this.isLoading = false;
     }
@@ -142,6 +153,65 @@ export class AddEditMovieComponent implements OnInit {
       this.isLoading = false;
       this.notFound = true;
     }
+  }
+
+  getMoviePoster(poster: IFile) {
+    if(poster != null) {
+      return `data:${poster.contentType};base64,${poster.file}`;
+    }
+    else {
+      return '';
+    }
+  }
+
+  uploadMoviePoster(event) {
+    if(event.target.files != null) {
+      this.fileToUpload = event.target.files[0];
+      this.movie.updatePhoto = true;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.file = reader.result as string;
+      }
+      reader.readAsDataURL(this.fileToUpload)
+    }
+
+    else {
+      this.file = '';
+      this.movie.updatePhoto = false;
+    }
+  }
+
+  onSubmit() {
+    this.movie.id = this.movieId;
+    this.movie.title = this.movieTitle.value;
+    this.movie.description = this.movieDescription.value;
+    this.movie.releaseYear = this.movieReleaseYear.value;
+    this.movie.movieLengthInMinutes = this.movieLengthInMinutes.value;
+    this.movie.file = this.fileToUpload;
+    this.movie.genres = this.selectedGenres.value
+
+    //actors
+    this.selectedActors.forEach(actor => {
+      this.movie.crew.push({ personnelId: actor.id, filmCrew: FilmCrew.Actor})
+    });
+
+    //directors
+    this.selectedDirectors.forEach(director => {
+      this.movie.crew.push({ personnelId: director.id, filmCrew: FilmCrew.Director})
+    });
+
+    //writers
+    this.selectedWriters.forEach(writer => {
+      this.movie.crew.push({ personnelId: writer.id, filmCrew: FilmCrew.Writer})
+    });
+
+    if(this.editMode) {
+      this.movieService.editMovie(this.movie).subscribe(data => alert("Wprowadzono zmiany"));
+    } else {
+      this.movieService.addMovie(this.movie).subscribe(data => alert("Dodano nowy film"));
+    }
+    
   }
 
   getTitleErrorMessage() {

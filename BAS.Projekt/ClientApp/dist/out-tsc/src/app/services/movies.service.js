@@ -26,6 +26,27 @@ let MoviesService = class MoviesService {
     deleteMovie(id) {
         return this.http.delete(`${this.url}/${id}`);
     }
+    editMovie(movie) {
+        debugger;
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+        let formData = new FormData();
+        formData.append('id', movie.id ? movie.id.toString() : '');
+        formData.append('title', movie.title);
+        formData.append('description', movie.description);
+        formData.append('releaseYear', movie.releaseYear ? movie.releaseYear.toString() : '');
+        formData.append('movieLengthInMinutes', movie.movieLengthInMinutes ? movie.movieLengthInMinutes.toString() : '');
+        formData.append('file', movie.file);
+        formData.append('updatePhoto', JSON.stringify(movie.updatePhoto));
+        movie.crew.forEach((person, index) => {
+            formData.append('crew[' + index + "].personnelId", person.personnelId ? person.personnelId.toString() : '');
+            formData.append('crew[' + index + "].filmCrew", person.filmCrew ? person.filmCrew.toString() : '');
+        });
+        movie.genres.forEach((genre, index) => {
+            formData.append('genres[' + index + "]", genre ? genre.toString() : '');
+        });
+        return this.http.put(this.url, formData, { headers: headers });
+    }
     getMovie(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.http.get(`${this.url}/${id}`).toPromise();
