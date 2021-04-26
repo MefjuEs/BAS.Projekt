@@ -29,6 +29,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PersonnelService } from './services/personnel.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AdminPersonnelComponent, DeletePersonnelDialog } from './components/admin-personnel/admin-personnel.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import localePl from '@angular/common/locales/pl';
+import { registerLocaleData } from '@angular/common';
+import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
+
+registerLocaleData(localePl);
 
 @NgModule({
   declarations: [
@@ -39,7 +47,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     AdminMovieComponent,
     MovieFilterComponent,
     AddEditMovieComponent,
-    DeleteMovieDialog
+    DeleteMovieDialog,
+    AdminPersonnelComponent,
+    DeletePersonnelDialog,
+    AddEditPersonnelComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +60,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
       { path: '', component: HomeComponent },
       { path: 'admin', component: AdminPanelComponent },
       { path: 'movie/add', component: AddEditMovieComponent },
-      { path: 'movie/edit/:id', component: AddEditMovieComponent }
+      { path: 'movie/edit/:id', component: AddEditMovieComponent },
+      { path: 'admin/personnel/add', component: AddEditPersonnelComponent },
+      { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent }
     ]),
     BrowserAnimationsModule,
     MatChipsModule,
@@ -66,12 +79,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatPaginatorModule,
     MatDialogModule,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     MoviesService, 
     GenresService,
-    PersonnelService
+    PersonnelService,
+    {provide: localePl, useValue: 'pl'},
+    {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}
   ],
   bootstrap: [AppComponent]
 })

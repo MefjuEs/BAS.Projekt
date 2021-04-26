@@ -25,7 +25,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPersonnelList([FromBody] PersonnelFilters personnelFilters)
+        public async Task<IActionResult> GetPersonnelList([FromQuery] PersonnelFilters personnelFilters)
         {
             var personnelList = await personnelService.GetPersonnelWtihFilter(personnelFilters);
             return Ok(personnelList);
@@ -39,28 +39,28 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        [BASAuthorize(UserRole.Admin)]
-        public async Task<IActionResult> InsertPersonnel([FromBody] PersonnelDTO personnel)
+        //[BASAuthorize(UserRole.Admin)]
+        public async Task<IActionResult> InsertPersonnel([FromForm] PersonnelDTO personnel)
         {
             var result = await personnelService.InsertPersonnel(personnel);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpPut]
-        [BASAuthorize(UserRole.Admin)]
-        public async Task<IActionResult> UpdatePersonnel([FromBody] PersonnelDTO personnelDTO)
+        //[BASAuthorize(UserRole.Admin)]
+        public async Task<IActionResult> UpdatePersonnel([FromForm] PersonnelDTO personnelDTO)
         {
 
             var result = await personnelService.UpdatePersonnel(personnelDTO);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        [BASAuthorize(UserRole.Admin)]
+        //[BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeletePersonnel([FromRoute] long id)
         {
             var result = await personnelService.DeletePersonnel(id);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
     }
 }

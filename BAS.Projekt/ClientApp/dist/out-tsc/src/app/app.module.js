@@ -30,6 +30,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PersonnelService } from './services/personnel.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AdminPersonnelComponent, DeletePersonnelDialog } from './components/admin-personnel/admin-personnel.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -42,7 +46,10 @@ AppModule = __decorate([
             AdminMovieComponent,
             MovieFilterComponent,
             AddEditMovieComponent,
-            DeleteMovieDialog
+            DeleteMovieDialog,
+            AdminPersonnelComponent,
+            DeletePersonnelDialog,
+            AddEditPersonnelComponent
         ],
         imports: [
             BrowserModule,
@@ -52,7 +59,9 @@ AppModule = __decorate([
                 { path: '', component: HomeComponent },
                 { path: 'admin', component: AdminPanelComponent },
                 { path: 'movie/add', component: AddEditMovieComponent },
-                { path: 'movie/edit/:id', component: AddEditMovieComponent }
+                { path: 'movie/edit/:id', component: AddEditMovieComponent },
+                { path: 'admin/personnel/add', component: AddEditPersonnelComponent },
+                { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent }
             ]),
             BrowserAnimationsModule,
             MatChipsModule,
@@ -69,12 +78,15 @@ AppModule = __decorate([
             MatPaginatorModule,
             MatDialogModule,
             ReactiveFormsModule,
-            MatAutocompleteModule
+            MatAutocompleteModule,
+            MatDatepickerModule,
+            MatNativeDateModule
         ],
         providers: [
             MoviesService,
             GenresService,
-            PersonnelService
+            PersonnelService,
+            { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
         ],
         bootstrap: [AppComponent]
     })

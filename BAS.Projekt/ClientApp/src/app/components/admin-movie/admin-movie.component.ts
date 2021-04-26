@@ -82,9 +82,6 @@ export class AdminMovieComponent implements OnInit {
 
     this.movieFilters.page = this.pageIndex + 1;
     this.getMovies();
-
-    console.log(event)
-    console.log(this.movieFilters.page)
   }
 
   openDeleteDialog(id) {

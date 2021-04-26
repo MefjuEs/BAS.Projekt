@@ -69,6 +69,11 @@ namespace BAS.AppServices
                 personnelFilter.Nationality = "";
             }
 
+            if(string.IsNullOrWhiteSpace(personnelFilter.OrderBy))
+            {
+                personnelFilter.OrderBy = "";
+            }
+
 
             var pageSize = personnelFilter.PageSize.HasValue ? personnelFilter.PageSize.Value : int.MaxValue;
             var allElements = db.Actors.Count(p => (p.Name.ToLower() + p.Surname.ToLower()).Contains(personnelFilter.FullName.ToLower()) &&

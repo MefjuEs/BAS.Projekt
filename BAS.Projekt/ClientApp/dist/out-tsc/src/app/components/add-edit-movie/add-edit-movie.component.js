@@ -31,6 +31,17 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         this.actorInputInDropdown.setValue(null);
         this.directorInputInDropdown.setValue(null);
         this.writerInputInDropdown.setValue(null);
+        this.movie = {
+            id: 0,
+            title: "",
+            description: "",
+            releaseYear: 0,
+            movieLengthInMinutes: 0,
+            file: null,
+            updatePhoto: false,
+            crew: [],
+            genres: []
+        };
     }
     ngOnInit() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,7 +61,6 @@ let AddEditMovieComponent = class AddEditMovieComponent {
                     this.movieReleaseYear.setValue('');
                     this.movieLengthInMinutes.setValue('');
                     this.file = null;
-                    this.updatePhoto = false;
                     this.selectedActors = [];
                     this.selectedDirectors = [];
                     this.selectedWriters = [];
@@ -87,20 +97,8 @@ let AddEditMovieComponent = class AddEditMovieComponent {
                 this.movieReleaseYear.setValue(getMovieDTO.releaseYear);
                 this.movieLengthInMinutes.setValue(getMovieDTO.movieLengthInMinutes);
                 this.file = this.getMoviePoster(getMovieDTO.moviePoster);
-                this.updatePhoto = false;
                 this.selectedGenres.setValue(genres);
                 this.isLoading = false;
-                this.movie = {
-                    id: this.movieId,
-                    title: "",
-                    description: "",
-                    releaseYear: 0,
-                    movieLengthInMinutes: 0,
-                    file: null,
-                    updatePhoto: false,
-                    crew: [],
-                    genres: []
-                };
             }
             catch (exception) {
                 this.isLoading = false;
@@ -118,15 +116,13 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     }
     uploadMoviePoster(event) {
         if (event.target.files != null) {
-            const file = event.target.files[0];
-            console.log(event.target.files[0]);
+            this.fileToUpload = event.target.files[0];
+            this.movie.updatePhoto = true;
             const reader = new FileReader();
             reader.onload = () => {
-                console.log(reader.result);
                 this.file = reader.result;
             };
-            reader.readAsDataURL(file);
-            this.movie.updatePhoto = true;
+            reader.readAsDataURL(this.fileToUpload);
         }
         else {
             this.file = '';
@@ -134,11 +130,12 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         }
     }
     onSubmit() {
+        this.movie.id = this.movieId;
         this.movie.title = this.movieTitle.value;
         this.movie.description = this.movieDescription.value;
         this.movie.releaseYear = this.movieReleaseYear.value;
         this.movie.movieLengthInMinutes = this.movieLengthInMinutes.value;
-        this.movie.file = this.file;
+        this.movie.file = this.fileToUpload;
         this.movie.genres = this.selectedGenres.value;
         //actors
         this.selectedActors.forEach(actor => {
@@ -152,7 +149,12 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         this.selectedWriters.forEach(writer => {
             this.movie.crew.push({ personnelId: writer.id, filmCrew: FilmCrew.Writer });
         });
-        this.movieService.editMovie(this.movie).subscribe(data => console.log(data));
+        if (this.editMode) {
+            this.movieService.editMovie(this.movie).subscribe(data => alert("Wprowadzono zmiany"));
+        }
+        else {
+            this.movieService.addMovie(this.movie).subscribe(data => alert("Dodano nowy film"));
+        }
     }
     getTitleErrorMessage() {
         if (this.movieTitle.hasError('required')) {
