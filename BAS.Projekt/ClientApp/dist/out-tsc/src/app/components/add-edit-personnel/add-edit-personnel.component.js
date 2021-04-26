@@ -2,13 +2,14 @@ import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 let AddEditPersonnelComponent = class AddEditPersonnelComponent {
-    constructor(personnelService, route, dateAdapter) {
+    constructor(personnelService, route, location) {
         this.personnelService = personnelService;
         this.route = route;
-        this.dateAdapter = dateAdapter;
+        this.location = location;
         this.personnelName = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.personnelSurname = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.personnelNationality = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+        this.personnelDateOfBirth = new FormControl(null, [Validators.required]);
         this.minDate = new Date(1800, 1, 1);
         this.maxDate = new Date();
         this.isLoading = true;
@@ -25,7 +26,7 @@ let AddEditPersonnelComponent = class AddEditPersonnelComponent {
                 this.personnelName.setValue('');
                 this.personnelSurname.setValue('');
                 this.personnelNationality.setValue('');
-                this.personnelDateOfBirth = null;
+                this.personnelDateOfBirth.setValue(null);
                 this.isLoading = false;
             }
         });
@@ -38,7 +39,7 @@ let AddEditPersonnelComponent = class AddEditPersonnelComponent {
                 this.personnelName.setValue(person.name);
                 this.personnelSurname.setValue(person.surname);
                 this.personnelNationality.setValue(person.nationality);
-                this.personnelDateOfBirth = person.dateOfBirth;
+                this.personnelDateOfBirth.setValue(new Date(person.dateOfBirth));
                 this.isLoading = false;
             }
             catch (exception) {
@@ -48,15 +49,62 @@ let AddEditPersonnelComponent = class AddEditPersonnelComponent {
         });
     }
     getNameErrorMessage() {
+        if (this.personnelName.hasError('required')) {
+            return 'Imię nie może być puste';
+        }
+        if (this.personnelName.hasError('maxLength')) {
+            return 'Imię jest za długie';
+        }
         return '';
     }
     getSurnameErrorMessage() {
+        if (this.personnelSurname.hasError('required')) {
+            return 'Nazwisko nie może być puste';
+        }
+        if (this.personnelSurname.hasError('maxLength')) {
+            return 'Nazwisko jest za długie';
+        }
         return '';
     }
     getNationalityErrorMessage() {
+        if (this.personnelNationality.hasError('required')) {
+            return 'Narodowość nie może być pusta';
+        }
+        if (this.personnelNationality.hasError('maxLength')) {
+            return 'Narodowość jest za długa';
+        }
         return '';
     }
+    onReturn() {
+        this.location.back();
+    }
     onSubmit() {
+        if (this.personnelName.invalid ||
+            this.personnelSurname.invalid ||
+            this.personnelNationality.invalid ||
+            this.personnelDateOfBirth.invalid) {
+            alert("Nie wszystkie pola są poprawne!");
+            return;
+        }
+        let person = {
+            id: this.personnelId,
+            name: this.personnelName.value,
+            surname: this.personnelSurname.value,
+            nationality: this.personnelNationality.value,
+            dateOfBirth: this.personnelDateOfBirth.value
+        };
+        if (this.editMode) {
+            this.personnelService.editPersonnel(person).subscribe(data => {
+                alert("Wprowadzono zmiany dla osoby");
+                this.location.back();
+            });
+        }
+        else {
+            this.personnelService.addPersonnel(person).subscribe(data => {
+                alert("Dodano nową osobę");
+                this.location.back();
+            });
+        }
     }
 };
 AddEditPersonnelComponent = __decorate([

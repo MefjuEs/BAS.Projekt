@@ -12,6 +12,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { IFile } from 'src/app/interfaces/movies/IFile';
+import { Location } from '@angular/common';
 
 const numberOfItems = 5;
 
@@ -61,7 +62,8 @@ export class AddEditMovieComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private movieService: MoviesService,
     private genreService: GenresService,
-    private personnelService: PersonnelService) { 
+    private personnelService: PersonnelService,
+    private location: Location) { 
       this.isLoading = true;
       this.notFound = false;
       this.titleExistError = false;
@@ -179,7 +181,19 @@ export class AddEditMovieComponent implements OnInit {
     }
   }
 
+  onReturn() {
+    this.location.back();
+  }
+
   onSubmit() {
+    if(this.movieTitle.invalid ||
+      this.movieDescription.invalid ||
+      this.movieReleaseYear.invalid ||
+      this.movieLengthInMinutes.invalid) {
+        alert("Nie wszystkie pola są poprawne!")
+        return;
+      }
+
     this.movie.id = this.movieId;
     this.movie.title = this.movieTitle.value;
     this.movie.description = this.movieDescription.value;
@@ -207,6 +221,7 @@ export class AddEditMovieComponent implements OnInit {
       this.movieService.editMovie(this.movie).subscribe(data => {
         if(data == true) {
           alert("Pomyślnie wprowadzono zmiany");
+          this.location.back();
         } else {
           this.titleExistError = true;
         }
@@ -215,6 +230,7 @@ export class AddEditMovieComponent implements OnInit {
       this.movieService.addMovie(this.movie).subscribe(data => {
         if(data == true) {
           alert("Dodano nowy film");
+          this.location.back();
         } else {
           this.titleExistError = true;
         }

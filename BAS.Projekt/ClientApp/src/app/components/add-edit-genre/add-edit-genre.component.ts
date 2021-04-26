@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IGenre } from 'src/app/interfaces/genres/IGenre';
 import { GenresService } from 'src/app/services/genres.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-genre',
@@ -21,7 +22,7 @@ export class AddEditGenreComponent implements OnInit {
   genreName = new FormControl('', [Validators.required, Validators.maxLength(20)]);
   genreDescription = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-  constructor(private route: ActivatedRoute, private genreService: GenresService) {
+  constructor(private route: ActivatedRoute, private genreService: GenresService, private location: Location) {
     this.notFound = false;
     this.isLoading = true;
     this.genreExistError = false;
@@ -64,6 +65,10 @@ export class AddEditGenreComponent implements OnInit {
   }
 
   onSubmit() {
+    if(this.genreName.invalid) {
+      alert("Nie wszystkie pola są poprawne!")
+    }
+
     this.genre.id = this.genreId;
     this.genre.name = this.genreName.value;
     this.genre.description = this.genreDescription.value;
@@ -72,6 +77,7 @@ export class AddEditGenreComponent implements OnInit {
       this.genreService.editGenre(this.genre).subscribe(res => {
         if(res == true) {
           alert('Pomyślnie wprowadzono zmiany');
+          this.location.back();
         } else {
           this.genreExistError = true;
         }
@@ -80,11 +86,16 @@ export class AddEditGenreComponent implements OnInit {
       this.genreService.addGenre(this.genre).subscribe(res => {
         if(res == true) {
           alert('Pomyślnie dodano gatunek filmowy');
+          this.location.back();
         } else {
           this.genreExistError = true;
         }
       });
     }
+  }
+
+  onReturn() {
+    this.location.back();
   }
 
   getNameErrorMessage() {

@@ -31,7 +31,7 @@ let GenresService = class GenresService {
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         let formData = new FormData();
-        formData.append('id', genre.id ? genre.id.toString() : '');
+        formData.append('id', genre.id.toString());
         formData.append('name', genre.name);
         formData.append('description', genre.description);
         return this.http.put(this.url, formData, { headers: headers });
@@ -40,9 +40,10 @@ let GenresService = class GenresService {
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         let formData = new FormData();
-        formData.append('id', genre.id ? genre.id.toString() : '');
+        formData.append('id', genre.id.toString());
         formData.append('name', genre.name);
         formData.append('description', genre.description);
+        debugger;
         return this.http.post(this.url, formData, { headers: headers });
     }
 };

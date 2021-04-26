@@ -31,6 +31,27 @@ let PersonnelService = class PersonnelService {
             return yield this.http.get(this.url, { headers: headers, params: params }).toPromise();
         });
     }
+    editPersonnel(person) {
+        let headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+        console.log(person.dateOfBirth);
+        let formData = new FormData();
+        formData.append('id', person.id.toString());
+        formData.append('name', person.name);
+        formData.append('surname', person.surname);
+        formData.append('nationality', person.nationality);
+        formData.append('dateOfBirth', person.dateOfBirth.toDateString());
+        return this.http.put(this.url, formData, { headers: headers });
+    }
+    addPersonnel(person) {
+        let headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+        let formData = new FormData();
+        formData.append('id', person.id.toString());
+        formData.append('name', person.name);
+        formData.append('surname', person.surname);
+        formData.append('nationality', person.nationality);
+        formData.append('dateOfBirth', person.dateOfBirth.toDateString());
+        return this.http.post(this.url, formData, { headers: headers });
+    }
     deletePersonnel(id) {
         return this.http.delete(`${this.url}/${id}`);
     }

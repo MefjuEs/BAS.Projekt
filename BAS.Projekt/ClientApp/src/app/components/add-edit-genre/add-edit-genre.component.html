@@ -23,9 +23,14 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                  <button mat-raised-button color="accent" (click)="onSubmit()">Zatwierdź</button>
-                </div>
+                <div class="col-md-6 clearfix">
+                    <div class="float-right">
+                        <button mat-raised-button color="accent" (click)="onSubmit()">Zatwierdź</button>
+                      </div>
+                      <div class="float-right mr-3">
+                        <button mat-raised-button (click)="onReturn()">Powrót</button>
+                      </div>
+                  </div>
               </div>
         </ng-container>
     </ng-container>

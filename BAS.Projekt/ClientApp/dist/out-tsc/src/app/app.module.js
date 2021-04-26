@@ -33,7 +33,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AdminPersonnelComponent, DeletePersonnelDialog } from './components/admin-personnel/admin-personnel.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import localePl from '@angular/common/locales/pl';
+import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
+registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -86,6 +89,7 @@ AppModule = __decorate([
             MoviesService,
             GenresService,
             PersonnelService,
+            { provide: localePl, useValue: 'pl' },
             { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
         ],
         bootstrap: [AppComponent]
