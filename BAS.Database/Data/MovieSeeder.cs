@@ -294,8 +294,8 @@ namespace BAS.Database
                 new Personnel()
                 {
                     DateOfBirth = new DateTime(1970, 12, 20),
-                    Name = "Todd Phillips",
-                    Surname = "Jackson",
+                    Name = "Todd",
+                    Surname = "Phillips",
                     Nationality = "USA"
                 },
                 new Personnel()

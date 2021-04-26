@@ -22,7 +22,7 @@
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef >
                   <div class="clearfix">
-                    <button mat-mini-fab class="green-background float-right" >
+                    <button mat-mini-fab routerLink="movie/add" class="green-background float-right" >
                       <mat-icon>add</mat-icon>
                     </button>
                   </div>
@@ -34,7 +34,7 @@
                     </button>
                   </div>
                   <div class="float-right mr-2">
-                    <button mat-mini-fab class="custom-button-icon" color="primary">
+                    <button mat-mini-fab routerLink="movie/edit/{{movie.id}}" class="custom-button-icon" color="primary">
                       <mat-icon class="custom-icon">edit</mat-icon>
                     </button>
                   </div>

@@ -76,6 +76,11 @@ namespace BAS.AppServices
                 genreFilter.Name = "";
             }
 
+            if (string.IsNullOrWhiteSpace(genreFilter.OrderBy))
+            {
+                genreFilter.OrderBy = "";
+            }
+
             //Func<Genre, bool> predicate = g => string.IsNullOrWhiteSpace(genreFilter.Name) ||
             //        g.Name.Contains(genreFilter.Name);
 
@@ -139,7 +144,8 @@ namespace BAS.AppServices
             result.GenreList = genres.Select(g => new GenreInListDTO()
             {
                 Id = g.Id,
-                Name = g.Name
+                Name = g.Name,
+                Description = g.Description
             }).ToList();
 
             return result;
@@ -154,8 +160,9 @@ namespace BAS.AppServices
         {
             return db.Genres.Select(g => new GenreInListDTO()
             {
+                Id = g.Id,
                 Name = g.Name,
-                Id = g.Id
+                Description = g.Description,
             }).ToList();
         }
 

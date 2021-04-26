@@ -10,7 +10,7 @@
                         <mat-label>Tytuł filmu</mat-label>
                         <input matInput #input maxlength="100" type="text" [formControl]="movieTitle"/>
                         <mat-hint align="end">{{movieTitle.value?.length || 0}}/100</mat-hint>
-                        <mat-error *ngIf="movieTitle.invalid">{{ getTitleErrorMessage() }}</mat-error>
+                        <mat-error *ngIf="movieTitle.invalid || titleExistError">{{ getTitleErrorMessage() }}</mat-error>
                     </mat-form-field>
                     <mat-form-field hintLabel="Max 2000 znaków" appearance="fill" class='mat-form-field-custom'>
                         <mat-label>Opis</mat-label>

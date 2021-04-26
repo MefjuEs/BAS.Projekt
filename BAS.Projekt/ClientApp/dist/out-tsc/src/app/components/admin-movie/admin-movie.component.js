@@ -56,8 +56,6 @@ let AdminMovieComponent = class AdminMovieComponent {
         this.pageIndex = event.pageIndex;
         this.movieFilters.page = this.pageIndex + 1;
         this.getMovies();
-        console.log(event);
-        console.log(this.movieFilters.page);
     }
     openDeleteDialog(id) {
         const dialogRef = this.dialog.open(DeleteMovieDialog);
@@ -65,7 +63,6 @@ let AdminMovieComponent = class AdminMovieComponent {
             if (result === true) {
                 this.moviesService.deleteMovie(id).subscribe(() => {
                     this.getMovies();
-                    console.log("Pomyślnie usunięto");
                 });
             }
         });

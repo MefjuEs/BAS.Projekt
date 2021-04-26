@@ -1,5 +1,4 @@
 import { IFile } from './../../interfaces/movies/IFile';
-import { IGetMovieDTO } from './../../interfaces/movies/IGetMovieDTO';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
@@ -7,7 +6,6 @@ import { IMovieInList } from 'src/app/interfaces/movies/IMovieInList';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 
 @Component({
   selector: 'admin-movie',
@@ -82,9 +80,6 @@ export class AdminMovieComponent implements OnInit {
 
     this.movieFilters.page = this.pageIndex + 1;
     this.getMovies();
-
-    console.log(event)
-    console.log(this.movieFilters.page)
   }
 
   openDeleteDialog(id) {
@@ -94,7 +89,6 @@ export class AdminMovieComponent implements OnInit {
       if(result === true) {
         this.moviesService.deleteMovie(id).subscribe(() => {
           this.getMovies();
-          console.log("Pomyślnie usunięto");
         })
       }
     });

@@ -29,6 +29,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PersonnelService } from './services/personnel.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AddEditGenreComponent } from './components/add-edit-genre/add-edit-genre.component';
+import { AdminGenreComponent, DeleteGenreDialog } from './components/admin-genre/admin-genre.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     AdminMovieComponent,
     MovieFilterComponent,
     AddEditMovieComponent,
-    DeleteMovieDialog
+    DeleteMovieDialog,
+    AddEditGenreComponent,
+    AdminGenreComponent,
+    DeleteGenreDialog
   ],
   imports: [
     BrowserModule,
@@ -48,8 +53,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'admin', component: AdminPanelComponent },
-      { path: 'movie/add', component: AddEditMovieComponent },
-      { path: 'movie/edit/:id', component: AddEditMovieComponent }
+      { path: 'admin/movie/add', component: AddEditMovieComponent },
+      { path: 'admin/movie/edit/:id', component: AddEditMovieComponent },
+      { path: 'admin/genre/add', component: AddEditGenreComponent },
+      { path: 'admin/genre/edit/:id', component: AddEditGenreComponent }
     ]),
     BrowserAnimationsModule,
     MatChipsModule,
