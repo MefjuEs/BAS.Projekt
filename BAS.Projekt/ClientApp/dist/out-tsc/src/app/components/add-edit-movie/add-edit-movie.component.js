@@ -49,7 +49,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "");
             this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "");
             this.route.url.subscribe(urlSegments => {
-                this.editMode = urlSegments[1].path === 'edit';
+                this.editMode = urlSegments[2].path === 'edit';
                 this.genreService.getGenres().subscribe(data => this.genreList = data);
                 if (this.editMode === true) {
                     this.getMovie(this.route.snapshot.params.id);
@@ -150,21 +150,30 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movie.crew.push({ personnelId: writer.id, filmCrew: FilmCrew.Writer });
         });
         if (this.editMode) {
-            this.movieService.editMovie(this.movie).subscribe(data => alert("Wprowadzono zmiany"));
+            this.movieService.editMovie(this.movie).subscribe(data => {
+                if (data == true) {
+                    alert("Pomyślnie wprowadzono zmiany");
+                }
+                else {
+                    this.titleExistError = true;
+                }
+            });
         }
         else {
-            this.movieService.addMovie(this.movie).subscribe(data => alert("Dodano nowy film"));
+            this.movieService.addMovie(this.movie).subscribe(data => {
+                if (data == true) {
+                    alert("Dodano nowy film");
+                }
+                else {
+                    this.titleExistError = true;
+                }
+            });
         }
     }
     getTitleErrorMessage() {
+        console.log('gowno');
         if (this.movieTitle.hasError('required')) {
             return 'Tytuł nie może być pusty';
-        }
-        if (this.movieTitle.hasError('maxLength')) {
-            return 'Tytuł jest za długi';
-        }
-        if (this.titleExistError) {
-            return 'Już istnieje film o takim tytule';
         }
         return '';
     }

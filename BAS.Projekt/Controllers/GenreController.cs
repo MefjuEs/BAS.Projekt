@@ -32,35 +32,35 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGenresByName([FromBody] GetGenresFiltersDTO genreFilter)
+        public async Task<IActionResult> GetGenresByName([FromQuery] GetGenresFiltersDTO genreFilter)
         {
             var genres = await genreService.GetGenresByName(genreFilter);
             return Ok(genres);
         }
 
         [HttpPost]
-        [BASAuthorize(UserRole.Admin)]
-        public async Task<IActionResult> InsertGenre([FromBody] GenreDTO genre)
+        //[BASAuthorize(UserRole.Admin)]
+        public async Task<IActionResult> InsertGenre([FromForm] GenreDTO genre)
         {
             var result = await genreService.InsertGenre(genre);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpPut]
-        [BASAuthorize(UserRole.Admin)]
-        public async Task<IActionResult> UpdateGenre([FromBody] GenreDTO genre)
+        //[BASAuthorize(UserRole.Admin)]
+        public async Task<IActionResult> UpdateGenre([FromForm] GenreDTO genre)
         {
             
             var result = await genreService.UpdateGenre(genre);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        [BASAuthorize(UserRole.Admin)]
+        //[BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeleteGenre([FromRoute] long id)
         {
             var result = await genreService.DeleteGenre(id);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
     }
 }

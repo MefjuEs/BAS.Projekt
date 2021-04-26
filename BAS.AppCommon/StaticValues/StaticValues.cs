@@ -2,8 +2,8 @@
 {
     public static class StaticValues
     {
-        public const int GenreNameMaxLength  = 50;
-        public const int GenreDescriptionMaxLength = 500;
+        public const int GenreNameMaxLength = 20;
+        public const int GenreDescriptionMaxLength = 100;
 
         public const int MoviePosterMaxLength = 50;
         public const int MovieTitleMaxLength = 100;

@@ -63,7 +63,6 @@ let AdminMovieComponent = class AdminMovieComponent {
             if (result === true) {
                 this.moviesService.deleteMovie(id).subscribe(() => {
                     this.getMovies();
-                    console.log("Pomyślnie usunięto");
                 });
             }
         });
