@@ -11,6 +11,11 @@ table {
     width: 100%;
 }
 
+th {
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .green-background {
     background-color: limegreen;
 }

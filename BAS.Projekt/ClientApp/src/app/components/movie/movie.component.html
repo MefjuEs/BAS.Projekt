@@ -16,16 +16,10 @@
             </div>
 
             <div class="mt-5">
-                Reżyseria:
-                <ng-container *ngFor="let director of directors">
-                    {{director.name}} {{director.surname}}
-                </ng-container>
+                <span class="font-weight-bold">Reżyseria:</span> {{ getDirectors() }}
             </div>
             <div class="mt-1">
-                Scenariusz:
-                <ng-container *ngFor="let writer of writers">
-                    {{writer.name}} {{writer.surname}}
-                </ng-container>
+                <span class="font-weight-bold">Scenariusz:</span> {{ getWriters() }}
             </div>
             <div class="mt-5">
                 <mat-chip-list class="mat-chip-list">

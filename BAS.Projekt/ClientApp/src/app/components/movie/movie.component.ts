@@ -1,3 +1,4 @@
+import { M } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
@@ -58,12 +59,20 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  getDirectors() {
+    return this.directors.map(director => `${director.name} ${director.surname}`).join(', ');
+  }
+
+  getWriters() {
+    return this.writers.map(writer => `${writer.name} ${writer.surname}`).join(', ');
+  }
+
   getMoviePoster(poster: IFile) {
     if(poster != null) {
       return `data:${poster.contentType};base64,${poster.file}`;
     }
     else {
-      return '';
+      return '/assets/images/noMovieImage.png';
     }
   }
   

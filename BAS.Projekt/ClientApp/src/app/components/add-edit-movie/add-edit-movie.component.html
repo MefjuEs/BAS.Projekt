@@ -126,7 +126,7 @@
 
                 <div class="clearfix col-md-6 image-preview">
                   <mat-card class="movie-card-margins">
-                    <img mat-card-image [src]="file">
+                    <img mat-card-image [src]="file == null ? '/assets/images/placeholder.png' : file">
                     <mat-card-footer>
                       <input type="file" (change)="uploadMoviePoster($event)"/>
                     </mat-card-footer>

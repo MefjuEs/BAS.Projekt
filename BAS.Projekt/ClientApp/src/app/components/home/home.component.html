@@ -5,32 +5,34 @@
 
     <div class="row" *ngIf="!isLoading; else loadingBlock">
         <div *ngFor="let movie of movies.movieList" class="col-md-4">
-            <mat-card class="movie-card-margins">
-                <img mat-card-image [src]="getMoviePoster(movie.poster)">
-                <mat-card-content>
-                    <div class="d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <h2>{{movie.title}}</h2>
+            <a class="movie-card-click" routerLink="movie/{{movie.id}}">
+                <mat-card class="movie-card-margins">
+                    <img mat-card-image [src]="movie.poster == null ? '/assets/images/noMovieImage.png' : getMoviePoster(movie.poster)">
+                    <mat-card-content>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h2>{{movie.title}}</h2>
+                                </div>
+                                <div>
+                                    <mat-icon class="golden-star">star</mat-icon>
+                                    <span class="align-middle">{{movie.averageRating}}</span>
+                                </div>
                             </div>
                             <div>
-                                <mat-icon class="golden-star">star</mat-icon>
-                                <span class="align-middle">{{movie.averageRating}}</span>
+                                {{movie.releaseYear}}
                             </div>
                         </div>
-                        <div>
-                            {{movie.releaseYear}}
-                        </div>
-                    </div>
-                </mat-card-content>
-                <mat-card-footer>
-                    <mat-chip-list class="mat-chip-list">
-                        <mat-chip *ngFor="let genre of movie.genres" class="mat-chip" color="primary" selected>
-                            {{genre}}
-                        </mat-chip>
-                    </mat-chip-list>
-                </mat-card-footer>
-            </mat-card>
+                    </mat-card-content>
+                    <mat-card-footer>
+                        <mat-chip-list class="mat-chip-list">
+                            <mat-chip *ngFor="let genre of movie.genres" class="mat-chip" color="primary" selected>
+                                {{genre}}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </mat-card-footer>
+                </mat-card>
+            </a>
         </div>
         
         <!-- 
