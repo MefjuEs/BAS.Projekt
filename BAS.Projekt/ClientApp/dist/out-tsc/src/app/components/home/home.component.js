@@ -45,7 +45,7 @@ let HomeComponent = class HomeComponent {
             return `data:${poster.contentType};base64,${poster.file}`;
         }
         else {
-            return '';
+            return `/assets/images/noMovieImage.png`;
         }
     }
     onApplyFilters(event) {

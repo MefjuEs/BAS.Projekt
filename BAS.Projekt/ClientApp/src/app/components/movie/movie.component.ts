@@ -67,6 +67,10 @@ export class MovieComponent implements OnInit {
     return this.writers.map(writer => `${writer.name} ${writer.surname}`).join(', ');
   }
 
+  getActors() {
+    return this.actors.map(actor => `${actor.name} ${actor.surname}`).join(', ');
+  }
+
   getMoviePoster(poster: IFile) {
     if(poster != null) {
       return `data:${poster.contentType};base64,${poster.file}`;

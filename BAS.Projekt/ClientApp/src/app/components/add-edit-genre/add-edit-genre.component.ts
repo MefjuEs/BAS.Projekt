@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -22,7 +23,10 @@ export class AddEditGenreComponent implements OnInit {
   genreName = new FormControl('', [Validators.required, Validators.maxLength(20)]);
   genreDescription = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-  constructor(private route: ActivatedRoute, private genreService: GenresService, private location: Location) {
+  constructor(private route: ActivatedRoute,
+      private genreService: GenresService,
+      private location: Location,
+      private notificationService: NotificationService) {
     this.notFound = false;
     this.isLoading = true;
     this.genreExistError = false;
@@ -66,7 +70,7 @@ export class AddEditGenreComponent implements OnInit {
 
   onSubmit() {
     if(this.genreName.invalid) {
-      alert("Nie wszystkie pola są poprawne!")
+      this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
     }
 
     this.genre.id = this.genreId;
@@ -76,7 +80,7 @@ export class AddEditGenreComponent implements OnInit {
     if(this.editMode) {
       this.genreService.editGenre(this.genre).subscribe(res => {
         if(res == true) {
-          alert('Pomyślnie wprowadzono zmiany');
+          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
           this.location.back();
         } else {
           this.genreExistError = true;
@@ -85,7 +89,7 @@ export class AddEditGenreComponent implements OnInit {
     } else {
       this.genreService.addGenre(this.genre).subscribe(res => {
         if(res == true) {
-          alert('Pomyślnie dodano gatunek filmowy');
+          this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', 'snackbar-success');
           this.location.back();
         } else {
           this.genreExistError = true;

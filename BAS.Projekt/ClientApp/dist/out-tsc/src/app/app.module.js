@@ -39,6 +39,8 @@ import localePl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
 import { MovieComponent } from './components/movie/movie.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from './services/notification.service';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -67,7 +69,7 @@ AppModule = __decorate([
             HttpClientModule,
             RouterModule.forRoot([
                 { path: '', component: HomeComponent },
-                { path: 'admin', component: AdminPanelComponent },
+                { path: 'admin/:tab', component: AdminPanelComponent },
                 { path: 'admin/movie/add', component: AddEditMovieComponent },
                 { path: 'admin/movie/edit/:id', component: AddEditMovieComponent },
                 { path: 'admin/genre/add', component: AddEditGenreComponent },
@@ -93,12 +95,14 @@ AppModule = __decorate([
             ReactiveFormsModule,
             MatAutocompleteModule,
             MatDatepickerModule,
-            MatNativeDateModule
+            MatNativeDateModule,
+            MatSnackBarModule
         ],
         providers: [
             MoviesService,
             GenresService,
             PersonnelService,
+            NotificationService,
             { provide: localePl, useValue: 'pl' },
             { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
         ],
