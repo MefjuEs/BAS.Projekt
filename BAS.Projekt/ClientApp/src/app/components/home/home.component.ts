@@ -1,10 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
 import { IFile } from 'src/app/interfaces/movies//IFile'
-import { GenresService } from 'src/app/services/genres.service';
-import { IGenreList } from 'src/app/interfaces/genres/IGenreList';
 
 @Component({
   selector: 'home',
