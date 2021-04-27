@@ -1,5 +1,7 @@
 <div class="container">
-    <mat-tab-group>
+  <ng-container *ngIf="!isLoading">
+    <div *ngIf="!tabError; else errorBlock">
+      <mat-tab-group [selectedIndex]="currentTab" (selectedTabChange)="changeUrl($event)">
         <mat-tab label="Filmy">
           <ng-template matTabContent>
               <ng-container>
@@ -32,4 +34,11 @@
             </ng-template>
         </mat-tab>
       </mat-tab-group>
+    </div>
+  </ng-container>
 </div>
+<ng-template #errorBlock>
+  <div>
+    ZŁY ADRES
+  </div>
+</ng-template>

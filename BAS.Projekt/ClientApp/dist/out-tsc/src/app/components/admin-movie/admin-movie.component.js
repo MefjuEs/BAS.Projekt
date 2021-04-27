@@ -2,8 +2,9 @@ import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 let AdminMovieComponent = class AdminMovieComponent {
-    constructor(moviesService, dialog) {
+    constructor(moviesService, notificationService, dialog) {
         this.moviesService = moviesService;
+        this.notificationService = notificationService;
         this.dialog = dialog;
         this.isLoading = true;
         this.movieFilters = {
@@ -61,6 +62,7 @@ let AdminMovieComponent = class AdminMovieComponent {
         const dialogRef = this.dialog.open(DeleteMovieDialog);
         dialogRef.afterClosed().subscribe(result => {
             if (result === true) {
+                this.notificationService.showSnackBarNotification('Pomyślnie usunięto film', 'Zamknij', 'snackbar-success');
                 this.moviesService.deleteMovie(id).subscribe(() => {
                     this.getMovies();
                 });

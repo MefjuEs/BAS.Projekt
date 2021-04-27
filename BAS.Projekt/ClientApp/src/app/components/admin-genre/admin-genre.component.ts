@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IGenreFilters } from 'src/app/interfaces/genres/IGenreFilters';
@@ -28,7 +29,7 @@ export class AdminGenreComponent implements OnInit {
   public pageIndex: number;
   public displayedColumns: string[] = ['name', 'description', 'action'];
 
-  constructor(private genreService: GenresService, public dialog: MatDialog) {
+  constructor(private genreService: GenresService, private notificationService: NotificationService, public dialog: MatDialog) {
     this.isLoading = true;
   }
 
@@ -70,8 +71,8 @@ export class AdminGenreComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result == true) {
         this.genreService.deleteGenre(id).subscribe(() => {
+          this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', 'snackbar-success');
           this.getGenres();
-          alert("Pomyślnie usunięto gatunek filmowy");
         })
       }
     });

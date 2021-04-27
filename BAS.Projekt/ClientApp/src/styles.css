@@ -2,3 +2,21 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackbar-success {
+    background-color: rgb(34, 177, 76)!important;
+    color: white!important;
+}
+
+.snackbar-success .mat-simple-snackbar-action {
+    color: rgb(0, 0, 255) !important;
+}
+
+.snackbar-error {
+    background-color: red!important;
+    color: white!important;
+}
+
+.snackbar-error .mat-simple-snackbar-action {
+    color: yellow !important;
+}

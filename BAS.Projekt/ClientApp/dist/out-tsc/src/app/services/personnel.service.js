@@ -6,13 +6,16 @@ let PersonnelService = class PersonnelService {
         this.http = http;
         this.url = 'http://localhost:50927/api/Personnel';
     }
-    getPersonnelToSelectList(numberOfItems, fullName) {
+    getPersonnelToSelectList(numberOfItems, fullName, skipPersonnelList) {
         return __awaiter(this, void 0, void 0, function* () {
             let headers = new HttpHeaders();
             headers = headers.append('Content-Type', 'application/json');
             let params = new HttpParams();
             params = params.append('numberOfItems', numberOfItems.toString());
             params = params.append('fullName', fullName);
+            skipPersonnelList.forEach((id, index) => {
+                params = params.append(`skipPersonnelList[${index}]`, id.toString());
+            });
             return yield this.http.get(`${this.url}/select`, { headers: headers, params: params }).toPromise();
         });
     }

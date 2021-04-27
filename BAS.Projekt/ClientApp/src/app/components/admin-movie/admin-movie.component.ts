@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { IFile } from './../../interfaces/movies/IFile';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -45,7 +46,9 @@ export class AdminMovieComponent implements OnInit {
   public pageIndex: number;
   public expandedElement: IMovieInList | null;
   
-  constructor(private moviesService: MoviesService, public dialog: MatDialog) {
+  constructor(private moviesService: MoviesService,
+      private notificationService: NotificationService,
+      public dialog: MatDialog) {
     this.isLoading = true;
   }
 
@@ -87,6 +90,7 @@ export class AdminMovieComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === true) {
+        this.notificationService.showSnackBarNotification('Pomyślnie usunięto film', 'Zamknij', 'snackbar-success');
         this.moviesService.deleteMovie(id).subscribe(() => {
           this.getMovies();
         })

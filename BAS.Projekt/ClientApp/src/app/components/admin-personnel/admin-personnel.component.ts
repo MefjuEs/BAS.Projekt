@@ -1,9 +1,8 @@
+import { NotificationService } from './../../services/notification.service';
 import { PersonnelService } from './../../services/personnel.service';
 import { IPersonnelFilters } from './../../interfaces/personnel/IPersonnelFilters';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { IPersonnelListWithFilters } from 'src/app/interfaces/personnel/IPersonnelListWithFilters';
-import { IPersonnel } from 'src/app/interfaces/personnel/IPersonnel';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -32,7 +31,7 @@ export class AdminPersonnelComponent implements OnInit {
   public pageIndex: number;
   public displayedColumns: string[] = ['name', 'dateOfBirth', 'nationality', 'action'];
 
-  constructor(private personnelService: PersonnelService, public dialog: MatDialog) { 
+  constructor(private personnelService: PersonnelService, private notificationService: NotificationService, public dialog: MatDialog) { 
     this.isLoading = true;
   }
 
@@ -66,7 +65,7 @@ export class AdminPersonnelComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === true) {
         this.personnelService.deletePersonnel(id).subscribe(() => {
-          console.log("Pomyślnie usunięto");
+          this.notificationService.showSnackBarNotification('Pomyślnie usunięto osobę', 'Zamknij', 'snackbar-success');
           this.getPersonnel();
         })
       }

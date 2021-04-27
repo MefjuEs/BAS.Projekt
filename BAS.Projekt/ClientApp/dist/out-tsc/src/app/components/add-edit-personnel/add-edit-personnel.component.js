@@ -2,8 +2,9 @@ import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 let AddEditPersonnelComponent = class AddEditPersonnelComponent {
-    constructor(personnelService, route, location) {
+    constructor(personnelService, notificationService, route, location) {
         this.personnelService = personnelService;
+        this.notificationService = notificationService;
         this.route = route;
         this.location = location;
         this.personnelName = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -83,7 +84,7 @@ let AddEditPersonnelComponent = class AddEditPersonnelComponent {
             this.personnelSurname.invalid ||
             this.personnelNationality.invalid ||
             this.personnelDateOfBirth.invalid) {
-            alert("Nie wszystkie pola są poprawne!");
+            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
             return;
         }
         let person = {
@@ -95,13 +96,13 @@ let AddEditPersonnelComponent = class AddEditPersonnelComponent {
         };
         if (this.editMode) {
             this.personnelService.editPersonnel(person).subscribe(data => {
-                alert("Wprowadzono zmiany dla osoby");
+                this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
                 this.location.back();
             });
         }
         else {
             this.personnelService.addPersonnel(person).subscribe(data => {
-                alert("Dodano nową osobę");
+                this.notificationService.showSnackBarNotification('Pomyślnie dodano osobę', 'Zamknij', 'snackbar-success');
                 this.location.back();
             });
         }

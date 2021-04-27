@@ -2,6 +2,7 @@
     <movie-filter (applyEvent)="onApplyFilters($event)"></movie-filter>
 </div>
 <div class="col-md-12 pb-3">
+  <ng-container *ngIf="!isLoading">
     <table mat-table [dataSource]="movies.movieList" class="mat-elevation-z8" multiTemplateDataRows>
               <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef>Tytuł</th>
@@ -22,7 +23,7 @@
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef >
                   <div class="clearfix">
-                    <button mat-mini-fab routerLink="movie/add" class="green-background float-right" >
+                    <button mat-mini-fab routerLink="/admin/movie/add" class="green-background float-right" >
                       <mat-icon>add</mat-icon>
                     </button>
                   </div>
@@ -34,7 +35,7 @@
                     </button>
                   </div>
                   <div class="float-right mr-2">
-                    <button mat-mini-fab routerLink="movie/edit/{{movie.id}}" (click)="$event.stopPropagation()" class="custom-button-icon" color="primary">
+                    <button mat-mini-fab routerLink="/admin/movie/edit/{{movie.id}}" (click)="$event.stopPropagation()" class="custom-button-icon" color="primary">
                       <mat-icon class="custom-icon">edit</mat-icon>
                     </button>
                   </div>
@@ -62,13 +63,12 @@
                     </div>
                   </div>
                 </td>
-        <ng-container *ngIf="!isLoading">
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row" [class.example-expanded-row]="expandedElement === element" (click)="expandMovieDetails(element)"></tr>
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-        </ng-container>
         </ng-container>      
       </table>
+    </ng-container>
 </div>
 <div>
     <mat-paginator [length]="movies.allElements" [pageSize]="movieFilters.pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5,10,20,50]" showFirstLastButtons (page)="changePage($event)"></mat-paginator>

@@ -10,5 +10,6 @@ namespace BAS.AppServices
     {
         public int NumberOfItems { get; set; }
         public string FullName { get; set; }
+        public long[] SkipPersonnelList { get; set; }
     }
 }
