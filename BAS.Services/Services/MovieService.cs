@@ -175,7 +175,7 @@ namespace BAS.AppServices
             {
                 if (await personnelService.IsPersonnelInDB(personnel.PersonnelId))
                 {
-                    var existingMP = existingMoviePersonnel.Find(mp => mp.PersonId == personnel.PersonnelId);
+                    var existingMP = existingMoviePersonnel.Find(mp => mp.PersonId == personnel.PersonnelId && mp.MemberPosition == personnel.FilmCrew);
 
                     if (existingMP != null)
                     {
@@ -193,8 +193,8 @@ namespace BAS.AppServices
                 }
             }
 
-            db.MoviePersonnel.AddRange(personnelList);
             db.MoviePersonnel.RemoveRange(existingMoviePersonnel);
+            db.MoviePersonnel.AddRange(personnelList);
             db.SaveChanges();
         }
         #endregion
