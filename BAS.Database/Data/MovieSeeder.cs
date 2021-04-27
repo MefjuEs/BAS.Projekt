@@ -1,4 +1,5 @@
 ﻿using BAS.AppCommon;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace BAS.Database
     {
         public static void Seed(MovieDbContext db)
         {
+            db.Database.Migrate();
+
             List<Movie> movies = new List<Movie>
             {
                 new Movie()

@@ -40,12 +40,18 @@ let MovieComponent = class MovieComponent {
             }
         });
     }
+    getDirectors() {
+        return this.directors.map(director => `${director.name} ${director.surname}`).join(', ');
+    }
+    getWriters() {
+        return this.writers.map(writer => `${writer.name} ${writer.surname}`).join(', ');
+    }
     getMoviePoster(poster) {
         if (poster != null) {
             return `data:${poster.contentType};base64,${poster.file}`;
         }
         else {
-            return '';
+            return '/assets/images/noMovieImage.png';
         }
     }
     getMovieLengthInHours(movieLength) {

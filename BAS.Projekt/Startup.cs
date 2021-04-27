@@ -36,6 +36,9 @@ namespace BAS.Projekt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appConfig = new AppConfig();
+            ConfigurationBinder.Bind(this.Configuration, appConfig);
+
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
@@ -45,14 +48,14 @@ namespace BAS.Projekt
             #region MovieDatabase
             services.AddDbContext<MovieDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("MovieDatabase"));
+                options.UseSqlServer(appConfig.ConnectionStrings.MovieDatabase);
             });
             #endregion
 
             #region IdentityConfig
             services.AddDbContext<IdentityContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Identity"));
+                options.UseSqlServer(appConfig.ConnectionStrings.Identity);
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
@@ -88,6 +91,7 @@ namespace BAS.Projekt
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
                 return factory.GetUrlHelper(actionContext);
             });
+            services.AddSingleton<IAppContext, WebAppContext>();
             this.ConfigureNotifications(services);
             this.AddAppConfigAccessor(services);
             #endregion

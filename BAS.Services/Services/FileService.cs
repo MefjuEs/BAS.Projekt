@@ -1,35 +1,32 @@
 ﻿using BAS.AppCommon;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BAS.AppServices
 {
     public class FileService : IFileService
     {
-        private readonly IHostingEnvironment appEnvironment;
         private readonly string[] enableExtensions = new string[]
         {
             ".jpeg",
             ".jpg",
             ".png"
         };
+        private readonly IAppContext appContext;
 
-        public FileService(IHostingEnvironment appEnvironment)
+        public FileService(IAppContext appContext)
         {
-            this.appEnvironment = appEnvironment;
+            this.appContext = appContext;
         }
 
         private string GenerateMoviePosterName(long movieId, IFormFile file)
         {
             var extension = "." + file.FileName.Split(".").Last();
             string fileName = "Movie_" + movieId;
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages\\";
+            string path = this.appContext.ServableContentPath + "\\MovieImages\\";
 
             if (File.Exists(path + fileName + extension))
             {
@@ -66,9 +63,14 @@ namespace BAS.AppServices
                 return "";
 
             var fileName = GenerateMoviePosterName(movieId, file);
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages\\";
 
-            using (var stream = File.Create(path + fileName))
+            var directoryToSaveTo = Path.Combine(this.appContext.ServableContentPath, "MovieImages");
+            if (!Directory.Exists(directoryToSaveTo))
+            {
+                Directory.CreateDirectory(directoryToSaveTo);
+            }
+
+            using (var stream = File.Create(Path.Combine(directoryToSaveTo, fileName)))
             {
                 await file.CopyToAsync(stream);
             }
@@ -87,7 +89,7 @@ namespace BAS.AppServices
             if (posterName == "")
                 return;
 
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages\\";
+            string path = this.appContext.ServableContentPath + "\\MovieImages\\";
 
             if (File.Exists(path + posterName))
             {
@@ -97,7 +99,7 @@ namespace BAS.AppServices
 
         public FileDTO GetMoviePoster(string posterName)
         {
-            string path = this.appEnvironment.WebRootPath + "\\MovieImages\\" + posterName;
+            string path = this.appContext.ServableContentPath + "\\MovieImages\\" + posterName;
 
             if (!File.Exists(path))
                 return null;

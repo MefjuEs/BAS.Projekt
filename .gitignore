@@ -342,3 +342,4 @@ healthchecksdb
 **/appsettings.Development.json
 **/bin
 **/obj
+**/appsettings.Tests.json
