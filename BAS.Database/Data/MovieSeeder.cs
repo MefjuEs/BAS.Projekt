@@ -676,6 +676,18 @@ namespace BAS.Database
                 },
                 new MoviePersonnel()
                 {
+                    MemberPosition = FilmCrew.Director,
+                    Movie = movies[6],
+                    Personnel = actors[27]
+                },
+                new MoviePersonnel()
+                {
+                    MemberPosition = FilmCrew.Writer,
+                    Movie = movies[6],
+                    Personnel = actors[26]
+                },
+                new MoviePersonnel()
+                {
                     MemberPosition = FilmCrew.Writer,
                     Movie = movies[6],
                     Personnel = actors[27]

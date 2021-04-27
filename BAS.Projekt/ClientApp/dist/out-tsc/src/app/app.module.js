@@ -38,6 +38,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import localePl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
+import { MovieComponent } from './components/movie/movie.component';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -57,7 +58,8 @@ AppModule = __decorate([
             AddEditPersonnelComponent,
             AdminGenreComponent,
             AddEditGenreComponent,
-            DeleteGenreDialog
+            DeleteGenreDialog,
+            MovieComponent
         ],
         imports: [
             BrowserModule,
@@ -71,7 +73,8 @@ AppModule = __decorate([
                 { path: 'admin/genre/add', component: AddEditGenreComponent },
                 { path: 'admin/genre/edit/:id', component: AddEditGenreComponent },
                 { path: 'admin/personnel/add', component: AddEditPersonnelComponent },
-                { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent }
+                { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent },
+                { path: 'movie/:id', component: MovieComponent }
             ]),
             BrowserAnimationsModule,
             MatChipsModule,
