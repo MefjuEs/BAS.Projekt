@@ -46,6 +46,9 @@ let MovieComponent = class MovieComponent {
     getWriters() {
         return this.writers.map(writer => `${writer.name} ${writer.surname}`).join(', ');
     }
+    getActors() {
+        return this.actors.map(actor => `${actor.name} ${actor.surname}`).join(', ');
+    }
     getMoviePoster(poster) {
         if (poster != null) {
             return `data:${poster.contentType};base64,${poster.file}`;

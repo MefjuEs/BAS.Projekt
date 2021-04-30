@@ -1,5 +1,6 @@
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let AdminGenreComponent = class AdminGenreComponent {
     constructor(genreService, notificationService, dialog) {
         this.genreService = genreService;
@@ -54,7 +55,7 @@ let AdminGenreComponent = class AdminGenreComponent {
         dialogRef.afterClosed().subscribe(result => {
             if (result == true) {
                 this.genreService.deleteGenre(id).subscribe(() => {
-                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', SnackBarStyle.success);
                     this.getGenres();
                 });
             }

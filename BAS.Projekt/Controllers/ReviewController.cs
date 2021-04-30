@@ -17,7 +17,6 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        [BASAuthorize]
         public async Task<IActionResult> InsertReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.InsertReview(reviewDTO);

@@ -14,6 +14,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { IFile } from 'src/app/interfaces/movies/IFile';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 const numberOfItems = 5;
 
@@ -201,7 +202,7 @@ export class AddEditMovieComponent implements OnInit {
       this.movieDescription.invalid ||
       this.movieReleaseYear.invalid ||
       this.movieLengthInMinutes.invalid) {
-        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
+        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         return;
       }
 
@@ -231,7 +232,7 @@ export class AddEditMovieComponent implements OnInit {
     if(this.editMode) {
       this.movieService.editMovie(this.movie).subscribe(data => {
         if(data == true) {
-          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.titleExistError = true;
@@ -240,7 +241,7 @@ export class AddEditMovieComponent implements OnInit {
     } else {
       this.movieService.addMovie(this.movie).subscribe(data => {
         if(data == true) {
-          this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.titleExistError = true;
@@ -250,7 +251,6 @@ export class AddEditMovieComponent implements OnInit {
   }
 
   getTitleErrorMessage() {
-    console.log('gowno')
     if (this.movieTitle.hasError('required')) {
       return 'Tytuł nie może być pusty';
     }

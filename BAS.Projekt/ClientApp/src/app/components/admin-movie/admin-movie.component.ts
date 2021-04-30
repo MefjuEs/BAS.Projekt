@@ -7,6 +7,7 @@ import { IMovieInList } from 'src/app/interfaces/movies/IMovieInList';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'admin-movie',
@@ -90,7 +91,7 @@ export class AdminMovieComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === true) {
-        this.notificationService.showSnackBarNotification('Pomyślnie usunięto film', 'Zamknij', 'snackbar-success');
+        this.notificationService.showSnackBarNotification('Pomyślnie usunięto film', 'Zamknij', SnackBarStyle.success);
         this.moviesService.deleteMovie(id).subscribe(() => {
           this.getMovies();
         })

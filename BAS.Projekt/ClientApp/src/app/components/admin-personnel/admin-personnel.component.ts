@@ -4,6 +4,7 @@ import { IPersonnelFilters } from './../../interfaces/personnel/IPersonnelFilter
 import { Component, OnInit } from '@angular/core';
 import { IPersonnelListWithFilters } from 'src/app/interfaces/personnel/IPersonnelListWithFilters';
 import { MatDialog } from '@angular/material/dialog';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'admin-personnel',
@@ -65,7 +66,7 @@ export class AdminPersonnelComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === true) {
         this.personnelService.deletePersonnel(id).subscribe(() => {
-          this.notificationService.showSnackBarNotification('Pomyślnie usunięto osobę', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie usunięto osobę', 'Zamknij', SnackBarStyle.success);
           this.getPersonnel();
         })
       }

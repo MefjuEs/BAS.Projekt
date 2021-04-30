@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 const numberOfItems = 5;
 let AddEditMovieComponent = class AddEditMovieComponent {
     constructor(route, movieService, genreService, personnelService, notificationService, location) {
@@ -147,7 +148,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movieDescription.invalid ||
             this.movieReleaseYear.invalid ||
             this.movieLengthInMinutes.invalid) {
-            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
+            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
             return;
         }
         this.movie.id = this.movieId;
@@ -172,7 +173,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         if (this.editMode) {
             this.movieService.editMovie(this.movie).subscribe(data => {
                 if (data == true) {
-                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -183,7 +184,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         else {
             this.movieService.addMovie(this.movie).subscribe(data => {
                 if (data == true) {
-                    this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -193,7 +194,6 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         }
     }
     getTitleErrorMessage() {
-        console.log('gowno');
         if (this.movieTitle.hasError('required')) {
             return 'Tytuł nie może być pusty';
         }

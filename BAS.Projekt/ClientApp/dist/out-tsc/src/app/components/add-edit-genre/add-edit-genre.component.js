@@ -1,6 +1,7 @@
 import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let AddEditGenreComponent = class AddEditGenreComponent {
     constructor(route, genreService, location, notificationService) {
         this.route = route;
@@ -49,7 +50,7 @@ let AddEditGenreComponent = class AddEditGenreComponent {
     }
     onSubmit() {
         if (this.genreName.invalid) {
-            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
+            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         }
         this.genre.id = this.genreId;
         this.genre.name = this.genreName.value;
@@ -57,7 +58,7 @@ let AddEditGenreComponent = class AddEditGenreComponent {
         if (this.editMode) {
             this.genreService.editGenre(this.genre).subscribe(res => {
                 if (res == true) {
-                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -68,12 +69,14 @@ let AddEditGenreComponent = class AddEditGenreComponent {
         else {
             this.genreService.addGenre(this.genre).subscribe(res => {
                 if (res == true) {
-                    this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
                     this.genreExistError = true;
                 }
+            }, error => {
+                console.log(error);
             });
         }
     }

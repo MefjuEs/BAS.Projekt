@@ -1,10 +1,11 @@
 import { __awaiter, __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 let PersonnelService = class PersonnelService {
     constructor(http) {
         this.http = http;
-        this.url = 'http://localhost:50927/api/Personnel';
+        this.url = `${environment.apiUrl}/api/Personnel`;
     }
     getPersonnelToSelectList(numberOfItems, fullName, skipPersonnelList) {
         return __awaiter(this, void 0, void 0, function* () {

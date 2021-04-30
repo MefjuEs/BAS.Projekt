@@ -5,6 +5,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IPersonnel } from 'src/app/interfaces/personnel/IPersonnel';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'app-add-edit-personnel',
@@ -110,7 +111,7 @@ export class AddEditPersonnelComponent implements OnInit {
       this.personnelSurname.invalid ||
       this.personnelNationality.invalid || 
       this.personnelDateOfBirth.invalid) {
-        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
+        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         return;
     }
     
@@ -124,12 +125,12 @@ export class AddEditPersonnelComponent implements OnInit {
 
     if(this.editMode) {
       this.personnelService.editPersonnel(person).subscribe(data => {
-        this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
+        this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
         this.location.back();
       });
     } else {
       this.personnelService.addPersonnel(person).subscribe(data => {
-        this.notificationService.showSnackBarNotification('Pomyślnie dodano osobę', 'Zamknij', 'snackbar-success');
+        this.notificationService.showSnackBarNotification('Pomyślnie dodano osobę', 'Zamknij', SnackBarStyle.success);
         this.location.back();
       });
     }

@@ -6,11 +6,11 @@ import { IGenreList } from '../interfaces/genres/IGenreList';
 import { IPersonnelInSelectDTO } from '../interfaces/personnel/IPersonnelInSelectDTO';
 import { IPersonnelListWithFilters } from '../interfaces/personnel/IPersonnelListWithFilters';
 import { IPersonnel } from '../interfaces/personnel/IPersonnel';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PersonnelService {
-
-  url = 'http://localhost:50927/api/Personnel';
+  private url = `${environment.apiUrl}/api/Personnel`;
 
   constructor(private http: HttpClient) { }
 

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IGenreFilters } from 'src/app/interfaces/genres/IGenreFilters';
 import { IGenreListWithFilters } from 'src/app/interfaces/genres/IGenreListWithFilters';
 import { GenresService } from 'src/app/services/genres.service';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'admin-genre',
@@ -71,7 +72,7 @@ export class AdminGenreComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result == true) {
         this.genreService.deleteGenre(id).subscribe(() => {
-          this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', SnackBarStyle.success);
           this.getGenres();
         })
       }

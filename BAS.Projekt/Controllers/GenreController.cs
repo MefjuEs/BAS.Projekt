@@ -39,7 +39,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        //[BASAuthorize(UserRole.Admin)]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertGenre([FromForm] GenreDTO genre)
         {
             var result = await genreService.InsertGenre(genre);

@@ -1,10 +1,11 @@
 import { __awaiter, __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 let GenresService = class GenresService {
     constructor(http) {
         this.http = http;
-        this.url = 'http://localhost:50927/api/Genre';
+        this.url = `${environment.apiUrl}/api/Genre`;
     }
     getGenre(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +38,7 @@ let GenresService = class GenresService {
         return this.http.put(this.url, formData, { headers: headers });
     }
     addGenre(genre) {
+        debugger;
         let headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         let formData = new FormData();

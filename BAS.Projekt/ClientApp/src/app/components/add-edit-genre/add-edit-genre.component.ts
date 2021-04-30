@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IGenre } from 'src/app/interfaces/genres/IGenre';
 import { GenresService } from 'src/app/services/genres.service';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'app-add-edit-genre',
@@ -70,7 +71,7 @@ export class AddEditGenreComponent implements OnInit {
 
   onSubmit() {
     if(this.genreName.invalid) {
-      this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', 'snackbar-error');
+      this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
     }
 
     this.genre.id = this.genreId;
@@ -80,7 +81,7 @@ export class AddEditGenreComponent implements OnInit {
     if(this.editMode) {
       this.genreService.editGenre(this.genre).subscribe(res => {
         if(res == true) {
-          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.genreExistError = true;
@@ -89,11 +90,13 @@ export class AddEditGenreComponent implements OnInit {
     } else {
       this.genreService.addGenre(this.genre).subscribe(res => {
         if(res == true) {
-          this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', 'snackbar-success');
+          this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.genreExistError = true;
         }
+      }, error => {
+        console.log(error);
       });
     }
   }

@@ -1,5 +1,6 @@
 import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let AdminPersonnelComponent = class AdminPersonnelComponent {
     constructor(personnelService, notificationService, dialog) {
         this.personnelService = personnelService;
@@ -56,7 +57,7 @@ let AdminPersonnelComponent = class AdminPersonnelComponent {
         dialogRef.afterClosed().subscribe(result => {
             if (result === true) {
                 this.personnelService.deletePersonnel(id).subscribe(() => {
-                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto osobę', 'Zamknij', 'snackbar-success');
+                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto osobę', 'Zamknij', SnackBarStyle.success);
                     this.getPersonnel();
                 });
             }
