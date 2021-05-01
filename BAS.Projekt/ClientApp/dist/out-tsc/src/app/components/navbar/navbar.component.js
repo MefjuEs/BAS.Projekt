@@ -1,10 +1,12 @@
 import { __decorate } from "tslib";
 import { UserRole } from './../../interfaces/auth/role';
 import { Component } from '@angular/core';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let NavbarComponent = class NavbarComponent {
-    constructor(router, authService) {
+    constructor(router, authService, notificationService) {
         this.router = router;
         this.authService = authService;
+        this.notificationService = notificationService;
         this.authService.currentUser.subscribe(x => this.currentUser = x);
     }
     ngOnInit() {
@@ -14,8 +16,8 @@ let NavbarComponent = class NavbarComponent {
     }
     logout() {
         this.authService.logout();
-        location.reload();
-        //this.router.navigate(['/']);
+        this.router.navigate(['/']);
+        this.notificationService.showSnackBarNotification("Pomyślnie wylogowano", "Zamknij", SnackBarStyle.success);
     }
 };
 NavbarComponent = __decorate([

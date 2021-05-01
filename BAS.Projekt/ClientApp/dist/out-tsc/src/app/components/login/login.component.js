@@ -31,7 +31,6 @@ let LoginComponent = class LoginComponent {
         }
         this.authService.login(this.email.value, this.password).pipe(first())
             .subscribe(response => {
-            console.log(response);
             debugger;
             if (response.invalidEmailOrPassword) {
                 this.errorMessage = "Niepoprawny login bądź hasło";

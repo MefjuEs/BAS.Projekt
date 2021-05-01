@@ -273,13 +273,6 @@ namespace BAS.AppServices
             var moviePoster = fileService.GetMoviePoster(movie.Poster);
             var movieGenres = await GetMovieGenres(id);
             var moviePersonnel = await GetMoviePersonnel(id);
-            var movieReviews = await GetMovieReviews(new ReviewFilters()
-            {
-                Id = id,
-                OrderBy = "",
-                Page = 1,
-                PageSize = 10
-            });
 
             var movieDTO = new GetMovieDTO()
             {
@@ -291,60 +284,59 @@ namespace BAS.AppServices
                 AverageRating = movie.AverageRating,
                 MoviePoster = moviePoster,
                 Genres = movieGenres,
-                Personnel = moviePersonnel,
-                Reviews = movieReviews
+                Personnel = moviePersonnel
             };
 
             return movieDTO;
         }
 
-        public async Task<MovieReviewListWithFilters> GetMovieReviews(ReviewFilters reviewfilters)
-        {
-            var pageSize = reviewfilters.PageSize ?? int.MaxValue;
+        //public async Task<MovieReviewListWithFilters> GetMovieReviews(ReviewFilters reviewfilters)
+        //{
+        //    var pageSize = reviewfilters.PageSize ?? int.MaxValue;
 
-            var allElements = db.Reviews.Count(r => r.MovieId == reviewfilters.Id);
+        //    var allElements = db.Reviews.Count(r => r.MovieId == reviewfilters.Id);
 
-            var result = new MovieReviewListWithFilters()
-            {
-                CurrentPage = reviewfilters.Page,
-                PageSize = pageSize,
-                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
-                AllElements = allElements
-            };
+        //    var result = new MovieReviewListWithFilters()
+        //    {
+        //        CurrentPage = reviewfilters.Page,
+        //        PageSize = pageSize,
+        //        AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+        //        AllElements = allElements
+        //    };
 
-            var reviews = db.Reviews
-                .Where(r => r.MovieId == reviewfilters.Id)
-                .Select(r => new MovieReviewInListDTO()
-                {
-                    UserId = r.UserId,
-                    MovieId = r.MovieId,
-                    Rating = r.Rating,
-                    Message = r.Message,
-                });
+        //    var reviews = db.Reviews
+        //        .Where(r => r.MovieId == reviewfilters.Id)
+        //        .Select(r => new MovieReviewInListDTO()
+        //        {
+        //            UserId = r.UserId,
+        //            MovieId = r.MovieId,
+        //            Rating = r.Rating,
+        //            Message = r.Message,
+        //        });
 
-            switch (reviewfilters.OrderBy.ToLower())
-            {
-                case "ratingdesc":
-                    reviews = reviews.OrderByDescending(r => r.Rating);
-                    break;
-                case "ratingasc":
-                    reviews = reviews.OrderBy(r => r.Rating);
-                    break;
-                default:
-                    break;
-            }
+        //    switch (reviewfilters.OrderBy.ToLower())
+        //    {
+        //        case "ratingdesc":
+        //            reviews = reviews.OrderByDescending(r => r.Rating);
+        //            break;
+        //        case "ratingasc":
+        //            reviews = reviews.OrderBy(r => r.Rating);
+        //            break;
+        //        default:
+        //            break;
+        //    }
 
-            reviews = reviews.Skip((reviewfilters.Page - 1) * pageSize).Take(pageSize);
+        //    reviews = reviews.Skip((reviewfilters.Page - 1) * pageSize).Take(pageSize);
 
-            result.ReviewList = reviews.ToList();
+        //    result.ReviewList = reviews.ToList();
 
-            foreach(var review in result.ReviewList)
-            {
-                review.Username = await userService.GetUsername(review.UserId);
-            }
+        //    foreach(var review in result.ReviewList)
+        //    {
+        //        review.Username = await userService.GetUsername(review.UserId);
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public async Task<List<GenreInMovieDTO>> GetMovieGenres(long movieId)
         {

@@ -13,6 +13,5 @@ namespace BAS.AppServices
         public FileDTO MoviePoster { get; set; }
         public List<GenreInMovieDTO> Genres { get; set; }
         public List<PersonnelInMovieDTO> Personnel { get; set; }
-        public MovieReviewListWithFilters Reviews { get; set; }
     }
 }

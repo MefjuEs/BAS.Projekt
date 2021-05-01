@@ -9,7 +9,7 @@ namespace BAS.AppServices
         Task<bool> UpdateMovie(InsertUpdateMovieDTO movieDTO);
         Task<bool> DeleteMovie(long id);
         Task<GetMovieDTO> GetMovie(long id);
-        Task<MovieReviewListWithFilters> GetMovieReviews(ReviewFilters reviewfilters);
+        //Task<MovieReviewListWithFilters> GetMovieReviews(ReviewFiltersDTO reviewfilters);
         Task<List<GenreInMovieDTO>> GetMovieGenres(long movieId);
         Task<List<PersonnelInMovieDTO>> GetMoviePersonnel(long movieId);
         Task<MovieListWithFilters> GetMovieWithFilters(MovieFilters personnelFilter);

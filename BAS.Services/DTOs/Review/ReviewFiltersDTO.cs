@@ -1,6 +1,6 @@
 ﻿namespace BAS.AppServices
 {
-    public class ReviewFilters : BaseFilter
+    public class ReviewFiltersDTO : BaseFilter
     {
         public long Id { get; set; }
     }

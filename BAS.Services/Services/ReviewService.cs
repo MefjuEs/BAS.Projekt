@@ -138,22 +138,22 @@ namespace BAS.AppServices
             return await db.Reviews.FindAsync(userId, movieId);
         }
 
-        public UserReviewListWithFilters GetUserReviews(ReviewFilters reviewfilters)
+        public UserReviewListWithFilters GetUserReviews(ReviewFiltersDTO reviewFilters)
         {
-            var pageSize = reviewfilters.PageSize ?? int.MaxValue;
+            var pageSize = reviewFilters.PageSize ?? int.MaxValue;
 
-            var allElements = db.Reviews.Count(r => r.UserId == reviewfilters.Id);
+            var allElements = db.Reviews.Count(r => r.UserId == reviewFilters.Id);
 
             var result = new UserReviewListWithFilters()
             {
-                CurrentPage = reviewfilters.Page,
+                CurrentPage = reviewFilters.Page,
                 PageSize = pageSize,
                 AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
                 AllElements = allElements
             };
 
             var reviews = db.Reviews.Include(r => r.Movie)
-                .Where(r => r.UserId == reviewfilters.Id)
+                .Where(r => r.UserId == reviewFilters.Id)
                 .Select(r => new UserReviewInListDTO()
                 {
                     UserId = r.UserId,
@@ -163,7 +163,7 @@ namespace BAS.AppServices
                     MovieTitle = r.Movie.Title
                 });
 
-            switch (reviewfilters.OrderBy.ToLower())
+            switch (reviewFilters.OrderBy.ToLower())
             {
                 case "ratingdesc":
                     reviews = reviews.OrderByDescending(r => r.Rating);
@@ -181,9 +181,69 @@ namespace BAS.AppServices
                     break;
             }
 
-            reviews = reviews.Skip((reviewfilters.Page - 1) * pageSize).Take(pageSize);
+            reviews = reviews.Skip((reviewFilters.Page - 1) * pageSize).Take(pageSize);
 
             result.ReviewList = reviews.ToList();
+
+            return result;
+        }
+
+        public async Task<UserReviewListWithFilters> GetAllReviews(AllReviewsFiltersDTO reviewFilters)
+        {
+            var pageSize = reviewFilters.PageSize ?? int.MaxValue;
+
+            Func<Review, bool> predicate = (r => (!reviewFilters.MovieId.HasValue || r.MovieId == reviewFilters.MovieId) &&
+                                                 (!reviewFilters.UserId.HasValue || r.UserId == reviewFilters.UserId));
+
+            var allElements = db.Reviews.Count(predicate);
+
+            var result = new UserReviewListWithFilters()
+            {
+                CurrentPage = reviewFilters.Page,
+                PageSize = pageSize,
+                AllPages = (int)Math.Ceiling(allElements * 1.0 / pageSize),
+                AllElements = allElements
+            };
+
+            var reviews = db.Reviews.Include(r => r.Movie)
+                .Where(predicate)
+                .Select(r => new UserReviewInListDTO()
+                {
+                    UserId = r.UserId,
+                    MovieId = r.MovieId,
+                    Rating = r.Rating,
+                    Message = r.Message,
+                    MovieTitle = r.Movie.Title
+                });
+
+            switch (reviewFilters.OrderBy.ToLower())
+            {
+                case "ratingdesc":
+                    reviews = reviews.OrderByDescending(r => r.Rating);
+                    break;
+                case "ratingasc":
+                    reviews = reviews.OrderBy(r => r.Rating);
+                    break;
+                case "moviedesc":
+                    reviews = reviews.OrderByDescending(r => r.MovieTitle);
+                    break;
+                case "movieasc":
+                    reviews = reviews.OrderBy(r => r.MovieTitle);
+                    break;
+                case "userid":
+                    reviews = reviews.OrderBy(r => r.UserId);
+                    break;
+                default:
+                    break;
+            }
+
+            reviews = reviews.Skip((reviewFilters.Page - 1) * pageSize).Take(pageSize);
+            result.ReviewList = reviews.ToList();
+
+            foreach(var review in result.ReviewList)
+            {
+                review.Username = await userService.GetUsername(review.UserId);
+            }
 
             return result;
         }

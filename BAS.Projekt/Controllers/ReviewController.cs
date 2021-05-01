@@ -1,4 +1,5 @@
-﻿using BAS.AppServices;
+﻿using BAS.AppCommon;
+using BAS.AppServices;
 using BAS.Projekt.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -37,6 +38,43 @@ namespace BAS.Projekt.Controllers
         {
             var result = await reviewService.DeleteReview(userId, movieId);
             return result ? Ok() : NotFound();
+        }
+
+        [HttpGet("all")]
+        [BASAuthorize(UserRole.Admin)]
+        public async Task<IActionResult> GetAllReviews([FromQuery] AllReviewsFiltersDTO filters)
+        {
+            var result = await reviewService.GetAllReviews(filters);
+            return Ok(result);
+        }
+
+        [HttpGet("movie")]
+        public async Task<IActionResult> GetMovieReviews([FromQuery] ReviewFiltersDTO filters)
+        {
+            var result = await reviewService.GetAllReviews(new AllReviewsFiltersDTO()
+            {
+                UserId = null,
+                MovieId = filters.Id,
+                OrderBy = filters.OrderBy,
+                Page = filters.Page,
+                PageSize = filters.PageSize
+            });
+            return Ok(result);
+        }
+
+        [HttpGet("user")]
+        [BASAuthorize]
+        public async Task<IActionResult> GetUserReviews([FromQuery] ReviewFiltersDTO filters)
+        {
+            var result = await reviewService.GetAllReviews(new AllReviewsFiltersDTO()
+            {
+                UserId = filters.Id,
+                MovieId = null,
+                OrderBy = filters.OrderBy,
+                Page = filters.Page,
+                PageSize = filters.PageSize
+            });
+            return Ok(result);
         }
     }
 }

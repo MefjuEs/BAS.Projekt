@@ -55,12 +55,12 @@ namespace BAS.Projekt.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Reviews")]
-        public async Task<IActionResult> GetMovieReviews([FromBody] ReviewFilters filters)
-        {
-            var result = await movieService.GetMovieReviews(filters);
-            return Ok(result);
-        }
+        //[HttpGet("Reviews")]
+        //public async Task<IActionResult> GetMovieReviews([FromBody] ReviewFiltersDTO filters)
+        //{
+        //    var result = await movieService.GetMovieReviews(filters);
+        //    return Ok(result);
+        //}
 
         #region AlternativeMethods
         [HttpGet("{id}/Genres")]
