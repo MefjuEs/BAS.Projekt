@@ -1,10 +1,11 @@
 import { __awaiter, __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 let MoviesService = class MoviesService {
     constructor(http) {
         this.http = http;
-        this.url = 'http://localhost:50927/api/Movie';
+        this.url = `${environment.apiUrl}/api/Movie`;
     }
     getMovies(movieFilters) {
         let headers = new HttpHeaders();

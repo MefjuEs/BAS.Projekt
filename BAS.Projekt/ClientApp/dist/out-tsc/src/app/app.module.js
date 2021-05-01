@@ -3,8 +3,7 @@ import { AddEditGenreComponent } from './components/add-edit-genre/add-edit-genr
 import { AdminGenreComponent, DeleteGenreDialog } from './components/admin-genre/admin-genre.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -38,8 +37,16 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import localePl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
-import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
+import { MovieComponent } from './components/movie/movie.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from './services/notification.service';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
+import { appRoutingModule } from './app.routing';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -60,23 +67,15 @@ AppModule = __decorate([
             AdminGenreComponent,
             AddEditGenreComponent,
             DeleteGenreDialog,
-            AdminUserComponent,
-            DeleteUserDialog
+            MovieComponent,
+            LoginComponent,
+            RegisterComponent
         ],
         imports: [
             BrowserModule,
             FormsModule,
             HttpClientModule,
-            RouterModule.forRoot([
-                { path: '', component: HomeComponent },
-                { path: 'admin', component: AdminPanelComponent },
-                { path: 'admin/movie/add', component: AddEditMovieComponent },
-                { path: 'admin/movie/edit/:id', component: AddEditMovieComponent },
-                { path: 'admin/genre/add', component: AddEditGenreComponent },
-                { path: 'admin/genre/edit/:id', component: AddEditGenreComponent },
-                { path: 'admin/personnel/add', component: AddEditPersonnelComponent },
-                { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent }
-            ]),
+            appRoutingModule,
             BrowserAnimationsModule,
             MatChipsModule,
             MatIconModule,
@@ -94,15 +93,20 @@ AppModule = __decorate([
             ReactiveFormsModule,
             MatAutocompleteModule,
             MatDatepickerModule,
-            MatNativeDateModule
+            MatNativeDateModule,
+            MatSnackBarModule
         ],
         providers: [
             MoviesService,
             GenresService,
             PersonnelService,
+            NotificationService,
+            AuthService,
             UserService,
             { provide: localePl, useValue: 'pl' },
-            { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
+            { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+            { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+            { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         ],
         bootstrap: [AppComponent]
     })

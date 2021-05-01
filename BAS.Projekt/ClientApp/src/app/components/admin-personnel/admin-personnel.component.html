@@ -53,6 +53,7 @@
 
 
 <div class="col-md-12 pb-3">
+  <ng-container *ngIf="!isLoading">
     <table mat-table [dataSource]="personnel.personnelList" class="mat-elevation-z8" multiTemplateDataRows>
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Imie</th>
@@ -69,7 +70,7 @@
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef >
                   <div class="clearfix">
-                    <button mat-mini-fab class="green-background float-right" routerLink="personnel/add">
+                    <button mat-mini-fab class="green-background float-right" routerLink="/admin/personnel/add">
                       <mat-icon>add</mat-icon>
                     </button>
                   </div>
@@ -81,17 +82,16 @@
                     </button>
                   </div>
                   <div class="float-right mr-2">
-                    <button mat-mini-fab class="custom-button-icon" color="primary" routerLink="personnel/edit/{{person.id}}">
+                    <button mat-mini-fab class="custom-button-icon" color="primary" routerLink="/admin/personnel/edit/{{person.id}}">
                       <mat-icon class="custom-icon">edit</mat-icon>
                     </button>
                   </div>
                 </td>
               </ng-container>
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
       </table>
+  </ng-container>
 </div>
 <div>
     <mat-paginator [length]="personnel.allElements" [pageSize]="personnel.pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5,10,20,50]" showFirstLastButtons (page)="changePage($event)"></mat-paginator>

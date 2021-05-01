@@ -6,21 +6,26 @@ import { IGenreList } from '../interfaces/genres/IGenreList';
 import { IPersonnelInSelectDTO } from '../interfaces/personnel/IPersonnelInSelectDTO';
 import { IPersonnelListWithFilters } from '../interfaces/personnel/IPersonnelListWithFilters';
 import { IPersonnel } from '../interfaces/personnel/IPersonnel';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PersonnelService {
-
-  url = 'http://localhost:50927/api/Personnel';
+  private url = `${environment.apiUrl}/api/Personnel`;
 
   constructor(private http: HttpClient) { }
 
-  async getPersonnelToSelectList(numberOfItems: number, fullName: string) {
+  async getPersonnelToSelectList(numberOfItems: number, fullName: string, skipPersonnelList: number[]) {
     let headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     
     let params = new HttpParams();
     params = params.append('numberOfItems', numberOfItems.toString());
     params = params.append('fullName', fullName);
+
+    skipPersonnelList.forEach((id, index) => {
+      params = params.append(`skipPersonnelList[${index}]`, id.toString());
+    })
+
     return await this.http.get<IPersonnelInSelectDTO[]>(`${this.url}/select`, {headers: headers, params: params}).toPromise();
   }
 

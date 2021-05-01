@@ -37,6 +37,11 @@ namespace BAS.AppServices
 
         public List<PersonnelInSelectDTO> GetPersonnelToSelect(PersonnelSelectFilter filters)
         {
+            if(filters.SkipPersonnelList == null)
+            {
+                filters.SkipPersonnelList = new long[0];
+            }
+
             if (filters.NumberOfItems <= 0)
                 throw new Exception("Zła liczba zwracanych osób");
 
@@ -45,7 +50,7 @@ namespace BAS.AppServices
                 filters.FullName = "";
             }
 
-            return db.Actors.Where(p => (p.Name.ToLower() + " " + p.Surname.ToLower()).Contains(filters.FullName.ToLower()))
+            return db.Actors.Where(p => (p.Name.ToLower() + " " + p.Surname.ToLower()).Contains(filters.FullName.ToLower()) && !filters.SkipPersonnelList.Contains(p.Id))
                 .OrderBy(p => p.Surname)
                 .Take(filters.NumberOfItems)
                 .Select(p => new PersonnelInSelectDTO()

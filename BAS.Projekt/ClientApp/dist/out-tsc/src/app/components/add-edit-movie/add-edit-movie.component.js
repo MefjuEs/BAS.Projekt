@@ -3,13 +3,15 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 const numberOfItems = 5;
 let AddEditMovieComponent = class AddEditMovieComponent {
-    constructor(route, movieService, genreService, personnelService, location) {
+    constructor(route, movieService, genreService, personnelService, notificationService, location) {
         this.route = route;
         this.movieService = movieService;
         this.genreService = genreService;
         this.personnelService = personnelService;
+        this.notificationService = notificationService;
         this.location = location;
         this.movieTitle = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.movieDescription = new FormControl('', [Validators.maxLength(2000)]);
@@ -46,9 +48,6 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     }
     ngOnInit() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.actorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "");
-            this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "");
-            this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "");
             this.route.url.subscribe(urlSegments => {
                 this.editMode = urlSegments[2].path === 'edit';
                 this.genreService.getGenres().subscribe(data => this.genreList = data);
@@ -66,9 +65,20 @@ let AddEditMovieComponent = class AddEditMovieComponent {
                     this.selectedDirectors = [];
                     this.selectedWriters = [];
                     this.selectedGenres = new FormControl();
-                    this.isLoading = false;
+                    this.getPersonnelToSelect();
                 }
             });
+        });
+    }
+    getPersonnelToSelect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let selectedActorsIndexes = this.selectedActors.map(a => a.id);
+            let selectedDirectorsIndexes = this.selectedDirectors.map(a => a.id);
+            let selectedWritersIndexes = this.selectedWriters.map(a => a.id);
+            this.actorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedActorsIndexes);
+            this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedDirectorsIndexes);
+            this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedWritersIndexes);
+            this.isLoading = false;
         });
     }
     getMovie(id) {
@@ -99,7 +109,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
                 this.movieLengthInMinutes.setValue(getMovieDTO.movieLengthInMinutes);
                 this.file = this.getMoviePoster(getMovieDTO.moviePoster);
                 this.selectedGenres.setValue(genres);
-                this.isLoading = false;
+                this.getPersonnelToSelect();
             }
             catch (exception) {
                 this.isLoading = false;
@@ -138,7 +148,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movieDescription.invalid ||
             this.movieReleaseYear.invalid ||
             this.movieLengthInMinutes.invalid) {
-            alert("Nie wszystkie pola są poprawne!");
+            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
             return;
         }
         this.movie.id = this.movieId;
@@ -163,7 +173,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         if (this.editMode) {
             this.movieService.editMovie(this.movie).subscribe(data => {
                 if (data == true) {
-                    alert("Pomyślnie wprowadzono zmiany");
+                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -174,7 +184,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         else {
             this.movieService.addMovie(this.movie).subscribe(data => {
                 if (data == true) {
-                    alert("Dodano nowy film");
+                    this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -184,7 +194,6 @@ let AddEditMovieComponent = class AddEditMovieComponent {
         }
     }
     getTitleErrorMessage() {
-        console.log('gowno');
         if (this.movieTitle.hasError('required')) {
             return 'Tytuł nie może być pusty';
         }
@@ -297,7 +306,8 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     }
     onActorInputChange(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.actorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+            let selectedActorsIndexes = this.selectedActors.map(a => a.id);
+            this.actorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedActorsIndexes);
         });
     }
     removeDirector(director) {
@@ -330,7 +340,8 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     }
     onDirectorInputChange(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+            let selectedDirectorsIndexes = this.selectedDirectors.map(a => a.id);
+            this.directorsInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedDirectorsIndexes);
         });
     }
     removeWriter(writer) {
@@ -363,7 +374,8 @@ let AddEditMovieComponent = class AddEditMovieComponent {
     }
     onWriterInputChange(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+            let selectedWritersIndexes = this.selectedWriters.map(a => a.id);
+            this.writersInDropdown = yield this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedWritersIndexes);
         });
     }
 };

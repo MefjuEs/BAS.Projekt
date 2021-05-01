@@ -1,9 +1,11 @@
+import { NotificationService } from './../../services/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IGenre } from 'src/app/interfaces/genres/IGenre';
 import { GenresService } from 'src/app/services/genres.service';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'app-add-edit-genre',
@@ -22,7 +24,10 @@ export class AddEditGenreComponent implements OnInit {
   genreName = new FormControl('', [Validators.required, Validators.maxLength(20)]);
   genreDescription = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
-  constructor(private route: ActivatedRoute, private genreService: GenresService, private location: Location) {
+  constructor(private route: ActivatedRoute,
+      private genreService: GenresService,
+      private location: Location,
+      private notificationService: NotificationService) {
     this.notFound = false;
     this.isLoading = true;
     this.genreExistError = false;
@@ -66,7 +71,7 @@ export class AddEditGenreComponent implements OnInit {
 
   onSubmit() {
     if(this.genreName.invalid) {
-      alert("Nie wszystkie pola są poprawne!")
+      this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
     }
 
     this.genre.id = this.genreId;
@@ -76,7 +81,7 @@ export class AddEditGenreComponent implements OnInit {
     if(this.editMode) {
       this.genreService.editGenre(this.genre).subscribe(res => {
         if(res == true) {
-          alert('Pomyślnie wprowadzono zmiany');
+          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.genreExistError = true;
@@ -85,11 +90,13 @@ export class AddEditGenreComponent implements OnInit {
     } else {
       this.genreService.addGenre(this.genre).subscribe(res => {
         if(res == true) {
-          alert('Pomyślnie dodano gatunek filmowy');
+          this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.genreExistError = true;
         }
+      }, error => {
+        console.log(error);
       });
     }
   }

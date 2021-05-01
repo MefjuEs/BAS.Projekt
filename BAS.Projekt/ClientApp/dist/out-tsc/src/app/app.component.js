@@ -4,6 +4,8 @@ let AppComponent = class AppComponent {
     constructor() {
         this.title = 'ClientApp';
     }
+    ngOnInit() {
+    }
 };
 AppComponent = __decorate([
     Component({

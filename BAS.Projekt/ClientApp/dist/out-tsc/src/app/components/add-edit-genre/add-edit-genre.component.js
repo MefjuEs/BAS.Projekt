@@ -1,11 +1,13 @@
 import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let AddEditGenreComponent = class AddEditGenreComponent {
-    constructor(route, genreService, location) {
+    constructor(route, genreService, location, notificationService) {
         this.route = route;
         this.genreService = genreService;
         this.location = location;
+        this.notificationService = notificationService;
         this.genreName = new FormControl('', [Validators.required, Validators.maxLength(20)]);
         this.genreDescription = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.notFound = false;
@@ -48,7 +50,7 @@ let AddEditGenreComponent = class AddEditGenreComponent {
     }
     onSubmit() {
         if (this.genreName.invalid) {
-            alert("Nie wszystkie pola są poprawne!");
+            this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         }
         this.genre.id = this.genreId;
         this.genre.name = this.genreName.value;
@@ -56,7 +58,7 @@ let AddEditGenreComponent = class AddEditGenreComponent {
         if (this.editMode) {
             this.genreService.editGenre(this.genre).subscribe(res => {
                 if (res == true) {
-                    alert('Pomyślnie wprowadzono zmiany');
+                    this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
@@ -67,12 +69,14 @@ let AddEditGenreComponent = class AddEditGenreComponent {
         else {
             this.genreService.addGenre(this.genre).subscribe(res => {
                 if (res == true) {
-                    alert('Pomyślnie dodano gatunek filmowy');
+                    this.notificationService.showSnackBarNotification('Pomyślnie dodano gatunek filmowy', 'Zamknij', SnackBarStyle.success);
                     this.location.back();
                 }
                 else {
                     this.genreExistError = true;
                 }
+            }, error => {
+                console.log(error);
             });
         }
     }

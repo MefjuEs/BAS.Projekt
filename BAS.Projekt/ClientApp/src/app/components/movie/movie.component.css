@@ -1,0 +1,26 @@
+h1 {
+    margin-bottom: 0px;    
+}
+
+.container-margins {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.movie-poster {
+    max-width: 414px;
+    max-height: 650px;
+}
+
+.mat-chip-list /deep/.mat-chip-list-wrapper {
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.mat-chip {
+    font-size: 12px;
+}
+
+.mat-spinner {
+    margin: auto;
+}

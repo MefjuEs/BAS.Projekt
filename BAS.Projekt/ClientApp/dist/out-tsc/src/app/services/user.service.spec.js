@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
-describe('RoleService', () => {
+describe('UserService', () => {
     let service;
     beforeEach(() => {
         TestBed.configureTestingModule({});

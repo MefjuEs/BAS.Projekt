@@ -5,12 +5,13 @@ import { IGenreListWithFilters } from '../interfaces/genres/IGenreListWithFilter
 import { IGenreFilters } from '../interfaces/genres/IGenreFilters';
 import { IGenreList } from '../interfaces/genres/IGenreList';
 import { IGenre } from '../interfaces/genres/IGenre';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 
 export class GenresService {
 
-  url = 'http://localhost:50927/api/Genre';
+  private url = `${environment.apiUrl}/api/Genre`;
 
   constructor(private http: HttpClient) { }
 
@@ -52,6 +53,7 @@ export class GenresService {
   }
 
   addGenre(genre: IGenre): Observable<any> {
+    debugger;
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 

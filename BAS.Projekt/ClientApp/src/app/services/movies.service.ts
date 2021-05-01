@@ -5,11 +5,11 @@ import { Observable } from 'rxjs';
 import { IMovieFilters } from '../interfaces/movies/IMovieFilters';
 import { IGetMovieDTO } from '../interfaces/movies/IGetMovieDTO';
 import { IMovieDTO } from '../interfaces/movies/IMovieDTO';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class MoviesService {
-
-  url = 'http://localhost:50927/api/Movie';
+  private url = `${environment.apiUrl}/api/Movie`;
 
   constructor(private http: HttpClient) { }
 

@@ -1,3 +1,4 @@
+import { NotificationService } from './../../services/notification.service';
 import { IPersonnelInSelectDTO } from './../../interfaces/personnel/IPersonnelInSelectDTO';
 import { PersonnelService } from './../../services/personnel.service';
 import { IGenreList } from './../../interfaces/genres/IGenreList';
@@ -13,6 +14,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { IFile } from 'src/app/interfaces/movies/IFile';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 const numberOfItems = 5;
 
@@ -63,6 +65,7 @@ export class AddEditMovieComponent implements OnInit {
     private movieService: MoviesService,
     private genreService: GenresService,
     private personnelService: PersonnelService,
+    private notificationService: NotificationService,
     private location: Location) { 
       this.isLoading = true;
       this.notFound = false;
@@ -87,11 +90,7 @@ export class AddEditMovieComponent implements OnInit {
       }
     }
 
-  async ngOnInit() {
-    this.actorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "");
-    this.directorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "");
-    this.writersInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "");
-    
+  async ngOnInit() {    
     this.route.url.subscribe(urlSegments => {
       this.editMode = urlSegments[2].path === 'edit';
 
@@ -111,9 +110,21 @@ export class AddEditMovieComponent implements OnInit {
         this.selectedDirectors = [];
         this.selectedWriters = [];
         this.selectedGenres = new FormControl();
-        this.isLoading = false;
+
+        this.getPersonnelToSelect();
       }
     });
+  }
+
+  async getPersonnelToSelect() {
+    let selectedActorsIndexes = this.selectedActors.map(a => a.id);
+    let selectedDirectorsIndexes = this.selectedDirectors.map(a => a.id);
+    let selectedWritersIndexes = this.selectedWriters.map(a => a.id);
+
+    this.actorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedActorsIndexes);
+    this.directorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedDirectorsIndexes);
+    this.writersInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, "", selectedWritersIndexes);
+    this.isLoading = false;
   }
 
   async getMovie(id) {
@@ -146,7 +157,8 @@ export class AddEditMovieComponent implements OnInit {
       this.movieLengthInMinutes.setValue(getMovieDTO.movieLengthInMinutes);
       this.file = this.getMoviePoster(getMovieDTO.moviePoster);
       this.selectedGenres.setValue(genres);
-      this.isLoading = false;
+
+      this.getPersonnelToSelect();
     }
     catch(exception) {
       this.isLoading = false;
@@ -190,7 +202,7 @@ export class AddEditMovieComponent implements OnInit {
       this.movieDescription.invalid ||
       this.movieReleaseYear.invalid ||
       this.movieLengthInMinutes.invalid) {
-        alert("Nie wszystkie pola są poprawne!")
+        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         return;
       }
 
@@ -220,7 +232,7 @@ export class AddEditMovieComponent implements OnInit {
     if(this.editMode) {
       this.movieService.editMovie(this.movie).subscribe(data => {
         if(data == true) {
-          alert("Pomyślnie wprowadzono zmiany");
+          this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.titleExistError = true;
@@ -229,7 +241,7 @@ export class AddEditMovieComponent implements OnInit {
     } else {
       this.movieService.addMovie(this.movie).subscribe(data => {
         if(data == true) {
-          alert("Dodano nowy film");
+          this.notificationService.showSnackBarNotification('Pomyślnie dodano nowy film', 'Zamknij', SnackBarStyle.success);
           this.location.back();
         } else {
           this.titleExistError = true;
@@ -239,7 +251,6 @@ export class AddEditMovieComponent implements OnInit {
   }
 
   getTitleErrorMessage() {
-    console.log('gowno')
     if (this.movieTitle.hasError('required')) {
       return 'Tytuł nie może być pusty';
     }
@@ -368,7 +379,8 @@ export class AddEditMovieComponent implements OnInit {
   }
 
   async onActorInputChange(value) {
-    this.actorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+    let selectedActorsIndexes = this.selectedActors.map(a => a.id);
+    this.actorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedActorsIndexes);
   }
 
   removeDirector(director: IPersonnelInSelectDTO): void {
@@ -408,7 +420,8 @@ export class AddEditMovieComponent implements OnInit {
   }
 
   async onDirectorInputChange(value) {
-    this.directorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+    let selectedDirectorsIndexes = this.selectedDirectors.map(a => a.id);
+    this.directorsInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedDirectorsIndexes);
   }
 
   removeWriter(writer: IPersonnelInSelectDTO): void {
@@ -448,7 +461,8 @@ export class AddEditMovieComponent implements OnInit {
   }
 
   async onWriterInputChange(value) {
-    this.writersInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value);
+    let selectedWritersIndexes = this.selectedWriters.map(a => a.id);
+    this.writersInDropdown = await this.personnelService.getPersonnelToSelectList(numberOfItems, value, selectedWritersIndexes);
   }
 }
 

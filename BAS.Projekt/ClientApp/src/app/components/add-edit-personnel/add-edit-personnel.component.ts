@@ -1,9 +1,11 @@
+import { NotificationService } from './../../services/notification.service';
 import { PersonnelService } from './../../services/personnel.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IPersonnel } from 'src/app/interfaces/personnel/IPersonnel';
 import { Location } from '@angular/common';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'app-add-edit-personnel',
@@ -25,6 +27,7 @@ export class AddEditPersonnelComponent implements OnInit {
   maxDate: Date = new Date();
 
   constructor(private personnelService: PersonnelService,
+              private notificationService: NotificationService,
               private route: ActivatedRoute,
               private location: Location) {
     this.isLoading = true;
@@ -108,7 +111,7 @@ export class AddEditPersonnelComponent implements OnInit {
       this.personnelSurname.invalid ||
       this.personnelNationality.invalid || 
       this.personnelDateOfBirth.invalid) {
-        alert("Nie wszystkie pola są poprawne!")
+        this.notificationService.showSnackBarNotification('Nie wszystkie pola są poprawne', 'Zamknij', SnackBarStyle.error);
         return;
     }
     
@@ -122,12 +125,12 @@ export class AddEditPersonnelComponent implements OnInit {
 
     if(this.editMode) {
       this.personnelService.editPersonnel(person).subscribe(data => {
-        alert("Wprowadzono zmiany dla osoby")
+        this.notificationService.showSnackBarNotification('Pomyślnie wprowadzono zmiany', 'Zamknij', SnackBarStyle.success);
         this.location.back();
       });
     } else {
       this.personnelService.addPersonnel(person).subscribe(data => {
-        alert("Dodano nową osobę")
+        this.notificationService.showSnackBarNotification('Pomyślnie dodano osobę', 'Zamknij', SnackBarStyle.success);
         this.location.back();
       });
     }

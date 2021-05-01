@@ -41,8 +41,13 @@ namespace BAS.AppServices
 
             result.HasConfirmedEmail = user?.EmailConfirmed ?? false;
 
-            if (user != null && result.HasConfirmedEmail && await this.userManager.CheckPasswordAsync(user, loginDTO.Password))
+            if (user != null && await this.userManager.CheckPasswordAsync(user, loginDTO.Password))
             {
+                if (!result.HasConfirmedEmail)
+                {
+                    return result;
+                }
+
                 var signInResult = await this.signInManager.PasswordSignInAsync(user, loginDTO.Password, false, false);
 
                 if (signInResult.Succeeded)
@@ -148,6 +153,7 @@ namespace BAS.AppServices
                         });
 
                         result.Success = true;
+                        transaction.Commit();
                     }
                 }
             }
