@@ -37,6 +37,8 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import localePl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
+import { AdminUserComponent, DeleteUserDialog} from './components/admin-user/admin-user.component';
+import { UserService } from './services/user.service';
 
 registerLocaleData(localePl);
 
@@ -55,7 +57,9 @@ registerLocaleData(localePl);
     AddEditPersonnelComponent,
     AdminGenreComponent,
     AddEditGenreComponent,
-    DeleteGenreDialog
+    DeleteGenreDialog,
+    AdminUserComponent,
+    DeleteUserDialog
   ],
   imports: [
     BrowserModule,
@@ -94,6 +98,7 @@ registerLocaleData(localePl);
     MoviesService, 
     GenresService,
     PersonnelService,
+    UserService,
     {provide: localePl, useValue: 'pl'},
     {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'}
   ],

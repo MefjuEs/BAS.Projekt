@@ -2,9 +2,10 @@ import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 let AddEditGenreComponent = class AddEditGenreComponent {
-    constructor(route, genreService) {
+    constructor(route, genreService, location) {
         this.route = route;
         this.genreService = genreService;
+        this.location = location;
         this.genreName = new FormControl('', [Validators.required, Validators.maxLength(20)]);
         this.genreDescription = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.notFound = false;
@@ -46,6 +47,9 @@ let AddEditGenreComponent = class AddEditGenreComponent {
         });
     }
     onSubmit() {
+        if (this.genreName.invalid) {
+            alert("Nie wszystkie pola są poprawne!");
+        }
         this.genre.id = this.genreId;
         this.genre.name = this.genreName.value;
         this.genre.description = this.genreDescription.value;
@@ -53,6 +57,7 @@ let AddEditGenreComponent = class AddEditGenreComponent {
             this.genreService.editGenre(this.genre).subscribe(res => {
                 if (res == true) {
                     alert('Pomyślnie wprowadzono zmiany');
+                    this.location.back();
                 }
                 else {
                     this.genreExistError = true;
@@ -63,12 +68,16 @@ let AddEditGenreComponent = class AddEditGenreComponent {
             this.genreService.addGenre(this.genre).subscribe(res => {
                 if (res == true) {
                     alert('Pomyślnie dodano gatunek filmowy');
+                    this.location.back();
                 }
                 else {
                     this.genreExistError = true;
                 }
             });
         }
+    }
+    onReturn() {
+        this.location.back();
     }
     getNameErrorMessage() {
         if (this.genreName.hasError('required')) {

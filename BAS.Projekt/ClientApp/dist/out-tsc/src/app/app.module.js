@@ -1,4 +1,6 @@
 import { __decorate } from "tslib";
+import { AddEditGenreComponent } from './components/add-edit-genre/add-edit-genre.component';
+import { AdminGenreComponent, DeleteGenreDialog } from './components/admin-genre/admin-genre.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -36,6 +38,8 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import localePl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { AddEditPersonnelComponent } from './components/add-edit-personnel/add-edit-personnel.component';
+import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
+import { UserService } from './services/user.service';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -52,7 +56,12 @@ AppModule = __decorate([
             DeleteMovieDialog,
             AdminPersonnelComponent,
             DeletePersonnelDialog,
-            AddEditPersonnelComponent
+            AddEditPersonnelComponent,
+            AdminGenreComponent,
+            AddEditGenreComponent,
+            DeleteGenreDialog,
+            AdminUserComponent,
+            DeleteUserDialog
         ],
         imports: [
             BrowserModule,
@@ -61,8 +70,10 @@ AppModule = __decorate([
             RouterModule.forRoot([
                 { path: '', component: HomeComponent },
                 { path: 'admin', component: AdminPanelComponent },
-                { path: 'movie/add', component: AddEditMovieComponent },
-                { path: 'movie/edit/:id', component: AddEditMovieComponent },
+                { path: 'admin/movie/add', component: AddEditMovieComponent },
+                { path: 'admin/movie/edit/:id', component: AddEditMovieComponent },
+                { path: 'admin/genre/add', component: AddEditGenreComponent },
+                { path: 'admin/genre/edit/:id', component: AddEditGenreComponent },
                 { path: 'admin/personnel/add', component: AddEditPersonnelComponent },
                 { path: 'admin/personnel/edit/:id', component: AddEditPersonnelComponent }
             ]),
@@ -89,6 +100,7 @@ AppModule = __decorate([
             MoviesService,
             GenresService,
             PersonnelService,
+            UserService,
             { provide: localePl, useValue: 'pl' },
             { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' }
         ],

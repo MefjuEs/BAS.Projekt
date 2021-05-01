@@ -1,4 +1,5 @@
 ﻿using BAS.AppCommon;
+using BAS.AppServices.DTOs.User;
 using BAS.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace BAS.AppServices
 {
@@ -20,8 +22,14 @@ namespace BAS.AppServices
             this.roleManager = roleManager;
         }
 
-        public async Task ChangeUserRole(long userId, long roleId)
+        public async Task ChangeUserRole(long userId, string role)
         {
+            var roleId = 2;
+            if (role.Equals("Admin"))
+            {
+                roleId = 1;
+            }
+
             var user = await userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
@@ -65,6 +73,113 @@ namespace BAS.AppServices
             var result = new UserDTO
             {
                 Email = user.Email,
+            };
+
+            return result;
+        }
+
+        public async Task<bool> DeleteUser(long id)
+        {
+            var user = await this.userManager.FindByIdAsync(id.ToString());
+            var result = userManager.DeleteAsync(user);
+            return true;
+        }
+
+        public async Task<UserRoleListWithFilters> GetUsersWithRoles(UserFilters userFilters)
+        {
+
+            var userRoleListWithFilters = new UserRoleListWithFilters();
+            var result = new List<UserInListDTO>();
+            var sizeList = new List<UserInListDTO>();
+            var index = 0;
+
+            if (string.IsNullOrWhiteSpace(userFilters.UserName))
+            {
+                userFilters.UserName = "";
+            }
+
+            if (string.IsNullOrWhiteSpace(userFilters.OrderBy))
+            {
+                userFilters.OrderBy = "";
+            }
+
+            foreach (var user in userManager.Users.ToList())
+            {
+                var roles = await userManager.GetRolesAsync(user);
+
+                var userInListDTO = new UserInListDTO
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Role = roles.FirstOrDefault()
+                };
+                result.Add(userInListDTO);
+            }
+
+            if(userFilters.UserName != "")
+            {
+                result.RemoveAll(u => (!u.Username.Contains(userFilters.UserName)));
+            }
+
+            switch (userFilters.OrderBy.ToLower())
+            {
+                case "usernameasc":
+                    result.Sort(delegate (UserInListDTO x, UserInListDTO y)
+                    {
+                        return x.Username.CompareTo(y.Username);
+                    });
+                    break;
+                case "usernamedesc":
+                    result.Sort(delegate (UserInListDTO x, UserInListDTO y)
+                    {
+                        return y.Username.CompareTo(x.Username);
+                    });
+                    break;
+                case "roleasc":
+                    result.Sort(delegate (UserInListDTO x, UserInListDTO y)
+                    {
+                        return x.Role.CompareTo(y.Role);
+                    });
+                    break;
+                case "roledesc":
+                    result.Sort(delegate (UserInListDTO x, UserInListDTO y)
+                    {
+                        return y.Role.CompareTo(x.Role);
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            userRoleListWithFilters.CurrentPage = userFilters.Page;
+            userRoleListWithFilters.PageSize = (int)userFilters.PageSize;
+            userRoleListWithFilters.AllElements = result.Count;
+            userRoleListWithFilters.AllPages = 1;
+
+            foreach (UserInListDTO row in result)
+            {
+                if(((userFilters.Page-1) * userFilters.PageSize) <= index && (((userFilters.Page - 1) * userFilters.PageSize) + userFilters.PageSize) > index)
+                {
+                    sizeList.Add(row);
+                }
+                index++;
+            }
+
+            result = sizeList;
+            userRoleListWithFilters.RoleList = result.ToList();
+
+            return userRoleListWithFilters;
+        }
+
+        public async Task<UserNameRole> GetUserNameRole(long id)
+        {
+            var user = await userManager.FindByIdAsync(id.ToString());
+            var roles = await userManager.GetRolesAsync(user);
+
+            var result = new UserNameRole
+            {
+                UserName = user.UserName,
+                Role = roles.FirstOrDefault()
             };
 
             return result;

@@ -5,11 +5,12 @@ import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 const numberOfItems = 5;
 let AddEditMovieComponent = class AddEditMovieComponent {
-    constructor(route, movieService, genreService, personnelService) {
+    constructor(route, movieService, genreService, personnelService, location) {
         this.route = route;
         this.movieService = movieService;
         this.genreService = genreService;
         this.personnelService = personnelService;
+        this.location = location;
         this.movieTitle = new FormControl('', [Validators.required, Validators.maxLength(100)]);
         this.movieDescription = new FormControl('', [Validators.maxLength(2000)]);
         this.movieReleaseYear = new FormControl('', [Validators.required, Validators.min(1900), Validators.max(2300)]);
@@ -129,7 +130,17 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movie.updatePhoto = false;
         }
     }
+    onReturn() {
+        this.location.back();
+    }
     onSubmit() {
+        if (this.movieTitle.invalid ||
+            this.movieDescription.invalid ||
+            this.movieReleaseYear.invalid ||
+            this.movieLengthInMinutes.invalid) {
+            alert("Nie wszystkie pola są poprawne!");
+            return;
+        }
         this.movie.id = this.movieId;
         this.movie.title = this.movieTitle.value;
         this.movie.description = this.movieDescription.value;
@@ -153,6 +164,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movieService.editMovie(this.movie).subscribe(data => {
                 if (data == true) {
                     alert("Pomyślnie wprowadzono zmiany");
+                    this.location.back();
                 }
                 else {
                     this.titleExistError = true;
@@ -163,6 +175,7 @@ let AddEditMovieComponent = class AddEditMovieComponent {
             this.movieService.addMovie(this.movie).subscribe(data => {
                 if (data == true) {
                     alert("Dodano nowy film");
+                    this.location.back();
                 }
                 else {
                     this.titleExistError = true;
