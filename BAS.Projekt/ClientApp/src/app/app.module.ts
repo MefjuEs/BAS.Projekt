@@ -46,6 +46,7 @@ import { UserService } from './services/user.service';
 import { appRoutingModule } from './app.routing';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
 
 registerLocaleData(localePl);
 
@@ -67,7 +68,9 @@ registerLocaleData(localePl);
     DeleteGenreDialog,
     MovieComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdminUserComponent,
+    DeleteUserDialog
   ],
   imports: [
     BrowserModule,

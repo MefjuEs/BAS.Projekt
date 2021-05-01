@@ -84,6 +84,16 @@ namespace BAS.Identity
                         SecurityStamp = Guid.NewGuid().ToString()
                     };
 
+                    var user6 = new ApplicationUser()
+                    {
+                        Name = "Testowy",
+                        Surname = "Testowy",
+                        Email = "Testowy@Testowy.pl",
+                        EmailConfirmed = true,
+                        UserName = "Testowy",
+                        SecurityStamp = Guid.NewGuid().ToString()
+                    };
+
                     await userManager.CreateAsync(user1, "admin123");
                     await userManager.AddToRoleAsync(user1, UserRole.Admin.ToString());
 
@@ -98,6 +108,9 @@ namespace BAS.Identity
 
                     await userManager.CreateAsync(user5, "nietup123");
                     await userManager.AddToRoleAsync(user5, UserRole.User.ToString());
+
+                    await userManager.CreateAsync(user6, "nietup123");
+                    await userManager.AddToRoleAsync(user6, UserRole.User.ToString());
                 }
 
                 transaction.Commit();
