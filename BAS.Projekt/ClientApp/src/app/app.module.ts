@@ -47,6 +47,8 @@ import { appRoutingModule } from './app.routing';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
+import { AdminReviewComponent } from './components/admin-review/admin-review.component';
+import { ReviewService } from './services/review.service';
 
 registerLocaleData(localePl);
 
@@ -70,7 +72,8 @@ registerLocaleData(localePl);
     LoginComponent,
     RegisterComponent,
     AdminUserComponent,
-    DeleteUserDialog
+    DeleteUserDialog,
+    AdminReviewComponent
   ],
   imports: [
     BrowserModule,
@@ -104,6 +107,7 @@ registerLocaleData(localePl);
     NotificationService,
     AuthService,
     UserService,
+    ReviewService,
     {provide: localePl, useValue: 'pl'},
     {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

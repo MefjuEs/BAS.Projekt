@@ -451,6 +451,23 @@ namespace BAS.AppServices
 
             return result;
         }
+
+        public List<MovieInSelectDTO> GetMoviesToSelect(SelectUsersFiltersDTO filters)
+        {
+            if (string.IsNullOrWhiteSpace(filters.StartsWith))
+            {
+                filters.StartsWith = "";
+            }
+
+            return db.Movies.Where(m => m.Title.StartsWith(filters.StartsWith))
+                .OrderBy(m => m.Title)
+                .Take(5)
+                .Select(m => new MovieInSelectDTO()
+                {
+                    Id = m.Id,
+                    Title = m.Title
+                }).ToList();
+        }
         #endregion
 
         public async Task<bool> DoesMovieExist(long movieId)

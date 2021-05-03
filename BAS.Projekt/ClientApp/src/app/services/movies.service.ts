@@ -1,3 +1,4 @@
+import { IMovieInSelectDTO } from './../interfaces/movies/IMovieInSelectDTO';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IMovieListWithFilters } from '../interfaces/movies/IMovieListWithFilters';
@@ -87,5 +88,15 @@ export class MoviesService {
 
   async getMovie(id: number) {
     return await this.http.get<IGetMovieDTO>(`${this.url}/${id}`).toPromise();
+  }
+
+  async getMoviesToSelect(startsWith: string) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+
+    let params = new HttpParams();
+    params = params.append('startsWith', startsWith ? startsWith : '');
+
+    return this.http.get<IMovieInSelectDTO[]>(`${this.url}/select`, { headers: headers, params: params }).toPromise();
   }
 }

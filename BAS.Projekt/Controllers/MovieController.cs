@@ -55,6 +55,13 @@ namespace BAS.Projekt.Controllers
             return Ok(result);
         }
 
+        [HttpGet("select")]
+        public async Task<IActionResult> GetMoviesToSelect([FromQuery] SelectUsersFiltersDTO filters)
+        {
+            var result = movieService.GetMoviesToSelect(filters);
+            return Ok(result);
+        }
+
         //[HttpGet("Reviews")]
         //public async Task<IActionResult> GetMovieReviews([FromBody] ReviewFiltersDTO filters)
         //{

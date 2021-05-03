@@ -1,3 +1,4 @@
+import { IUserInSelectDTO } from './../interfaces/user/IUserInSelectDTO';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -5,12 +6,14 @@ import { IUserRole } from '../interfaces/user/IUserRole';
 import { IUserNameRole } from '../interfaces/user/IUserNameRole';
 import { IUserRoleFilters } from '../interfaces/user/IUserRoleFilters';
 import { IUserRoleListWithFilters } from '../interfaces/user/IUserRoleListWithFilters';
+import { startWith } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable()
 export class UserService {
 
-    url = 'http://localhost:50927/api/Role';
+    url = `${environment.apiUrl}/api/Role`;
 
     constructor(private http: HttpClient) { }
 
@@ -45,6 +48,16 @@ export class UserService {
         formData.append('role', userNameRole.role);
     
         return this.http.post(this.url, formData, { headers: headers });
+    }
+
+    async getUsersToSelect(startsWith: string) {
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+
+        let params = new HttpParams();
+        params = params.append('startsWith', startsWith ? startsWith : '');
+
+        return this.http.get<IUserInSelectDTO[]>(`${this.url}/select`, { headers: headers, params: params }).toPromise();
     }
 }
 

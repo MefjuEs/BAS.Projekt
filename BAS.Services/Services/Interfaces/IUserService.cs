@@ -14,5 +14,6 @@ namespace BAS.AppServices
         Task<UserRoleListWithFilters> GetUsersWithRoles(UserFilters userFilters);
         Task<UserNameRole> GetUserNameRole(long id);
         Task<bool> DeleteUser(long id);
+        List<UserInSelectDTO> GetUsersToSelect(SelectUsersFiltersDTO filters);
     }
 }

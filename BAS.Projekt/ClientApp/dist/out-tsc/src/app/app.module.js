@@ -47,6 +47,8 @@ import { UserService } from './services/user.service';
 import { appRoutingModule } from './app.routing';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
+import { AdminReviewComponent } from './components/admin-review/admin-review.component';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -69,7 +71,10 @@ AppModule = __decorate([
             DeleteGenreDialog,
             MovieComponent,
             LoginComponent,
-            RegisterComponent
+            RegisterComponent,
+            AdminUserComponent,
+            DeleteUserDialog,
+            AdminReviewComponent
         ],
         imports: [
             BrowserModule,

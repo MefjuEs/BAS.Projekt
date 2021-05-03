@@ -50,5 +50,12 @@ namespace BAS.Projekt.Controllers
             var result = await userService.GetUserNameRole(id);
             return Ok(result);
         }
+
+        [HttpGet("select")]
+        public async Task<IActionResult> GetUsersToSelect([FromQuery] SelectUsersFiltersDTO filters)
+        {
+            var result = userService.GetUsersToSelect(filters);
+            return Ok(result);
+        }
     }
 }

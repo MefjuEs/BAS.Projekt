@@ -114,7 +114,7 @@ export class AdminMovieComponent implements OnInit {
       return `data:${poster.contentType};base64,${poster.file}`;
     }
     else {
-      return '';
+      return `/assets/images/noMovieImage.png`;
     }
   }
 

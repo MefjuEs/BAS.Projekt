@@ -87,7 +87,6 @@ namespace BAS.AppServices
 
         public async Task<UserRoleListWithFilters> GetUsersWithRoles(UserFilters userFilters)
         {
-
             var userRoleListWithFilters = new UserRoleListWithFilters();
             var result = new List<UserInListDTO>();
             var sizeList = new List<UserInListDTO>();
@@ -183,6 +182,23 @@ namespace BAS.AppServices
             };
 
             return result;
+        }
+
+        public List<UserInSelectDTO> GetUsersToSelect(SelectUsersFiltersDTO filters)
+        {
+            if(string.IsNullOrEmpty(filters.StartsWith))
+            {
+                filters.StartsWith = "";
+            }
+
+            return userManager.Users.Where(u => u.UserName.StartsWith(filters.StartsWith))
+                .OrderBy(u => u.UserName)
+                .Take(5)
+                .Select(u => new UserInSelectDTO()
+                {
+                    Id = u.Id,
+                    Username = u.UserName
+                }).ToList();
         }
     }
 }
