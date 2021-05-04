@@ -12,5 +12,4 @@ export interface IGetMovieDTO {
     moviePoster: IFile
     genres: IGenreInMovieDTO[],
     personnel: IPersonnelInMovieDTO[],
-    reviews: any
 }

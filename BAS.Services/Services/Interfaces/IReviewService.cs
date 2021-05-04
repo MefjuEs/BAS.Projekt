@@ -8,5 +8,7 @@ namespace BAS.AppServices
         Task<bool> UpdateReview(InsertUpdateReviewDTO reviewDTO);
         Task<bool> DeleteReview(long userId, long movieId);
         Task<UserReviewListWithFilters> GetAllReviews(AllReviewsFiltersDTO reviewFilters);
+
+        bool DidUserReviewMovie(long movieId);
     }
 }

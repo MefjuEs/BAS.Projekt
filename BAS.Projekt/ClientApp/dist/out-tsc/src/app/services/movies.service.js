@@ -70,6 +70,15 @@ let MoviesService = class MoviesService {
             return yield this.http.get(`${this.url}/${id}`).toPromise();
         });
     }
+    getMoviesToSelect(startsWith) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let headers = new HttpHeaders();
+            headers.append('Content-Type', 'application/json');
+            let params = new HttpParams();
+            params = params.append('startsWith', startsWith ? startsWith : '');
+            return this.http.get(`${this.url}/select`, { headers: headers, params: params }).toPromise();
+        });
+    }
 };
 MoviesService = __decorate([
     Injectable()

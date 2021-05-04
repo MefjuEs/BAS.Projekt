@@ -1,11 +1,17 @@
 import { M } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { IFile } from 'src/app/interfaces/movies/IFile';
 import { IGetMovieDTO } from 'src/app/interfaces/movies/IGetMovieDTO';
 import { IPersonnelInMovieDTO } from 'src/app/interfaces/personnel/IPersonnelInMovieDTO';
+import { IReviewFilters } from 'src/app/interfaces/reviews/IReviewFilters';
+import { IUserReviewListWithFilters } from 'src/app/interfaces/reviews/IUserReviewListWithFilters';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
+import { AuthService } from 'src/app/services/auth.service';
 import { MoviesService } from 'src/app/services/movies.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { ReviewService } from 'src/app/services/review.service';
 
 @Component({
   selector: 'app-movie',
@@ -14,16 +20,29 @@ import { MoviesService } from 'src/app/services/movies.service';
 })
 export class MovieComponent implements OnInit {
 
-  public isLoading: boolean;
-  public notFound: boolean;
+  public canUserReview: boolean;
+  public displayReviewForm: boolean;
+  public userSignedIn: boolean;
   public movie: IGetMovieDTO;
   public actors: IPersonnelInMovieDTO[];
   public directors: IPersonnelInMovieDTO[];
   public writers: IPersonnelInMovieDTO[];
+  public reviews: IUserReviewListWithFilters;
+  public reviewFilters: IReviewFilters;
 
-  constructor(private route: ActivatedRoute, private movieService: MoviesService) {
-    this.isLoading = true;
-    this.notFound = false;
+  public isLoading: boolean;
+  public notFound: boolean;
+  public areReviewsLoading: boolean;
+  public canLoadReviews: boolean;
+
+  constructor(private route: ActivatedRoute, 
+      private movieService: MoviesService, 
+      private authService: AuthService, 
+      private reviewService: ReviewService,
+      private notificationService: NotificationService) {
+    this.canUserReview = false;
+    this.displayReviewForm = false;
+    this.userSignedIn = false;
     this.movie = {
       id: 0,
       title: '',
@@ -34,8 +53,27 @@ export class MovieComponent implements OnInit {
       moviePoster: null,
       genres: [],
       personnel: [],
-      reviews: []
     }
+
+    this.reviews = {
+      currentPage: 0,
+      pageSize: 5,
+      allPages: 0,
+      allElements: 0,
+      reviewList: []
+    };
+
+    this.reviewFilters = {
+      id: this.route.snapshot.params.id,
+      page: 0,
+      pageSize: 5,
+      orderBy: '',
+    }
+
+    this.isLoading = true;
+    this.notFound = false;
+    this.areReviewsLoading = true;
+    this.canLoadReviews = true;
 
     this.actors = [];
     this.directors = [];
@@ -44,6 +82,27 @@ export class MovieComponent implements OnInit {
 
   ngOnInit() {
     this.getMovie(this.route.snapshot.params.id);
+    this.getReviews(this.reviewFilters);
+    this.checkIfUserSignedIn();
+    this.checkIfUserCanReview();
+  }
+
+  checkIfUserSignedIn() {
+    if(this.authService.currentUserValue != null) {
+      this.userSignedIn = true;
+    } else {
+      this.userSignedIn = false;
+    }
+  }
+
+  checkIfUserCanReview() {
+    this.reviewService.didUserReviewMovie(this.route.snapshot.params.id).subscribe(result => {
+      if(result) {
+        this.canUserReview = false;
+      } else {
+        this.canUserReview = true;
+      }
+    });
   }
 
   async getMovie(id) {
@@ -56,6 +115,30 @@ export class MovieComponent implements OnInit {
     catch(exception) {
       this.isLoading = false;
       this.notFound = true;
+    }
+  }
+
+  async getReviews(reviewFilters) {
+    try {
+      this.reviewFilters.page += 1;
+      this.canLoadReviews = true;
+      this.areReviewsLoading = true;
+
+      let riwjus = await this.reviewService.getMovieReviews(reviewFilters);
+      this.reviews.currentPage = riwjus.currentPage;
+      this.reviews.allPages = riwjus.allPages;
+      this.reviews.allElements = riwjus.allElements;
+      riwjus.reviewList.forEach(riwju => {
+        this.reviews.reviewList.push(riwju);
+      });
+
+      if(this.reviews.reviewList.length == this.reviews.allElements) {
+        this.canLoadReviews = false;
+      }
+      
+      this.areReviewsLoading = false;
+    } catch(exception) {
+      this.areReviewsLoading = false;
     }
   }
 
@@ -99,9 +182,22 @@ export class MovieComponent implements OnInit {
         this.writers.push(person);
       }
     });
+  }
 
-    console.log(this.actors);
-    console.log(this.directors);
-    console.log(this.writers);
+  showReviewForm(event) {
+    this.displayReviewForm = true;
+  }
+
+  onReviewFormSubmit(event) {
+    if(event) {
+      this.canUserReview = false;
+      this.notificationService.showSnackBarNotification('Pomyślnie opublikowano recenzję', 'Zamknij', SnackBarStyle.success);
+    } else {
+      this.displayReviewForm = false;
+    }
+  }
+
+  onLoadReviews() {
+    this.getReviews(this.reviewFilters);
   }
 }

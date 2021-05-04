@@ -49,6 +49,8 @@ import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { AdminUserComponent, DeleteUserDialog } from './components/admin-user/admin-user.component';
 import { AdminReviewComponent } from './components/admin-review/admin-review.component';
 import { ReviewService } from './services/review.service';
+import { MovieReviewComponent } from './components/movie-review/movie-review.component';
+import { StarRatingModule } from 'angular-star-rating';
 
 registerLocaleData(localePl);
 
@@ -73,7 +75,8 @@ registerLocaleData(localePl);
     RegisterComponent,
     AdminUserComponent,
     DeleteUserDialog,
-    AdminReviewComponent
+    AdminReviewComponent,
+    MovieReviewComponent
   ],
   imports: [
     BrowserModule,
@@ -98,7 +101,8 @@ registerLocaleData(localePl);
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    StarRatingModule.forRoot(),
   ],
   providers: [
     MoviesService, 

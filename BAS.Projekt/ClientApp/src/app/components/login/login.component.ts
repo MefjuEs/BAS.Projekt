@@ -47,10 +47,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.login(this.email.value, this.password).pipe(first())
-    .subscribe(
-        response => {
-          debugger;
+    this.authService.login(this.email.value, this.password).pipe(first()).subscribe(response => {
           if(response.invalidEmailOrPassword) {
             this.errorMessage = "Niepoprawny login bądź hasło"
             return;

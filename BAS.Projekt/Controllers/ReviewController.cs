@@ -18,10 +18,11 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
+        [BASAuthorize]
         public async Task<IActionResult> InsertReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.InsertReview(reviewDTO);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpPut]
@@ -29,7 +30,7 @@ namespace BAS.Projekt.Controllers
         public async Task<IActionResult> UpdateReview([FromBody] InsertUpdateReviewDTO reviewDTO)
         {
             var result = await reviewService.UpdateReview(reviewDTO);
-            return result ? Ok() : NotFound();
+            return Ok(result);
         }
 
         [HttpDelete("{userId}/{movieId}")]
@@ -37,7 +38,15 @@ namespace BAS.Projekt.Controllers
         public async Task<IActionResult> DeleteReview([FromRoute] long userId, long movieId)
         {
             var result = await reviewService.DeleteReview(userId, movieId);
-            return result ? Ok() : NotFound();
+            return Ok(result);
+        }
+
+        [HttpGet("movie/{movieId}")]
+        public IActionResult DidUserReviewMovie([FromRoute] long movieId)
+        {
+            var result = reviewService.DidUserReviewMovie(movieId);
+
+            return Ok(result);
         }
 
         [HttpGet("all")]

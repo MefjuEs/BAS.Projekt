@@ -17,7 +17,7 @@
                         <textarea matInput #input maxlength="2000" type="text" [formControl]="movieDescription"></textarea>
                         <mat-hint align="end">{{movieDescription.value?.length || 0}}/2000</mat-hint>
                         <mat-error *ngIf="movieDescription.invalid">{{ getDescriptionErrorMessage() }}</mat-error>
-                      </mat-form-field>
+                    </mat-form-field>
                     <mat-form-field hintLabel="Przedział lat: 1900-2300" appearance="fill" class='mat-form-field-custom'>
                         <mat-label>Rok premiery</mat-label>
                         <input matInput #input type="number" [formControl]="movieReleaseYear"/>
