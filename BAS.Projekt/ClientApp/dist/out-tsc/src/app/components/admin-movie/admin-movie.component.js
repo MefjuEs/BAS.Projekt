@@ -85,7 +85,7 @@ let AdminMovieComponent = class AdminMovieComponent {
             return `data:${poster.contentType};base64,${poster.file}`;
         }
         else {
-            return '';
+            return `/assets/images/noMovieImage.png`;
         }
     }
     getMovieGenres(genres) {

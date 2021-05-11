@@ -1,10 +1,11 @@
-import { __decorate } from "tslib";
+import { __awaiter, __decorate } from "tslib";
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 let UserService = class UserService {
     constructor(http) {
         this.http = http;
-        this.url = 'http://localhost:50927/api/Role';
+        this.url = `${environment.apiUrl}/api/Role`;
     }
     getUserRole(role) {
         let headers = new HttpHeaders();
@@ -30,6 +31,15 @@ let UserService = class UserService {
         formData.append('username', userNameRole.username);
         formData.append('role', userNameRole.role);
         return this.http.post(this.url, formData, { headers: headers });
+    }
+    getUsersToSelect(startsWith) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let headers = new HttpHeaders();
+            headers.append('Content-Type', 'application/json');
+            let params = new HttpParams();
+            params = params.append('startsWith', startsWith ? startsWith : '');
+            return this.http.get(`${this.url}/select`, { headers: headers, params: params }).toPromise();
+        });
     }
 };
 UserService = __decorate([
