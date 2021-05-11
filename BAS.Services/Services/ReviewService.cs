@@ -190,6 +190,11 @@ namespace BAS.AppServices
 
         public async Task<UserReviewListWithFilters> GetAllReviews(AllReviewsFiltersDTO reviewFilters)
         {
+            if (reviewFilters.OrderBy == null)
+            {
+                reviewFilters.OrderBy = "";
+            }
+
             var pageSize = reviewFilters.PageSize ?? int.MaxValue;
 
             Func<Review, bool> predicate = (r => (!reviewFilters.MovieId.HasValue || r.MovieId == reviewFilters.MovieId) &&
@@ -246,6 +251,20 @@ namespace BAS.AppServices
             }
 
             return result;
+        }
+
+        public bool DidUserReviewMovie(long movieId)
+        {
+            if(userContext.IsAuthenticated)
+            {
+                var userId = userContext.UserAccountId;
+
+                return db.Reviews.Any(r => r.MovieId == movieId && r.UserId == userId);
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

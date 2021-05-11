@@ -1,12 +1,17 @@
 import { __awaiter, __decorate } from "tslib";
 import { Component } from '@angular/core';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let MovieComponent = class MovieComponent {
-    constructor(route, movieService) {
+    constructor(route, movieService, authService, reviewService, notificationService) {
         this.route = route;
         this.movieService = movieService;
-        this.isLoading = true;
-        this.notFound = false;
+        this.authService = authService;
+        this.reviewService = reviewService;
+        this.notificationService = notificationService;
+        this.canUserReview = false;
+        this.displayReviewForm = false;
+        this.userSignedIn = false;
         this.movie = {
             id: 0,
             title: '',
@@ -17,14 +22,50 @@ let MovieComponent = class MovieComponent {
             moviePoster: null,
             genres: [],
             personnel: [],
-            reviews: []
         };
+        this.reviews = {
+            currentPage: 0,
+            pageSize: 2,
+            allPages: 0,
+            allElements: 0,
+            reviewList: []
+        };
+        this.reviewFilters = {
+            id: this.route.snapshot.params.id,
+            page: 1,
+            pageSize: 2,
+            orderBy: '',
+        };
+        this.isLoading = true;
+        this.notFound = false;
+        this.areReviewsLoading = true;
         this.actors = [];
         this.directors = [];
         this.writers = [];
     }
     ngOnInit() {
         this.getMovie(this.route.snapshot.params.id);
+        this.getReviews(this.reviewFilters);
+        this.checkIfUserSignedIn();
+        this.checkIfUserCanReview();
+    }
+    checkIfUserSignedIn() {
+        if (this.authService.currentUserValue != null) {
+            this.userSignedIn = true;
+        }
+        else {
+            this.userSignedIn = false;
+        }
+    }
+    checkIfUserCanReview() {
+        this.reviewService.didUserReviewMovie(this.route.snapshot.params.id).subscribe(result => {
+            if (result) {
+                this.canUserReview = false;
+            }
+            else {
+                this.canUserReview = true;
+            }
+        });
     }
     getMovie(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +78,18 @@ let MovieComponent = class MovieComponent {
             catch (exception) {
                 this.isLoading = false;
                 this.notFound = true;
+            }
+        });
+    }
+    getReviews(reviewFilters) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                this.areReviewsLoading = true;
+                this.reviews = yield this.reviewService.getMovieReviews(reviewFilters);
+                this.areReviewsLoading = false;
+            }
+            catch (exception) {
+                this.areReviewsLoading = false;
             }
         });
     }
@@ -75,9 +128,26 @@ let MovieComponent = class MovieComponent {
                 this.writers.push(person);
             }
         });
-        console.log(this.actors);
-        console.log(this.directors);
-        console.log(this.writers);
+    }
+    showReviewForm(event) {
+        this.displayReviewForm = true;
+    }
+    onReviewFormSubmit(event) {
+        if (event) {
+            this.canUserReview = false;
+            this.notificationService.showSnackBarNotification('Pomyślnie opublikowano recenzję', 'Zamknij', SnackBarStyle.success);
+        }
+        else {
+            this.displayReviewForm = false;
+        }
+    }
+    onWindowScroll(event) {
+        let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+        let max = document.documentElement.scrollHeight;
+        if (pos == max && this.reviews.allPages > this.reviewFilters.page) {
+            this.areReviewsLoading = true;
+            this.getReviews(this.reviewFilters);
+        }
     }
 };
 MovieComponent = __decorate([

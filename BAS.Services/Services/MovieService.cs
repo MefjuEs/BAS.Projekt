@@ -28,14 +28,14 @@ namespace BAS.AppServices
             this.personnelService = personnelService;
             this.fileService = fileService;
             this.userService = userService;
-            this.moviePyClient = this.ConfigureMoviePy(appConfig);
+            //this.moviePyClient = this.ConfigureMoviePy(appConfig);
         }
 
-        private RestClient ConfigureMoviePy(AppConfig appConfig)
+        /*private RestClient ConfigureMoviePy(AppConfig appConfig)
         {
             var baseUrl = appConfig.API.MoviePy.Url;
             return new RestClient(baseUrl);
-        }
+        }*/
 
         #region Movie
         public async Task<bool> InsertMovie(InsertUpdateMovieDTO movieDTO)

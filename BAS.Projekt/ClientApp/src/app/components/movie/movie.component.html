@@ -1,5 +1,5 @@
-<div class="container container-margins">
-    <div class="row" *ngIf="!isLoading; else loadingBlock">
+<div class="container container-margins" *ngIf="!isLoading; else loadingBlock">
+    <div class="row">
         <div class="col-md-5">
             <img [src]="getMoviePoster(movie.moviePoster)" class="movie-poster">
         </div>
@@ -21,9 +21,6 @@
             <div class="mt-1">
                 <span class="font-weight-bold">Scenariusz:</span> {{ getWriters() }}
             </div>
-            <div class="mt-1">
-                <span class="font-weight-bold">Aktorzy:</span> {{ getActors() }}
-            </div>
             <div class="mt-5">
                 <mat-chip-list class="mat-chip-list">
                     <mat-chip *ngFor="let genre of movie.genres" class="mat-chip" color="primary" selected>
@@ -33,10 +30,73 @@
             </div>
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2>Obsada</h2>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row mt-3"> 
+        <ng-container *ngFor="let actor of actors">
+            <div class="w-100 actor-element">
+                {{actor.name}} {{actor.surname}}
+            </div>
+        </ng-container> 
+    </div>
+
+    <div class="row mt-5" *ngIf="userSignedIn && canUserReview">
+        <button mat-raised-button color="accent" *ngIf="!displayReviewForm" (click)="showReviewForm($event)">Napisz recenzję</button> 
+        <div class="col-md-12" *ngIf="displayReviewForm">
+            <movie-review [movieId]="movie.id" (reviewFormClose)="onReviewFormSubmit($event)"></movie-review>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2>Recenzje użytkowników</h2>
+        </div>  
+    </div>
+
+    <hr/>
+
+    <div class="row" *ngIf="!areReviewsLoading; else loadingBlock">
+        <div class="col-md-12">
+            <ng-container *ngFor="let review of reviews.reviewList">
+                <div class="w-100 user-review">
+                    <mat-card>
+                        <mat-card-title class="user-review-title">
+                            <div>
+                                {{review.username}}
+                            </div>
+                            <div>
+                                <mat-icon>star</mat-icon>
+                                <span>{{review.rating}}</span>
+                            </div>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            01.01.2021
+                        </mat-card-subtitle>
+                        <mat-card-content>
+                            {{review.message}}
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
     <div class="row mt-3">
         <div class="col-md-12">
-            <!--Aktorzy-->
+            <ng-container *ngIf="canLoadReviews">
+                <button mat-raised-button color="primary" (click)="onLoadReviews()">Więcej recenzji</button>
+            </ng-container>
         </div>
+    </div>
+
+    <div style="height: 200px;">
+        
     </div>
 </div>
 
