@@ -17,6 +17,6 @@ namespace BAS.AppServices
         Task<bool> DoesMovieExist(long movieId);
         Task<bool> UpdateMovieRating(long movieId, double avgRating);
         Task<FileDTO> GetMoviePoster(long movieId);
-        Task<RecommendationsDTO> GetRecommendations(long userAccountId, int page = 1, int pageSize = 20);
+        Task<List<MovieInListDTO>> GetRecommendations(RecommendationFiltersDTO filters);
     }
 }

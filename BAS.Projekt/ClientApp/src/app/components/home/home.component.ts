@@ -3,6 +3,7 @@ import { IMovieFilters } from 'src/app/interfaces/movies/IMovieFilters';
 import { IMovieListWithFilters } from 'src/app/interfaces/movies/IMovieListWithFilters';
 import { MoviesService } from 'src/app/services/movies.service';
 import { IFile } from 'src/app/interfaces/movies//IFile'
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'home',
@@ -14,6 +15,7 @@ export class HomeComponent implements OnInit {
 
   public isLoading: boolean;
   public isLoadingMoviePage: boolean;
+  public currentUser: any;
   public movies: IMovieListWithFilters = {
     currentPage: 1,
     pageSize: 9,
@@ -35,9 +37,12 @@ export class HomeComponent implements OnInit {
     genreId: null
   }
 
-  constructor(private moviesService: MoviesService) {
+  constructor(private moviesService: MoviesService, private authService: AuthService) {
     this.isLoading = true;
     this.isLoadingMoviePage = false;
+    this.authService.currentUser.subscribe(x => {
+      this.currentUser = x
+    });
   }
 
   ngOnInit() {
@@ -74,10 +79,12 @@ export class HomeComponent implements OnInit {
   }
 
   onWindowScroll(event) {
+    
     let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-    let max = document.documentElement.scrollHeight;
+    let max = document.documentElement.scrollHeight - 62;
 
-    if(pos == max && this.movies.allPages > this.movieFilters.page) {
+    if(pos >= max && this.movies.allPages > this.movieFilters.page) {
+      
       this.isLoadingMoviePage = true;
       this.getMovies();
     }

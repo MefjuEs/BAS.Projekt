@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Web;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -144,7 +145,7 @@ namespace BAS.AppServices
                     if (createResult.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, UserRole.User.ToString());
-                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var token = HttpUtility.UrlEncode(await userManager.GenerateEmailConfirmationTokenAsync(user));
 
                         await notificationService.CreateNotification(NotificationType.REGISTRATION_CONFIRM, new RegistrationConfirmNotificationArgs
                         {
@@ -161,9 +162,9 @@ namespace BAS.AppServices
             return result;
         }
 
-        public async Task<bool> ConfirmRegistration(string userId, string token)
+        public async Task<bool> ConfirmRegistration(ConfirmEmailDTO dto)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(dto.UserId);
 
             if (user.EmailConfirmed)
             {
@@ -175,7 +176,7 @@ namespace BAS.AppServices
                 return false;
             }
 
-            var result = await userManager.ConfirmEmailAsync(user, token);
+            var result = await userManager.ConfirmEmailAsync(user, dto.Token);
             return result.Succeeded;
         }
 

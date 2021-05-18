@@ -9,6 +9,7 @@ import { MovieComponent } from './components/movie/movie.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { ActivationComponent } from './components/register/activation/activation.component';
 const routes = [
     {
         path: '',
@@ -67,6 +68,10 @@ const routes = [
     {
         path: 'signup',
         component: RegisterComponent
+    },
+    {
+        path: 'activate',
+        component: ActivationComponent
     },
     {
         path: '**',

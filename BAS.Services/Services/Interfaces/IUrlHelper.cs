@@ -1,7 +1,9 @@
-﻿namespace BAS.Services
+﻿using BAS.Services.Notification;
+
+namespace BAS.Services
 {
     public interface IUrlHelper
     {
-        string CreateClientUrl();
+        string CreateClientUrl(RegistrationConfirmNotificationArgs args);
     }
 }

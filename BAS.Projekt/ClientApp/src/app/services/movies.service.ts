@@ -7,6 +7,7 @@ import { IMovieFilters } from '../interfaces/movies/IMovieFilters';
 import { IGetMovieDTO } from '../interfaces/movies/IGetMovieDTO';
 import { IMovieDTO } from '../interfaces/movies/IMovieDTO';
 import { environment } from 'src/environments/environment';
+import { IMovieInList } from '../interfaces/movies/IMovieInList';
 
 @Injectable()
 export class MoviesService {
@@ -98,5 +99,17 @@ export class MoviesService {
     params = params.append('startsWith', startsWith ? startsWith : '');
 
     return this.http.get<IMovieInSelectDTO[]>(`${this.url}/select`, { headers: headers, params: params }).toPromise();
+  }
+
+  getRecommendations(userAccountId: number, page: number, pageSize: number) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+
+    let params = new HttpParams();
+    params = params.append('userAccountId', userAccountId.toString());
+    params = params.append('page', page.toString());
+    params = params.append('pageSize', pageSize.toString());
+
+    return this.http.get<IMovieInList[]>(`${this.url}/recommendations`, { headers: headers, params: params })
   }
 }

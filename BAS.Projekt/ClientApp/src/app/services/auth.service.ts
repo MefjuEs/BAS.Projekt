@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { UserRole } from '../interfaces/auth/role';
 import { User } from '../interfaces/auth/user';
+import { IConfirmEmailDTO } from '../interfaces/auth/IConfirmEmailDTO';
 
 
 @Injectable({
@@ -46,15 +47,24 @@ export class AuthService {
 
   register(registerDTO: IRegisterDTO) {
     let headers = new HttpHeaders();
-      headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'application/json');
 
-      return this.http.post<any>(`${this.url}/register`, registerDTO, { headers: headers });
+    return this.http.post<any>(`${this.url}/register`, registerDTO, { headers: headers });
   }
 
   logout() {
-      // remove user from local storage to log user out
-      localStorage.removeItem('currentUserToken');
-      this.currentUserSubject.next(null);
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUserToken');
+    this.currentUserSubject.next(null);
+  }
+
+  confirmEmail(userId: string, token: string) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json')
+    console.log(token);
+
+    const body: IConfirmEmailDTO = { userId: userId, token: token }
+    return this.http.post<any>(`${this.url}/confirm`, body, { headers: headers });
   }
 
   private getUserFromToken(token, hasConfirmedEmail) : User {

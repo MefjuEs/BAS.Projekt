@@ -23,7 +23,7 @@ namespace BAS.Services.Notification
             var user = await this.userService.GetUser(args.UserAccountId);
 
             var subject = "BAS Filmweb | Potwierdzenie rejestracji";
-            var url = this.urlHelper.CreateClientUrl();
+            var url = this.urlHelper.CreateClientUrl(args);
             var body = $"W celu ukończenia rejestracji proszę wejść na stronę: <a href=\"{url}\">Aktywuj konto</a>";
 
             var notification = new NotificationDTO

@@ -25,7 +25,7 @@
 
     public class APIConfig
     {
-        public MoviePyAPIConfig MoviePy { get; set; }
+        public MoviePyAPIConfig BasPy { get; set; }
     }
 
     public class MoviePyAPIConfig
@@ -42,5 +42,6 @@
     public class HostConfig
     {
         public string Url { get; set; }
+        public string FrontURL { get; set; }
     }
 }

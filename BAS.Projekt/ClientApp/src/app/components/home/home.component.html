@@ -1,4 +1,13 @@
 <div class="container" (window:scroll)="onWindowScroll($event)">
+
+    <div class="row" *ngIf="currentUser != null; else gownoBlock">
+        <recommendations class="w-100"></recommendations>
+    </div>
+
+    <h2>
+        Baza filmów
+    </h2>
+
     <div class="row">
         <movie-filter (applyEvent)="onApplyFilters($event)"></movie-filter>
     </div>
@@ -74,5 +83,11 @@
     <div class="mat-spinner">
         <mat-spinner color="accent">
         </mat-spinner>
+    </div>
+</ng-template>
+
+<ng-template #gownoBlock>
+    <div style="margin-top: 75px;">
+
     </div>
 </ng-template>

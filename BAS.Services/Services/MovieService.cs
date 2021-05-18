@@ -28,14 +28,14 @@ namespace BAS.AppServices
             this.personnelService = personnelService;
             this.fileService = fileService;
             this.userService = userService;
-            //this.moviePyClient = this.ConfigureMoviePy(appConfig);
+            this.moviePyClient = this.ConfigureMoviePy(appConfig);
         }
 
-        /*private RestClient ConfigureMoviePy(AppConfig appConfig)
+        private RestClient ConfigureMoviePy(AppConfig appConfig)
         {
-            var baseUrl = appConfig.API.MoviePy.Url;
+            var baseUrl = appConfig.API.BasPy.Url;
             return new RestClient(baseUrl);
-        }*/
+        }
 
         #region Movie
         public async Task<bool> InsertMovie(InsertUpdateMovieDTO movieDTO)
@@ -497,22 +497,56 @@ namespace BAS.AppServices
             return fileService.GetMoviePoster(movie.Poster);
         }
 
-        public async Task<RecommendationsDTO> GetRecommendations(long userAccountId, int page = 1, int pageSize = 20)
+        #region Recommendations
+        public async Task<List<MovieInListDTO>> GetRecommendations(RecommendationFiltersDTO filters)
         {
             var request = new RestRequest(moviePyRecommendUrl);
-            request.AddParameter(nameof(userAccountId), userAccountId);
-            request.AddParameter(nameof(page), page);
-            request.AddParameter(nameof(pageSize), pageSize);
+            request.AddParameter(nameof(filters.userAccountId), filters.userAccountId);
+            request.AddParameter(nameof(filters.page), filters.page);
+            request.AddParameter(nameof(filters.pageSize), filters.pageSize);
 
             try
             {
-                var response = await this.moviePyClient.GetAsync<MoviePyResponseDTO<RecommendationsDTO>>(request);
-                return response.Data;
+                var response = this.moviePyClient.Get<MoviePyResponseDTO<RecommendationsDTO>>(request).Data;
+
+                var movieList = new List<MovieInListDTO>();
+
+                foreach (var movieId in response.Data.MovieIds)
+                {
+                    movieList.Add(await GetMovieForRecommendation(movieId));
+                }
+
+                return movieList;
             }
             catch (Exception e)
             {
                 throw new InvalidOperationException("MoviePy API returned error", e);
             }
         }
+
+        private async Task<MovieInListDTO> GetMovieForRecommendation(long movieId)
+        {
+            var movie = await db.Movies.FindAsync(movieId);
+
+            if (movie == null)
+            {
+                return null;
+            }
+
+            var moviePoster = fileService.GetMoviePoster(movie.Poster);
+
+            var movieDTO = new MovieInListDTO()
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                ReleaseYear = movie.ReleaseYear,
+                MovieLengthInMinutes = movie.MovieLengthInMinutes,
+                AverageRating = movie.AverageRating,
+                Poster = moviePoster,
+            };
+
+            return movieDTO;
+        }
+        #endregion
     }
 }

@@ -1,8 +1,9 @@
 import { __decorate } from "tslib";
 import { Component } from '@angular/core';
 let HomeComponent = class HomeComponent {
-    constructor(moviesService) {
+    constructor(moviesService, authService) {
         this.moviesService = moviesService;
+        this.authService = authService;
         this.movies = {
             currentPage: 1,
             pageSize: 9,
@@ -25,6 +26,9 @@ let HomeComponent = class HomeComponent {
         };
         this.isLoading = true;
         this.isLoadingMoviePage = false;
+        this.authService.currentUser.subscribe(x => {
+            this.currentUser = x;
+        });
     }
     ngOnInit() {
         this.getMovies();
@@ -56,8 +60,8 @@ let HomeComponent = class HomeComponent {
     }
     onWindowScroll(event) {
         let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-        let max = document.documentElement.scrollHeight;
-        if (pos == max && this.movies.allPages > this.movieFilters.page) {
+        let max = document.documentElement.scrollHeight - 62;
+        if (pos >= max && this.movies.allPages > this.movieFilters.page) {
             this.isLoadingMoviePage = true;
             this.getMovies();
         }

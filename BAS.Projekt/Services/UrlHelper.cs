@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using BAS.AppServices;
+using BAS.Services.Notification;
 
 namespace BAS.Projekt.Services
 {
@@ -17,10 +18,11 @@ namespace BAS.Projekt.Services
             this.appConfig = appConfig;
         }
 
-        public string CreateClientUrl()
+        public string CreateClientUrl(RegistrationConfirmNotificationArgs args)
         {
-            //to do generate urls for client app
-            return string.Empty;
+            string url = appConfig.Host.FrontURL + "activate?userId=" + args.UserAccountId + "&token=" + args.Token;
+
+            return url;
         }
     }
 }

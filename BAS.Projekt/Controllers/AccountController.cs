@@ -30,9 +30,9 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost("confirm")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO dto)
         {
-            var result = await this.authService.ConfirmRegistration(userId, token);
+            var result = await this.authService.ConfirmRegistration(dto);
             return Ok(result);
         }
     }

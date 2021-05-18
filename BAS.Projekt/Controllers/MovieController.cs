@@ -18,7 +18,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPost]
-        //[BASAuthorize(UserRole.Admin)]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> InsertMovie([FromForm] InsertUpdateMovieDTO movieDTO)
         {
             var result = await movieService.InsertMovie(movieDTO);
@@ -26,7 +26,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpPut]
-        //[BASAuthorize(UserRole.Admin)]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> UpdateMovie([FromForm] InsertUpdateMovieDTO movieDTO)
         {
             var result = await movieService.UpdateMovie(movieDTO);
@@ -34,7 +34,7 @@ namespace BAS.Projekt.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[BASAuthorize(UserRole.Admin)]
+        [BASAuthorize(UserRole.Admin)]
         public async Task<IActionResult> DeleteMovie([FromRoute] long id)
         {
             var result = await movieService.DeleteMovie(id);
@@ -59,6 +59,14 @@ namespace BAS.Projekt.Controllers
         public async Task<IActionResult> GetMoviesToSelect([FromQuery] SelectUsersFiltersDTO filters)
         {
             var result = movieService.GetMoviesToSelect(filters);
+            return Ok(result);
+        }
+
+        [HttpGet("recommendations")]
+        //[BASAuthorize]
+        public async Task<IActionResult> GetMoviesForRecommendations([FromQuery] RecommendationFiltersDTO filters)
+        {
+            var result = await movieService.GetRecommendations(filters);
             return Ok(result);
         }
 

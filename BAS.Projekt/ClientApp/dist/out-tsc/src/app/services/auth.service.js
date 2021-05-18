@@ -40,6 +40,13 @@ let AuthService = class AuthService {
         localStorage.removeItem('currentUserToken');
         this.currentUserSubject.next(null);
     }
+    confirmEmail(userId, token) {
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+        console.log(token);
+        const body = { userId: userId, token: token };
+        return this.http.post(`${this.url}/confirm`, body, { headers: headers });
+    }
     getUserFromToken(token, hasConfirmedEmail) {
         const helper = new JwtHelperService();
         let user = helper.decodeToken(token);
