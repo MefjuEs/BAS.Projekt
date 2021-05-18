@@ -79,6 +79,15 @@ let MoviesService = class MoviesService {
             return this.http.get(`${this.url}/select`, { headers: headers, params: params }).toPromise();
         });
     }
+    getRecommendations(userAccountId, page, pageSize) {
+        let headers = new HttpHeaders();
+        headers.append('Content-Type', 'application/json');
+        let params = new HttpParams();
+        params = params.append('userAccountId', userAccountId.toString());
+        params = params.append('page', page.toString());
+        params = params.append('pageSize', pageSize.toString());
+        return this.http.get(`${this.url}/recommendations`, { headers: headers, params: params });
+    }
 };
 MoviesService = __decorate([
     Injectable()

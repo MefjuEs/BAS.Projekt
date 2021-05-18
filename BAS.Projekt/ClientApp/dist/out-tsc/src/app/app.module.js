@@ -54,6 +54,7 @@ import { MovieReviewComponent } from './components/movie-review/movie-review.com
 import { StarRatingModule } from 'angular-star-rating';
 import { ActivationComponent } from './components/register/activation/activation.component';
 import { RecommendationsComponent } from './components/recommendations/recommendations.component';
+import { DeleteReviewDialogComponent } from './components/dialogs/delete-review-dialog/delete-review-dialog.component';
 registerLocaleData(localePl);
 let AppModule = class AppModule {
 };
@@ -82,7 +83,8 @@ AppModule = __decorate([
             AdminReviewComponent,
             MovieReviewComponent,
             ActivationComponent,
-            RecommendationsComponent
+            RecommendationsComponent,
+            DeleteReviewDialogComponent
         ],
         imports: [
             BrowserModule,

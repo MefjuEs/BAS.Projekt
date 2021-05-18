@@ -12,6 +12,9 @@ let ReviewService = class ReviewService {
         headers.append('Content-Type', 'application/json');
         return this.http.post(this.url, review, { headers: headers });
     }
+    deleteReview(userId, movieId) {
+        return this.http.delete(`${this.url}/${userId}/${movieId}`);
+    }
     didUserReviewMovie(movieId) {
         return this.http.get(`${this.url}/movie/${movieId}`);
     }

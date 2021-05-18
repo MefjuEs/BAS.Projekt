@@ -507,7 +507,7 @@ namespace BAS.AppServices
 
             try
             {
-                var response = this.moviePyClient.Get<MoviePyResponseDTO<RecommendationsDTO>>(request).Data;
+                var response = await this.moviePyClient.GetAsync<MoviePyResponseDTO<RecommendationsDTO>>(request);
 
                 var movieList = new List<MovieInListDTO>();
 

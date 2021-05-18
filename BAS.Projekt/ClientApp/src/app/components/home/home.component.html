@@ -14,7 +14,7 @@
 
     <div class="row" *ngIf="!isLoading; else loadingBlock">
         <div *ngFor="let movie of movies.movieList" class="col-md-4">
-            <a class="movie-card-click" routerLink="movie/{{movie.id}}">
+            <a class="movie-card-click text-decoration-none" routerLink="movie/{{movie.id}}">
                 <mat-card class="movie-card-margins">
                     <img mat-card-image [src]="movie.poster == null ? '/assets/images/noMovieImage.png' : getMoviePoster(movie.poster)">
                     <mat-card-content>

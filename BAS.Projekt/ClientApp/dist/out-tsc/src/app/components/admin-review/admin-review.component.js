@@ -1,12 +1,16 @@
 import { __awaiter, __decorate } from "tslib";
+import { DeleteReviewDialogComponent } from './../dialogs/delete-review-dialog/delete-review-dialog.component';
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 let AdminReviewComponent = class AdminReviewComponent {
-    constructor(userService, movieService, reviewService) {
+    constructor(userService, movieService, reviewService, dialog, notificationService) {
         this.userService = userService;
         this.movieService = movieService;
         this.reviewService = reviewService;
+        this.dialog = dialog;
+        this.notificationService = notificationService;
         this.reviewFilter = {
             userId: null,
             movieId: null,
@@ -104,6 +108,17 @@ let AdminReviewComponent = class AdminReviewComponent {
         this.reviewFilter.movieId = (_a = this.selectedMovie) === null || _a === void 0 ? void 0 : _a.id;
         this.reviewFilter.userId = (_b = this.selectedUser) === null || _b === void 0 ? void 0 : _b.id;
         this.getAllReviews();
+    }
+    openDeleteDialog(userId, movieId) {
+        const dialogRef = this.dialog.open(DeleteReviewDialogComponent);
+        dialogRef.afterClosed().subscribe(result => {
+            if (result == true) {
+                this.reviewService.deleteReview(userId, movieId).subscribe(() => {
+                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', SnackBarStyle.success);
+                    this.getAllReviews();
+                });
+            }
+        });
     }
 };
 AdminReviewComponent = __decorate([
