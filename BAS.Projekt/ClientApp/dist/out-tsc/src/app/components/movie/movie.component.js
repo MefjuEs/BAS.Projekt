@@ -25,20 +25,21 @@ let MovieComponent = class MovieComponent {
         };
         this.reviews = {
             currentPage: 0,
-            pageSize: 2,
+            pageSize: 5,
             allPages: 0,
             allElements: 0,
             reviewList: []
         };
         this.reviewFilters = {
             id: this.route.snapshot.params.id,
-            page: 1,
-            pageSize: 2,
+            page: 0,
+            pageSize: 5,
             orderBy: '',
         };
         this.isLoading = true;
         this.notFound = false;
         this.areReviewsLoading = true;
+        this.canLoadReviews = true;
         this.actors = [];
         this.directors = [];
         this.writers = [];
@@ -84,8 +85,44 @@ let MovieComponent = class MovieComponent {
     getReviews(reviewFilters) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                this.reviewFilters.page += 1;
+                this.canLoadReviews = true;
                 this.areReviewsLoading = true;
-                this.reviews = yield this.reviewService.getMovieReviews(reviewFilters);
+                let riwjus = yield this.reviewService.getMovieReviews(reviewFilters);
+                this.reviews.currentPage = riwjus.currentPage;
+                this.reviews.allPages = riwjus.allPages;
+                this.reviews.allElements = riwjus.allElements;
+                riwjus.reviewList.forEach(riwju => {
+                    this.reviews.reviewList.push(riwju);
+                });
+                if (this.reviews.reviewList.length == this.reviews.allElements) {
+                    this.canLoadReviews = false;
+                }
+                this.areReviewsLoading = false;
+            }
+            catch (exception) {
+                this.areReviewsLoading = false;
+            }
+        });
+    }
+    refreshReviews() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                debugger;
+                this.reviewFilters.page = 1;
+                this.canLoadReviews = true;
+                this.areReviewsLoading = true;
+                let riwjus = yield this.reviewService.getMovieReviews(this.reviewFilters);
+                this.reviews.currentPage = riwjus.currentPage;
+                this.reviews.allPages = riwjus.allPages;
+                this.reviews.allElements = riwjus.allElements;
+                this.reviews.reviewList = [];
+                riwjus.reviewList.forEach(riwju => {
+                    this.reviews.reviewList.push(riwju);
+                });
+                if (this.reviews.reviewList.length == this.reviews.allElements) {
+                    this.canLoadReviews = false;
+                }
                 this.areReviewsLoading = false;
             }
             catch (exception) {
@@ -136,18 +173,15 @@ let MovieComponent = class MovieComponent {
         if (event) {
             this.canUserReview = false;
             this.notificationService.showSnackBarNotification('Pomyślnie opublikowano recenzję', 'Zamknij', SnackBarStyle.success);
+            this.refreshReviews();
         }
         else {
             this.displayReviewForm = false;
         }
     }
-    onWindowScroll(event) {
-        let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-        let max = document.documentElement.scrollHeight;
-        if (pos == max && this.reviews.allPages > this.reviewFilters.page) {
-            this.areReviewsLoading = true;
-            this.getReviews(this.reviewFilters);
-        }
+    onLoadReviews() {
+        this.reviewFilters.page = 0;
+        this.getReviews(this.reviewFilters);
     }
 };
 MovieComponent = __decorate([

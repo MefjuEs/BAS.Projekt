@@ -22,6 +22,10 @@ export class ReviewService {
     return this.http.post<boolean>(this.url, review, {headers: headers});
   }
 
+  deleteReview(userId: number, movieId: number) {
+    return this.http.delete(`${this.url}/${userId}/${movieId}`);
+  }
+
   didUserReviewMovie(movieId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.url}/movie/${movieId}`)
   }

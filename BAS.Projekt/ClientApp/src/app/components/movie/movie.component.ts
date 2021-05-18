@@ -142,6 +142,32 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  async refreshReviews() {
+    try {
+      debugger;
+      this.reviewFilters.page = 1;
+      this.canLoadReviews = true;
+      this.areReviewsLoading = true;
+
+      let riwjus = await this.reviewService.getMovieReviews(this.reviewFilters);
+      this.reviews.currentPage = riwjus.currentPage;
+      this.reviews.allPages = riwjus.allPages;
+      this.reviews.allElements = riwjus.allElements;
+      this.reviews.reviewList = [];
+      riwjus.reviewList.forEach(riwju => {
+        this.reviews.reviewList.push(riwju);
+      });
+
+      if(this.reviews.reviewList.length == this.reviews.allElements) {
+        this.canLoadReviews = false;
+      }
+      
+      this.areReviewsLoading = false;
+    } catch(exception) {
+      this.areReviewsLoading = false;
+    }
+  }
+
   getDirectors() {
     return this.directors.map(director => `${director.name} ${director.surname}`).join(', ');
   }
@@ -192,12 +218,14 @@ export class MovieComponent implements OnInit {
     if(event) {
       this.canUserReview = false;
       this.notificationService.showSnackBarNotification('Pomyślnie opublikowano recenzję', 'Zamknij', SnackBarStyle.success);
+      this.refreshReviews();
     } else {
       this.displayReviewForm = false;
     }
   }
 
   onLoadReviews() {
+    this.reviewFilters.page = 0;
     this.getReviews(this.reviewFilters);
   }
 }

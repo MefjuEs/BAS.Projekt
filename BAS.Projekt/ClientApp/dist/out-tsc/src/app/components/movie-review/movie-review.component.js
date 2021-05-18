@@ -36,7 +36,6 @@ let MovieReviewComponent = class MovieReviewComponent {
         this.review.message = this.reviewBody.value;
         this.review.rating = this.rating;
         this.reviewService.insertReview(this.review).subscribe(result => {
-            console.log(result);
             if (result != false) {
                 this.reviewFormClose.emit(result);
             }

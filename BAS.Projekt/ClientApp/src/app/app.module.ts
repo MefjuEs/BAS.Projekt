@@ -51,6 +51,7 @@ import { AdminReviewComponent } from './components/admin-review/admin-review.com
 import { ReviewService } from './services/review.service';
 import { MovieReviewComponent } from './components/movie-review/movie-review.component';
 import { StarRatingModule } from 'angular-star-rating';
+import { DeleteReviewDialogComponent } from './components/dialogs/delete-review-dialog/delete-review-dialog.component';
 
 registerLocaleData(localePl);
 
@@ -76,7 +77,8 @@ registerLocaleData(localePl);
     AdminUserComponent,
     DeleteUserDialog,
     AdminReviewComponent,
-    MovieReviewComponent
+    MovieReviewComponent,
+    DeleteReviewDialogComponent
   ],
   imports: [
     BrowserModule,

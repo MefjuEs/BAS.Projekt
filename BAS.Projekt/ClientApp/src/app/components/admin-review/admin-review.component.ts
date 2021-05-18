@@ -1,3 +1,5 @@
+import { NotificationService } from './../../services/notification.service';
+import { DeleteReviewDialogComponent } from './../dialogs/delete-review-dialog/delete-review-dialog.component';
 import { IUserReviewInListDTO } from './../../interfaces/reviews/IUserReviewInListDTO';
 import { IUserReviewListWithFilters } from './../../interfaces/reviews/IUserReviewListWithFilters';
 import { ReviewService } from './../../services/review.service';
@@ -10,6 +12,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
 
 @Component({
   selector: 'admin-review',
@@ -53,7 +57,9 @@ export class AdminReviewComponent implements OnInit {
 
   constructor(private userService: UserService,
       private movieService: MoviesService,
-      private reviewService: ReviewService) { }
+      private reviewService: ReviewService,
+      public dialog: MatDialog,
+      private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.getUsersToSelect('');
@@ -136,5 +142,18 @@ export class AdminReviewComponent implements OnInit {
     this.reviewFilter.movieId = this.selectedMovie?.id;
     this.reviewFilter.userId = this.selectedUser?.id;
     this.getAllReviews();
+  }
+
+  openDeleteDialog(userId, movieId) {
+    const dialogRef = this.dialog.open(DeleteReviewDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.reviewService.deleteReview(userId, movieId).subscribe(() => {
+          this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', SnackBarStyle.success);
+          this.getAllReviews();
+        })
+      }
+    });
   }
 }
