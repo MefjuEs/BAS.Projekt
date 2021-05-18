@@ -60,7 +60,6 @@ export class MovieReviewComponent implements OnInit {
     this.review.rating = this.rating;
 
     this.reviewService.insertReview(this.review).subscribe(result => {
-      console.log(result);
       if(result != false) {
         this.reviewFormClose.emit(result);
       } else {
