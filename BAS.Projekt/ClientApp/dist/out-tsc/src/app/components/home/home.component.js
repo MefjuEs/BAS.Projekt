@@ -66,6 +66,14 @@ let HomeComponent = class HomeComponent {
             this.getMovies();
         }
     }
+    getStringRating(rating) {
+        let roundedRating = Math.round(rating * 10) / 10.0;
+        let stringRating = roundedRating.toString();
+        if (stringRating.indexOf(".") < 0) {
+            stringRating += ".0";
+        }
+        return stringRating;
+    }
 };
 HomeComponent = __decorate([
     Component({

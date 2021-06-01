@@ -4,6 +4,8 @@ let RecommendationsComponent = class RecommendationsComponent {
     constructor(authService, movieService) {
         this.authService = authService;
         this.movieService = movieService;
+        this.apiError = false;
+        this.isLoading = true;
         this.userAccountId = 0;
         this.page = 1;
         this.pageSize = 5;
@@ -19,6 +21,11 @@ let RecommendationsComponent = class RecommendationsComponent {
         this.movieService.getRecommendations(this.userAccountId, this.page, this.pageSize).subscribe(result => {
             console.log(result);
             this.movieList = result;
+            this.isLoading = false;
+        }, error => {
+            this.movieList = [];
+            this.apiError = true;
+            this.isLoading = false;
         });
     }
     getMoviePoster(poster) {

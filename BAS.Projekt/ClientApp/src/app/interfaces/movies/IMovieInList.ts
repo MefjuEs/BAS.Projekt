@@ -8,5 +8,5 @@ export interface IMovieInList {
     averageRating: number,
     poster: IFile,
     posterName: string,
-    genres: []   
+    genres: any[]   
 }

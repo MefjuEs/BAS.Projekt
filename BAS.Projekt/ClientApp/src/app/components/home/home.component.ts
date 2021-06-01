@@ -89,4 +89,17 @@ export class HomeComponent implements OnInit {
       this.getMovies();
     }
   }
+
+  getStringRating(rating: number)
+  {
+    let roundedRating = Math.round(rating * 10) / 10.0;
+
+    let stringRating = roundedRating.toString();
+    
+    if(stringRating.indexOf(".") < 0) {
+      stringRating += ".0";
+    }
+
+    return stringRating;
+  }
 }

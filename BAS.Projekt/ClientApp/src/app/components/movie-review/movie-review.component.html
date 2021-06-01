@@ -1,11 +1,11 @@
 <div>
     <mat-card>
         <mat-card-title class="review-card-title">
-            Napisz recenzję
+            Nowa recenzja
         </mat-card-title>
         <mat-card-content>
             <div class="row">
-                <star-rating class="review-card-star-rating"
+                <star-rating class="review-card-star-rating m-auto"
                 [labelText]="reviewScore"
                 labelPosition="top"
                 starType="icon"
@@ -20,10 +20,10 @@
                 </star-rating>
             </div>
             <div class="row">
-                <mat-form-field hintLabel="Max 2000 znaków" appearance="fill" class="mat-form-field-custom">
+                <mat-form-field hintLabel="Max 500 znaków" appearance="fill" class="mat-form-field-custom">
                     <mat-label>Treść recenzji</mat-label>
-                    <textarea matInput #input maxlength="2000" type="text" [formControl]="reviewBody"></textarea>
-                    <mat-hint align="end">{{reviewBody.value?.length || 0}}/2000</mat-hint>
+                    <textarea matInput #input maxlength="500" type="text" [formControl]="reviewBody"></textarea>
+                    <mat-hint align="end">{{reviewBody.value?.length || 0}}/500</mat-hint>
                     <mat-error *ngIf="reviewBody.invalid"></mat-error>
                 </mat-form-field>
             </div>

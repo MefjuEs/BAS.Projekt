@@ -1,14 +1,17 @@
 import { __awaiter, __decorate } from "tslib";
+import { UserRole } from './../../interfaces/auth/role';
 import { Component } from '@angular/core';
 import { FilmCrew } from 'src/app/interfaces/FilmCrew';
 import { SnackBarStyle } from 'src/app/interfaces/SnackBarStyle';
+import { DeleteReviewDialogComponent } from '../dialogs/delete-review-dialog/delete-review-dialog.component';
 let MovieComponent = class MovieComponent {
-    constructor(route, movieService, authService, reviewService, notificationService) {
+    constructor(route, movieService, authService, reviewService, notificationService, dialog) {
         this.route = route;
         this.movieService = movieService;
         this.authService = authService;
         this.reviewService = reviewService;
         this.notificationService = notificationService;
+        this.dialog = dialog;
         this.canUserReview = false;
         this.displayReviewForm = false;
         this.userSignedIn = false;
@@ -108,7 +111,6 @@ let MovieComponent = class MovieComponent {
     refreshReviews() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                debugger;
                 this.reviewFilters.page = 1;
                 this.canLoadReviews = true;
                 this.areReviewsLoading = true;
@@ -154,6 +156,9 @@ let MovieComponent = class MovieComponent {
         return movieLengthInHours;
     }
     splitMoviePersonnel(personnel) {
+        this.actors = [];
+        this.directors = [];
+        this.writers = [];
         personnel.forEach(person => {
             if (person.memberPosition == FilmCrew.Actor) {
                 this.actors.push(person);
@@ -173,7 +178,9 @@ let MovieComponent = class MovieComponent {
         if (event) {
             this.canUserReview = false;
             this.notificationService.showSnackBarNotification('Pomyślnie opublikowano recenzję', 'Zamknij', SnackBarStyle.success);
+            this.getMovie(this.route.snapshot.params.id);
             this.refreshReviews();
+            this.displayReviewForm = false;
         }
         else {
             this.displayReviewForm = false;
@@ -182,6 +189,31 @@ let MovieComponent = class MovieComponent {
     onLoadReviews() {
         this.reviewFilters.page = 0;
         this.getReviews(this.reviewFilters);
+    }
+    canDeleteReview(userId) {
+        return this.authService.currentUserValue != null && (this.authService.currentUserValue.id === userId || this.authService.currentUserValue.userRole == UserRole.Admin);
+    }
+    openDeleteDialog(userId, movieId) {
+        const dialogRef = this.dialog.open(DeleteReviewDialogComponent);
+        console.log(userId, movieId);
+        dialogRef.afterClosed().subscribe(result => {
+            if (result == true) {
+                this.reviewService.deleteReview(userId, movieId).subscribe(() => {
+                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto recenzję', 'Zamknij', SnackBarStyle.success);
+                    this.getMovie(this.route.snapshot.params.id);
+                    this.refreshReviews();
+                    this.checkIfUserCanReview();
+                });
+            }
+        });
+    }
+    getStringRating(rating) {
+        let roundedRating = Math.round(rating * 10) / 10.0;
+        let stringRating = roundedRating.toString();
+        if (stringRating.indexOf(".") < 0) {
+            stringRating += ".0";
+        }
+        return stringRating;
     }
 };
 MovieComponent = __decorate([

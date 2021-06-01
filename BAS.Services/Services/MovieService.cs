@@ -138,6 +138,10 @@ namespace BAS.AppServices
             if (crew == null)
                 return;
 
+            crew = crew.GroupBy(c => new { c.FilmCrew, c.PersonnelId })
+                .Select(c => c.First())
+                .ToList();
+
             var personnelList = new List<MoviePersonnel>();
 
             foreach (var personnel in crew)

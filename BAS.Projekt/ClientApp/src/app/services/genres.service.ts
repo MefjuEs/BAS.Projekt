@@ -53,7 +53,6 @@ export class GenresService {
   }
 
   addGenre(genre: IGenre): Observable<any> {
-    debugger;
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
@@ -62,7 +61,6 @@ export class GenresService {
     formData.append('name', genre.name);
     formData.append('description', genre.description);
 
-    debugger;
     return this.http.post(this.url, formData, { headers: headers });
   }
 }

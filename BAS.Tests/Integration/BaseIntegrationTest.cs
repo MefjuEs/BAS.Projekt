@@ -9,6 +9,15 @@ using BAS.AppServices;
 using Xunit;
 using BAS.Tests.Services;
 using System.IO;
+using System.Linq;
+using BAS.AppCommon;
+using BAS.Services.Notification;
+using BAS.Services;
+using BAS.Projekt.Services;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Moq;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BAS.Tests.Integration
 {
@@ -95,6 +104,24 @@ namespace BAS.Tests.Integration
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IPersonnelService, PersonnelService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            //services.AddScoped<IUserContext, UserContext>();
+            //services.AddScoped<IUrlHelper, Projekt.Services.UrlHelper>();
+            //services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            //services.AddScoped<INotificationAggregateServices, NotificationAggregateServices>();
+            //services.AddScoped(x => {
+            //    var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+            //    var factory = x.GetRequiredService<IUrlHelperFactory>();
+            //    return factory.GetUrlHelper(actionContext);
+            //});
+            //services.AddSingleton<IAppContext, WebAppContext>();
+
+            //var notifications = typeof(NotificationService).Assembly.DefinedTypes.Where(x => x.GetInterfaces().Contains(typeof(INotification)));
+            //foreach (var notification in notifications)
+            //{
+            //    services.Add(new ServiceDescriptor(typeof(INotification), notification, ServiceLifetime.Scoped));
+            //}
         }
 
         private void CreateIdentityDatabase(IServiceProvider serviceProvider)
@@ -120,6 +147,30 @@ namespace BAS.Tests.Integration
             this.serviceProvider = services.ServiceProvider;
             this.ClearIdentityDatabase(serviceProvider);
             this.ClearMovieDatabase(serviceProvider);
+            this.SeedIdentityDatabase(serviceProvider);
+        }
+
+        private void SeedIdentityDatabase(IServiceProvider serviceProvider)
+        {
+            var identityContext = serviceProvider.GetService<IdentityContext>();
+
+            if (!identityContext.Roles.Any())
+            {
+                identityContext.Roles.Add(new IdentityRole<long>(UserRole.Admin.ToString()));
+                identityContext.Roles.Add(new IdentityRole<long>(UserRole.User.ToString()));
+                identityContext.SaveChanges();
+
+                var roles = identityContext.Roles.ToList();
+
+                foreach (var role in roles)
+                {
+                    role.NormalizedName = role.Name.ToUpper();
+                }
+                identityContext.SaveChanges();
+
+                //await roleManager.(new IdentityRole<long>(UserRole.Admin.ToString()));
+                //await roleManager.CreateAsync(new IdentityRole<long>(UserRole.User.ToString()));
+            }
         }
 
         private void ClearIdentityDatabase(IServiceProvider serviceProvider)

@@ -13,19 +13,21 @@
     </div>
 
     <div class="row" *ngIf="!isLoading; else loadingBlock">
-        <div *ngFor="let movie of movies.movieList" class="col-md-4">
+        <div *ngFor="let movie of movies.movieList" class="col-lg-4 col-sm-6">
             <a class="movie-card-click text-decoration-none" routerLink="movie/{{movie.id}}">
                 <mat-card class="movie-card-margins">
                     <img mat-card-image [src]="movie.poster == null ? '/assets/images/noMovieImage.png' : getMoviePoster(movie.poster)">
                     <mat-card-content>
                         <div class="d-flex flex-column">
-                            <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex justify-content-between">
                                 <div>
                                     <h2>{{movie.title}}</h2>
                                 </div>
-                                <div>
+                                <div class="d-flex justify-content-start rating-container">
                                     <mat-icon class="golden-star">star</mat-icon>
-                                    <span class="align-middle">{{movie.averageRating}}</span>
+                                    <div class="rating-text">
+                                        <span class="">{{ getStringRating(movie.averageRating) }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div>

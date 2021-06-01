@@ -18,6 +18,8 @@ export class RecommendationsComponent implements OnInit {
   private pageSize: number;
   private currentUser: User;
   movieList: IMovieInList[];
+  apiError: boolean = false;
+  isLoading: boolean = true;
 
   constructor(private authService: AuthService, private movieService: MoviesService) {
     this.userAccountId = 0;
@@ -38,6 +40,11 @@ export class RecommendationsComponent implements OnInit {
     this.movieService.getRecommendations(this.userAccountId, this.page, this.pageSize).subscribe(result => {
       console.log(result);
       this.movieList = result;
+      this.isLoading = false;
+    }, error => {
+      this.movieList = [];
+      this.apiError = true;
+      this.isLoading = false;
     });
   }
 

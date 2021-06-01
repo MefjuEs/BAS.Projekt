@@ -114,7 +114,7 @@ let AdminReviewComponent = class AdminReviewComponent {
         dialogRef.afterClosed().subscribe(result => {
             if (result == true) {
                 this.reviewService.deleteReview(userId, movieId).subscribe(() => {
-                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto gatunek filmowy', 'Zamknij', SnackBarStyle.success);
+                    this.notificationService.showSnackBarNotification('Pomyślnie usunięto recenzje', 'Zamknij', SnackBarStyle.success);
                     this.getAllReviews();
                 });
             }
