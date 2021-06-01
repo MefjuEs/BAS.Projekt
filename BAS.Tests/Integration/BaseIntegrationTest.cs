@@ -74,25 +74,11 @@ namespace BAS.Tests.Integration
         {
             services.AddDbContext<IdentityContext>(options =>
             {
-                if (appConfig.DatabaseProvider == DatabaseProvider.SqlServer)
-                {
-                    options.UseSqlServer(appConfig.ConnectionStrings.MovieDatabaseSQLServer);
-                }
-                else
-                {
-                    //to do use mysql connection string format
-                }
+                options.UseSqlServer(appConfig.ConnectionStrings.MovieDatabase);
             });
             services.AddDbContext<MovieDbContext>(options =>
             {
-                if (appConfig.DatabaseProvider == DatabaseProvider.SqlServer)
-                {
-                    options.UseSqlServer(appConfig.ConnectionStrings.IdentitySQLServer);
-                }
-                else
-                {
-                    //to do use mysql connection string format
-                }
+                options.UseSqlServer(appConfig.ConnectionStrings.Identity);
             });
             services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
             {
