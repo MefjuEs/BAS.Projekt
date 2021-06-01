@@ -11,23 +11,16 @@ using BAS.Tests.Services;
 using System.IO;
 using System.Linq;
 using BAS.AppCommon;
-using BAS.Services.Notification;
-using BAS.Services;
-using BAS.Projekt.Services;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Moq;
-using Microsoft.AspNetCore.Hosting;
 
 namespace BAS.Tests.Integration
 {
     public class IntegrationTestsFixture
     {
         private IServiceProvider serviceProvider;
-        private AppConfig config;
+        private AppConfig appConfig;
 
         public IServiceProvider ServiceProvider => this.serviceProvider;
-        public AppConfig Config => this.config;
+        public AppConfig AppConfig => this.appConfig;
 
         public IntegrationTestsFixture()
         {
@@ -37,7 +30,7 @@ namespace BAS.Tests.Integration
             var testsConfig = new AppConfig();
             ConfigurationBinder.Bind(configuration, testsConfig);
 
-            this.config = testsConfig;
+            this.appConfig = testsConfig;
             this.serviceProvider = this.Setup();
         }
 
@@ -79,8 +72,28 @@ namespace BAS.Tests.Integration
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-            services.AddDbContext<IdentityContext>(options => { options.UseSqlServer(this.config.ConnectionStrings.Identity); });
-            services.AddDbContext<MovieDbContext>(options => { options.UseSqlServer(this.config.ConnectionStrings.MovieDatabase); });
+            services.AddDbContext<IdentityContext>(options =>
+            {
+                if (appConfig.DatabaseProvider == DatabaseProvider.SqlServer)
+                {
+                    options.UseSqlServer(appConfig.ConnectionStrings.MovieDatabaseSQLServer);
+                }
+                else
+                {
+                    //to do use mysql connection string format
+                }
+            });
+            services.AddDbContext<MovieDbContext>(options =>
+            {
+                if (appConfig.DatabaseProvider == DatabaseProvider.SqlServer)
+                {
+                    options.UseSqlServer(appConfig.ConnectionStrings.IdentitySQLServer);
+                }
+                else
+                {
+                    //to do use mysql connection string format
+                }
+            });
             services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -97,7 +110,7 @@ namespace BAS.Tests.Integration
         {
             services.AddLogging();
             services.AddOptions();
-            services.AddSingleton(x => this.config);
+            services.AddSingleton(x => this.appConfig);
             services.AddSingleton<IAppContext>(x => new TestsAppContext());
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IFileService, FileService>();
