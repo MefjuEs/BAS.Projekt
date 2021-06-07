@@ -42,7 +42,7 @@ namespace BAS.Projekt
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "ClientApp/dist/ClientApp";
             });
 
             #region MovieDatabase
@@ -158,13 +158,13 @@ namespace BAS.Projekt
             if (env.IsDevelopment())
             {
                 app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
-                app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseCors(options => options.WithOrigins(appConfig.Host.Url).AllowAnyHeader().AllowAnyOrigin());
             }
 
+            app.UseDeveloperExceptionPage();
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             app.UseHttpsRedirection();

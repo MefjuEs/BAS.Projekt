@@ -343,3 +343,5 @@ healthchecksdb
 **/bin
 **/obj
 **/appsettings.Tests.json
+
+BAS.Projekt/site
