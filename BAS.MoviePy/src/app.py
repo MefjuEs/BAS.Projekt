@@ -9,9 +9,8 @@ api = Api(app)
 
 api.add_resource(RecommendController, '/movies/recommend')
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--environment")
-    args = parser.parse_args()
-    create_config(args.environment)
-    app.run()
+#parser = argparse.ArgumentParser()
+#parser.add_argument("--environment")
+#args = parser.parse_args()
+#create_config(args.environment)
+#app.run()
