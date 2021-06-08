@@ -9,7 +9,7 @@ class Config:
         self.load_config()
 
     def load_config(self):
-        config_path = ''
+        config_path = 'appsettings.json'
         if self.environment == 'Development':
             config_path = 'appsettings.Development.json'
         elif self.environment == 'Production':
