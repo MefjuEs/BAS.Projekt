@@ -3,9 +3,9 @@ import jsons
 config = None
 
 class Config:
-    def __init__(self, environment):
+    def __init__(self):
         self.fields = None
-        self.environment = environment
+        self.environment = 'Production'
         self.load_config()
 
     def load_config(self):
@@ -24,6 +24,6 @@ def get_config():
         return config
     return Config()
 
-def create_config(env):
+def create_config():
     global config
-    config = Config(env)
+    config = Config()
