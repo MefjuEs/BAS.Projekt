@@ -20,7 +20,7 @@ variables:
   environmentName: 'baspy'
 
   # Project root folder. Point to the folder containing manage.py file.
-  projectRoot: BAS.MoviePy/src
+  projectRoot: BAS.BasPy/src
 
   # Python version: 3.7
   pythonVersion: '3.7'
