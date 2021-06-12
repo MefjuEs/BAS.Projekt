@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from flask import Flask
 from flask_restful import Api
 from controllers.recommend.recommend import RecommendController
@@ -11,4 +13,4 @@ api.add_resource(RecommendController, '/movies/recommend')
 #parser.add_argument("--environment")
 #args = parser.parse_args()
 #create_config(args.environment)
-app.run(debug=True)
+app.run()
