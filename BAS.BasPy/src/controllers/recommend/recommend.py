@@ -17,4 +17,4 @@ class RecommendController(Resource):
         except BaseException as e:
             #to do: log errors
             print(e)
-            return jsons.dump(ResponseDTO()), 500
+            return jsons.dump(ResponseDTO(e)), 500

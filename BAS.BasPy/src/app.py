@@ -1,11 +1,9 @@
-#!/usr/bin/env python3
-
 from flask import Flask
 from flask_restful import Api
 from controllers.recommend.recommend import RecommendController
 
-app = Flask(__name__)
-api = Api(app)
+application = app = Flask(__name__)
+api = Api(application)
 
 api.add_resource(RecommendController, '/movies/recommend')
 
@@ -13,4 +11,6 @@ api.add_resource(RecommendController, '/movies/recommend')
 #parser.add_argument("--environment")
 #args = parser.parse_args()
 #create_config(args.environment)
-app.run(host='0.0.0.0', port=8000)
+
+if __name__ == "__main__":
+    application.run(debug=True)
