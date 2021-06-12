@@ -33,6 +33,7 @@ namespace BAS.AppServices
             client.EnableSsl = true;
             client.Host = this.appConfig.Email.Host;
             client.Port = this.appConfig.Email.Port;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
 
             foreach (var notification in notifications)
             {
