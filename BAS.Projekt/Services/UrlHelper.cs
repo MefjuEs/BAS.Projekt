@@ -20,7 +20,7 @@ namespace BAS.Projekt.Services
 
         public string CreateClientUrl(RegistrationConfirmNotificationArgs args)
         {
-            string url = appConfig.Host.FrontURL + "activate?userId=" + args.UserAccountId + "&token=" + args.Token;
+            string url = appConfig.Host.FrontURL + "/activate?userId=" + args.UserAccountId + "&token=" + args.Token;
 
             return url;
         }
