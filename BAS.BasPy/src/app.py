@@ -14,3 +14,5 @@ api.add_resource(RecommendController, '/movies/recommend')
 
 if __name__ == "__main__":
     application.run(debug=True)
+	
+#lubie placki
